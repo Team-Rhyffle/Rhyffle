@@ -1,0 +1,38 @@
+{
+    "NormalNotes": [
+        { "position": 48, "line": 4, "length": 1 },
+        { "position": 72, "line": 4, "length": 4 },
+        { "position": 96, "line": 4, "length": 7 },
+        { "position": 96, "line": 14, "length": 7 }
+    ],
+    "HoldNotes": [
+        { "position": 336, "line": 9, "count": 0, "length": 7 },
+        { "position": 360, "line": 9, "count": 0, "length": 4 },
+        { "position": 408, "line": 13, "count": 0, "length": 8 },
+        { "position": 360, "line": 2, "count": 1, "length": 4 },
+        { "position": 432, "line": 4, "count": 1, "length": 9 },
+        { "position": 480, "line": 6, "count": 1, "length": 5 },
+        { "position": 528, "line": 14, "count": 2, "length": 6 },
+        { "position": 552, "line": 11, "count": 2, "length": 4 },
+        { "position": 648, "line": 1, "count": 1, "length": 7 },
+        { "position": 576, "line": 12, "count": 4, "length": 3 },
+        { "position": 600, "line": 12, "count": 4, "length": 3 }
+    ],
+    "SlideNotes": [
+        { "position": 144, "line": 4, "length": 7 },
+        { "position": 144, "line": 14, "length": 7 },
+        { "position": 168, "line": 6, "length": 3 },
+        { "position": 192, "line": 7, "length": 1 },
+        { "position": 192, "line": 13, "length": 1 },
+        { "position": 192, "line": 19, "length": 1 }
+    ],
+    "FlickNotes": [
+        { "position": 216, "line": 6, "length": 1, "direction": 0 },
+        { "position": 216, "line": 9, "length": 12, "direction": 0 },
+        { "position": 240, "line": 7, "length": 6, "direction": 1 },
+        { "position": 264, "line": 15, "length": 7, "direction": 2 },
+        { "position": 288, "line": 8, "length": 6, "direction": 3 },
+        { "position": 312, "line": 6, "length": 8, "direction": 1 },
+        { "position": 312, "line": 16, "length": 4, "direction": 0 }
+    ]
+}

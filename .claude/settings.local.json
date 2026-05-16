@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"C:/Users/ljk91/.claude/skills\")",
+      "Bash(cp -r /tmp/council_inspect/council \"C:/Users/ljk91/.claude/skills/council\")",
+      "Read(//c/Users/ljk91/.claude/skills/**)"
+    ]
+  }
+}
