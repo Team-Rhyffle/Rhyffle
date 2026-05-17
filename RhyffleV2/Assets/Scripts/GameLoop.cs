@@ -23,6 +23,10 @@ public class GameLoop : MonoBehaviour {
     [Header("Chart")]
     public string chartName = "dummy_test";
 
+    [Header("Debug")]
+    [Tooltip("ON 시 모든 노트를 판정선 도달 순간 자동 Perfect 처리 — 콤보/점수 검증용")]
+    public bool autoPerfectDebug = true;
+
     private ChartData chart;
     private List<Note> activeNotes = new List<Note>();
     private int normalIdx, holdIdx, slideIdx, flickIdx;
@@ -51,8 +55,23 @@ public class GameLoop : MonoBehaviour {
         if (isPaused) return;
         SpawnDueNotes();
         DropActiveNotes();
-        ProcessInput();
+        if (autoPerfectDebug) AutoPerfectJudge();
+        else ProcessInput();
         CheckMissedNotes();
+    }
+
+    // === Debug: 모든 노트가 판정선 도달 시점에 자동 Perfect 처리 ===
+    private void AutoPerfectJudge() {
+        float songTime = conductor.SongTime;
+        for (int i = 0; i < activeNotes.Count; i++) {
+            var note = activeNotes[i];
+            if (note == null || note.IsJudged) continue;
+            float noteTimeSec = Conductor.StepToTime(note.Position, conductor.bpm);
+            // 노트 chart time에 ±1프레임(16ms) 이내 도달 시 Perfect
+            if (Mathf.Abs(songTime - noteTimeSec) < 0.02f) {
+                ApplyJudgment(note, JudgmentGrade.Perfect);
+            }
+        }
     }
 
     // === Spawn (Sprint 1 내부 메서드 — Week 2 NoteSpawner 분리) ===
@@ -157,6 +176,7 @@ public class GameLoop : MonoBehaviour {
         if (grade == JudgmentGrade.Miss) combo = 0;
         else combo++;
         UpdateHUD(grade);
+        Debug.Log($"[Judge] {grade} note(kind={note.Kind}, line={note.Line}) | score={score} combo={combo}");
     }
 
     private void UpdateHUD(JudgmentGrade grade) {
