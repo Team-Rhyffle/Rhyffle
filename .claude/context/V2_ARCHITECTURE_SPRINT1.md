@@ -106,25 +106,24 @@ Note (4종 통합 클래스, enum 기반)
 
 > 출처: `V1_SCENE_INSPECTION.md`. v1 Game.unity 인스펙터 값 그대로 v2에 재현. spec 추측 없음.
 
-**씬 루트 (필수 8개)**:
-1. **Main Camera** — Orthographic, size 10, pos (0, 1.5, -10), near/far 0.3/1000, bg RGB(49,77,121), Clear Flags Solid Color, AudioListener 부착
+**씬 루트 (6개 — council Pragmatist 권장 축소안. HUDController + NoteCreator → GameLoop 흡수)**:
+1. **Main Camera** — Orthographic, size 10, pos (0, 1.5, -10), near/far 0.3/1000, bg RGB(49,77,121), Clear Flags Solid Color, AudioListener 부착. **+ PhysicsRaycaster** (council 결정 #2 — `InputSystemUIInputModule`은 Canvas raycast 모듈 only, World BoxCollider hit은 별도 Physics Raycaster 필요)
 2. **Canvas** — Render Mode ScreenSpaceCamera, Render Camera = Main Camera, Plane Distance 100. CanvasScaler ScaleWithScreenSize, ref res 956×440, ScreenMatchMode Expand
 3. **EventSystem** — `InputSystemUIInputModule` 컴포넌트 (legacy `StandaloneInputModule` 아님)
 4. **GameSystem** (빈 컨테이너)
    - 자식 **NoteScreen** (pos 0, -2.5, 0) — `NoteScreen` 컴포넌트 + 24 Bar 자식
    - 자식 **NoteBoard** (pos 0, 0, 0) — `LineRenderer` 컴포넌트 (hold polyline 공유)
-5. **GameLoop** — v2 신규. `GameLoop` 컴포넌트
-6. **NoteCreator** — `NoteCreator` 컴포넌트, 5개 prefab ref (`Resources/Prefabs/Note/{BasicNote,SlideNote,FlickNote,HoldNote,HoldNoteBody}.prefab`)
-7. **Audio Source** — `AudioSource` 컴포넌트 (vol 0.3, pitch 1, spatialBlend 0, playOnAwake false, loop false) + `Conductor` 컴포넌트. Sprint 1엔 clip 없음
-8. **HUDController** (선택) — v1 GameUIManager + GameScoreInfo 의 UI 책임 흡수
+5. **GameLoop** — v2 신규. `GameLoop` 컴포넌트 + Note prefab 5종 ref 직접 보유 (NoteCreator 흡수)
+6. **Audio Source** — `AudioSource` 컴포넌트 (vol 0.3, pitch 1, spatialBlend 0, playOnAwake false, loop false) + `Conductor` 컴포넌트. Sprint 1엔 clip 없음
 
-**Bar 배치 (24개)**:
-- 중심 정렬 시 Bar_N world position = (`-12.5 + N`, -2.5, 0). Bar_1 = -11.5, Bar_24 = +11.5. 화면 가로 폭 23 unit
-- 또는 v1 패턴 좌측 정렬 시 Bar_N = (-12 + N). Bar_1 = -11, Bar_24 = +12
+**Bar 배치 (24개) — 중심정렬 확정 (council 결정 #5)**:
+- Bar_N world position = (`N - 12.5`, -2.5, 0). Bar_1 = -11.5, Bar_12 = -0.5, Bar_13 = +0.5, Bar_24 = +11.5
+- 화면 가로 폭 = 23 unit (Bar_1 ~ Bar_24), 카메라 시야 (ortho 10 × aspect 16:9) = ~35.6 unit 안에 fit
 - 각 Bar:
   - Tag = "Bar", Layer = Default
-  - SpriteRenderer (Sprint 1은 enabled=false. Hi-Fi 도착 시 enabled=true + bar sprite)
+  - SpriteRenderer **enabled=true + 1×1 white α=0.3 placeholder** (Sprint 1 디버깅 가시화 — Pragmatist 권장. Hi-Fi 도착 시 디자인 sprite로 교체)
   - 3D **BoxCollider** (BoxCollider2D 아님!): center (0, -0.84, 0), size (0.32, 3.0, 0.2), localScale 3.2 — v1 동일
+  - **콜라이더 의도 (council 결정 #4)**: y 9.6 unit = lane 전체 입력 영역 확보용. 판정과 무관 — JudgeProcessor가 거리 기반으로 별도 계산
   - `Bar` 컴포넌트: barNum (1~24), GameLoop ref
 
 **UI 자식 (Canvas)**:
@@ -261,3 +260,4 @@ Note (4종 통합 클래스, enum 기반)
 - 2026-05-16: Council (5 agents, 2 rounds) 결정으로 신설. 14 → 6 컴포넌트 점진 분해. h placeholder 1.0 임의 결정. Sprint 2 entry 분리 작업 명시.
 - 2026-05-17: Sprint 1 spec 잔여 빈칸 일괄 확정 (HoldNote SpMiss v1 동일 / r 옵션 X / 플릭 시간창 없음 / 콤보 UI 중앙상단 / 점수·Pause UI v1 참고). Week 1 우선순위 = JSON 채보 드롭 검증 우선, 음원/곡 메타 후순위. §4 UI placeholder 결정 신설.
 - 2026-05-17: **v1 Game.unity 인스펙션 결과 통합** — §3.1 Week 1 step 9 (씬 셋업) 구체화 (Camera/Canvas/Bar/UI/Note prefab 5종/Pause sprite 직접 수치 명시). §4 placeholder 표에 카메라/Canvas/라인 간격 실측치 추가. §5 매핑 표에 prefab + sprite salvage 경로 추가. 판정선 y placeholder -2.25 → -2.5 정정.
+- 2026-05-17: **Council 5-agent 심의 + Sprint 1 진입 전 9개 spec 확정** — §3.1 씬 루트 8→6 축소 (HUDController + NoteCreator → GameLoop 흡수). Main Camera에 PhysicsRaycaster 부착 명시. Bar 위치 공식 `N - 12.5` 중심정렬 확정 + 콜라이더 9.6 unit 의도 주석. Bar SpriteRenderer Sprint 1 한정 enabled=true + 1×1 white placeholder. URP → Built-in 다운그레이드 (manifest.json). Sprint 1 = "load-bearing spike" 선언.

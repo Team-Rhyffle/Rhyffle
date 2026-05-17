@@ -89,6 +89,24 @@
 
 ---
 
+## 2026-05-17: Sprint 1 진입 전 spec 9개 + URP → Built-in 다운그레이드
+
+- **Context**: 5-agent council (Steelman/Red Team/Context Keeper/Pragmatist) 2 round 심의 결과 — 9개 진입 전 spec 박을 항목 + Sprint 1 = load-bearing spike 선언. v2 manifest가 URP 17.2.0인데 v1은 Built-in이라 prefab salvage 시 핑크 박스 risk.
+- **Decision**:
+  - URP 패키지 제거 → Built-in 유지. Hi-Fi 디자이너 합류 후 URP 재검토
+  - Bar 위치 공식: 중심정렬 `Bar_N x = N - 12.5` (Bar_1=-11.5 ~ Bar_24=+11.5)
+  - LANE_WIDTH = 1.0 unit (24 × 1.0 = 24 unit 폭, ortho size 10 + 16:9 화면 ~35.6 unit 안에 fit)
+  - NoteScreen.cs 역할 = 24 Bar 컨테이너 + Bar 활성 토글 관리
+  - Bar 콜라이더 9.6 unit y = lane 입력 식별 only, 판정은 거리 기반 (코드 주석 필수)
+  - Conductor 초기화 = PlayScheduled(dspTime + 0.1) + Pause offset 누적 (Scenario A 차단)
+  - PhysicsRaycaster를 Main Camera에 부착 (InputSystemUIInputModule은 Canvas만)
+  - Note 책임 = prefab 4종 + Note.cs logic only + HoldNoteBody 별개 + FlickNote prefab variant 4개
+  - 씬 루트 8 → 6 축소 (HUDController + NoteCreator → GameLoop 흡수)
+  - Sprint 1 = "load-bearing spike" 명시
+- **Outcome**: V2_ARCHITECTURE_SPRINT1.md 갱신, manifest.json URP 제거, plan 작성 (docs/superpowers/plans/2026-05-17-sprint1-plain-mode-playscreen.md)
+
+---
+
 ## YYYY-MM-DD: [다음 결정 제목]
 
 - **Context**:
