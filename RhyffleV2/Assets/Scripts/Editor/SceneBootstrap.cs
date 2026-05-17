@@ -101,6 +101,7 @@ public static class SceneBootstrap {
         cam.backgroundColor = new Color(49f / 255f, 77f / 255f, 121f / 255f, 0f);
         cameraGO.AddComponent<AudioListener>();
         cameraGO.AddComponent<PhysicsRaycaster>();  // Council 결정 #2: World BoxCollider hit raycast
+        cameraGO.AddComponent<CameraAspectFit>();   // Steelman Scenario C: 화면 aspect 무관 24 lane fit
 
         // === 2. Canvas ===
         var canvasGO = new GameObject("Canvas", typeof(RectTransform));

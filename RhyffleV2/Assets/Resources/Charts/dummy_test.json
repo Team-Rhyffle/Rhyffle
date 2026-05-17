@@ -1,13 +1,13 @@
 {
     "NormalNotes": [
-        {"position": 96,  "line": 0,  "length": 1},
-        {"position": 144, "line": 3,  "length": 1},
-        {"position": 192, "line": 6,  "length": 1},
-        {"position": 240, "line": 9,  "length": 1},
-        {"position": 288, "line": 12, "length": 1},
-        {"position": 336, "line": 15, "length": 1},
-        {"position": 384, "line": 18, "length": 1},
-        {"position": 432, "line": 21, "length": 1}
+        {"position": 192, "line": 0,  "length": 1},
+        {"position": 240, "line": 3,  "length": 1},
+        {"position": 288, "line": 6,  "length": 1},
+        {"position": 336, "line": 9,  "length": 1},
+        {"position": 384, "line": 12, "length": 1},
+        {"position": 432, "line": 15, "length": 1},
+        {"position": 480, "line": 18, "length": 1},
+        {"position": 528, "line": 21, "length": 1}
     ],
     "HoldNotes": [
         {"position": 480, "line": 0,  "count": 1, "length": 1},
