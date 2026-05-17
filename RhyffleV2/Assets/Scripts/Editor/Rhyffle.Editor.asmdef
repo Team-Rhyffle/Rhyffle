@@ -1,0 +1,15 @@
+{
+    "name": "Rhyffle.Editor",
+    "rootNamespace": "",
+    "references": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenceIncludedAssemblies": true,
+    "versionDefines": [],
+    "noEngineReferences": false
+}
