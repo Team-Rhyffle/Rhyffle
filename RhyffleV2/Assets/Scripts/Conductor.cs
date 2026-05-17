@@ -40,8 +40,8 @@ public class Conductor : MonoBehaviour {
     /// 곡 시작 — PlayScheduled로 dspTime과 첫 샘플을 정렬 (Council Scenario A 차단).
     /// </summary>
     public void StartSong() {
-        // Android 오디오 버퍼 지연(50~150ms) 대비 0.1s 여유.
-        double scheduledDsp = AudioSettings.dspTime + 0.1;
+        // Android 오디오 버퍼 지연(50~150ms) + Editor Play 진입 hiccup 대비 0.3s 여유.
+        double scheduledDsp = AudioSettings.dspTime + 0.3;
         if (audioSource.clip != null) {
             audioSource.PlayScheduled(scheduledDsp);
         }

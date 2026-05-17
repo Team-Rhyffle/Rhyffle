@@ -26,6 +26,8 @@ public class GameLoop : MonoBehaviour {
     [Header("Debug")]
     [Tooltip("ON 시 모든 노트를 판정선 도달 순간 자동 Perfect 처리 — 콤보/점수 검증용")]
     public bool autoPerfectDebug = true;
+    [Tooltip("Play 진입 후 곡 시작까지 대기 시간 (초). 첫 프레임 hiccup 흡수.")]
+    public float startDelay = 2.0f;
 
     private ChartData chart;
     private List<Note> activeNotes = new List<Note>();
@@ -35,6 +37,8 @@ public class GameLoop : MonoBehaviour {
     private int combo;
     private int baseScore;
     private bool isPaused;
+    private float startCountdown;
+    private bool songStarted;
 
     void Start() {
         // 채보 로드
@@ -47,12 +51,24 @@ public class GameLoop : MonoBehaviour {
         if (totalNoteCount > 0) {
             baseScore = Mathf.RoundToInt(1_000_000f / totalNoteCount);
         }
-        // 시작
-        conductor.StartSong();
+        // 시작 — startDelay 후 conductor.StartSong()
+        startCountdown = startDelay;
+        songStarted = false;
+        Debug.Log($"[GameLoop] Loaded chart '{chartName}': {totalNoteCount} notes total, baseScore={baseScore}. Starting in {startDelay}s.");
     }
 
     void Update() {
         if (isPaused) return;
+        // 시작 카운트다운 — Play 진입 hiccup 흡수 후 conductor 시작
+        if (!songStarted) {
+            startCountdown -= Time.deltaTime;
+            if (startCountdown <= 0f) {
+                conductor.StartSong();
+                songStarted = true;
+                Debug.Log($"[GameLoop] Conductor started. SongTime={conductor.SongTime:F3}, dspTime={AudioSettings.dspTime:F3}");
+            }
+            return;
+        }
         SpawnDueNotes();
         DropActiveNotes();
         if (autoPerfectDebug) AutoPerfectJudge();
@@ -69,6 +85,7 @@ public class GameLoop : MonoBehaviour {
             float noteTimeSec = Conductor.StepToTime(note.Position, conductor.bpm);
             // 노트 chart time에 ±1프레임(16ms) 이내 도달 시 Perfect
             if (Mathf.Abs(songTime - noteTimeSec) < 0.02f) {
+                Debug.Log($"[AutoJudge] note(line={note.Line}, pos={note.Position}) judged at songTime={songTime:F3}, noteTime={noteTimeSec:F3}, sprite.y={note.transform.position.y:F3}, judgeLineY={GameConfig.JUDGE_LINE_Y}");
                 ApplyJudgment(note, JudgmentGrade.Perfect);
             }
         }
