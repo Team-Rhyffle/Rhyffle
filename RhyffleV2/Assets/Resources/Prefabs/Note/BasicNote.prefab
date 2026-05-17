@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 646327568514250522}
   - component: {fileID: 1564439497269783325}
-  - component: {fileID: -3919590257531567530}
+  - component: {fileID: 8873022819386422348}
   m_Layer: 0
   m_Name: BasicNote
   m_TagString: Untagged
@@ -89,10 +89,10 @@ SpriteRenderer:
   m_Size: {x: 0.30755395, y: 0.06262207}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-3919590257531567530
+--- !u!114 &8873022819386422348
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -101,16 +101,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1335181937763020999}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52a18a95606f3c54ab7411d1b9af2631, type: 3}
+  m_Script: {fileID: 11500000, guid: 597abb116510be341a523e155dd66c10, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  judge: 0
-  line: 0
-  length: 0
-  height: 10
-  endFingerID: -1
-  pressFingerID: -1
-  fingerID: -1
+  m_EditorClassIdentifier: Rhyffle.Runtime::Note
+  Kind: 0
+  Position: 0
+  Line: 0
+  Length: 0
+  IsJudged: 0
 --- !u!1 &5006114718042446355
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,7 +119,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7517677390161925130}
   - component: {fileID: 519778738331939893}
-  - component: {fileID: 9056799709384678113}
   m_Layer: 0
   m_Name: BasicNote
   m_TagString: Untagged
@@ -199,25 +196,6 @@ SpriteRenderer:
   m_Size: {x: 0.32, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &9056799709384678113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5006114718042446355}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52a18a95606f3c54ab7411d1b9af2631, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  judge: 0
-  line: 0
-  length: 0
-  height: 10
-  endFingerID: -1
-  pressFingerID: -1
-  fingerID: -1

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 646327568514250522}
   - component: {fileID: 1564439497269783325}
   - component: {fileID: 3956280535038954398}
-  - component: {fileID: -3018593373632675914}
+  - component: {fileID: 3489323693948281729}
   m_Layer: 0
   m_Name: HoldNote
   m_TagString: HoldNote
@@ -90,7 +90,7 @@ SpriteRenderer:
   m_Size: {x: 0.33203125, y: 0.05078125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!61 &3956280535038954398
@@ -139,7 +139,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.29, y: 0.04}
   m_EdgeRadius: 0
---- !u!114 &-3018593373632675914
+--- !u!114 &3489323693948281729
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,16 +148,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1335181937763020999}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a99364e48d099d744b51272235f83818, type: 3}
+  m_Script: {fileID: 11500000, guid: 597abb116510be341a523e155dd66c10, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  judge: 0
-  line: 0
-  length: 0
-  height: 10
-  endFingerID: -1
-  pressFingerID: -1
-  fingerID: 0
+  m_EditorClassIdentifier: Rhyffle.Runtime::Note
+  Kind: 0
+  Position: 0
+  Line: 0
+  Length: 0
+  IsJudged: 0
 --- !u!1 &8910084205133615197
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,7 +167,6 @@ GameObject:
   - component: {fileID: 8617258924156427621}
   - component: {fileID: 1968363317090483981}
   - component: {fileID: 5942744166074708682}
-  - component: {fileID: 5938686522284282042}
   m_Layer: 0
   m_Name: HoldNote
   m_TagString: Untagged
@@ -247,7 +244,7 @@ SpriteRenderer:
   m_Size: {x: 0.32, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!61 &5942744166074708682
@@ -296,22 +293,3 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.885641, y: 0.11957264}
   m_EdgeRadius: 0
---- !u!114 &5938686522284282042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8910084205133615197}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a99364e48d099d744b51272235f83818, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  judge: 0
-  line: 0
-  length: 0
-  height: 10
-  endFingerID: -1
-  pressFingerID: -1
-  fingerID: 0
