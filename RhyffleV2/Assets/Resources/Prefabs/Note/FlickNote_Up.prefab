@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 646327568514250522}
   - component: {fileID: 1564439497269783325}
-  - component: {fileID: 8244326249287074978}
+  - component: {fileID: 1050423966488387654}
   m_Layer: 0
-  m_Name: FlickNote
+  m_Name: FlickNote_Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,18 +81,18 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 12
-  m_Sprite: {fileID: 8105125283602190477, guid: d8583e5ee1ca24341855b965ce3bffcc, type: 3}
+  m_Sprite: {fileID: 2664434829443777333, guid: f363a9cfbb41e4ec4ae26e971f3bcb5c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 4.8722615, y: 0.9610136}
+  m_Size: {x: 1, y: 0.62515724}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8244326249287074978
+--- !u!114 &1050423966488387654
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -101,19 +101,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1335181937763020999}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37455d949214f11489a21726fc8eef82, type: 3}
+  m_Script: {fileID: 11500000, guid: 597abb116510be341a523e155dd66c10, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  judge: 0
-  line: 0
-  length: 0
-  height: 10
-  endFingerID: -1
-  pressFingerID: -1
-  fingerID: -1
-  flicDir: 0
-  flickUpSprite: {fileID: 2664434829443777333, guid: f363a9cfbb41e4ec4ae26e971f3bcb5c, type: 3}
-  flickDownSprite: {fileID: 915788078009525506, guid: 0024d556cee454fc4b11000327f14667, type: 3}
+  m_EditorClassIdentifier: Rhyffle.Runtime::Note
+  Kind: 0
+  Position: 0
+  Line: 0
+  Length: 0
+  IsJudged: 0
 --- !u!1 &3280852576235947296
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,7 +119,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3101139160838984736}
   - component: {fileID: 8230637918451323894}
-  - component: {fileID: 6692935864946603869}
   m_Layer: 0
   m_Name: FlickNote
   m_TagString: Untagged
@@ -205,25 +199,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6692935864946603869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3280852576235947296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37455d949214f11489a21726fc8eef82, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  judge: 0
-  line: 0
-  length: 0
-  height: 10
-  endFingerID: -1
-  pressFingerID: -1
-  fingerID: -1
-  flicDir: 0
-  flickUpSprite: {fileID: -4334457456803565793, guid: db5ddcad6a113410ea92816af249d88a, type: 3}
-  flickDownSprite: {fileID: -5265111857970887000, guid: f403fe422b0104f968e39f946e22a6b3, type: 3}
