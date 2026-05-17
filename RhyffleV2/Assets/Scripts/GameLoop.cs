@@ -83,8 +83,8 @@ public class GameLoop : MonoBehaviour {
             var note = activeNotes[i];
             if (note == null || note.IsJudged) continue;
             float noteTimeSec = Conductor.StepToTime(note.Position, conductor.bpm);
-            // 노트 chart time에 ±1프레임(16ms) 이내 도달 시 Perfect
-            if (Mathf.Abs(songTime - noteTimeSec) < 0.02f) {
+            // 노트가 판정선 도달(또는 통과) 직후 첫 프레임에 Perfect — visual ↔ judgment 일치
+            if (songTime >= noteTimeSec) {
                 Debug.Log($"[AutoJudge] note(line={note.Line}, pos={note.Position}) judged at songTime={songTime:F3}, noteTime={noteTimeSec:F3}, sprite.y={note.transform.position.y:F3}, judgeLineY={GameConfig.JUDGE_LINE_Y}");
                 ApplyJudgment(note, JudgmentGrade.Perfect);
             }
