@@ -153,6 +153,7 @@ public class GameLoop : MonoBehaviour {
         note.IsJudged = true;
         int delta = Mathf.RoundToInt(baseScore * JudgeProcessor.GetScoreMultiplier(grade));
         score += delta;
+        // TODO: SpMiss combo behavior unspecified in JUDGMENT_SPEC.md — confirm before Sprint 2 ComboCounter split
         if (grade == JudgmentGrade.Miss) combo = 0;
         else combo++;
         UpdateHUD(grade);
