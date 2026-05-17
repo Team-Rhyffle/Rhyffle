@@ -42,7 +42,7 @@ public class Note : MonoBehaviour {
         float timeUntilHit = noteTimeSec - songTime;  // 양수 = 아직 안 도달
         // 위에서 아래로 떨어짐: y = JUDGE_LINE_Y + (timeUntilHit * speed * (SPAWN_Y - JUDGE_LINE_Y) / spawnLeadTimeSec)
         float spawnLeadTimeSec = Conductor.StepToTime(GameConfig.SPAWN_LEAD_STEPS, bpm);
-        float yProgress = Mathf.Clamp01(timeUntilHit / spawnLeadTimeSec);
+        float yProgress = Mathf.Clamp01(timeUntilHit * speed / spawnLeadTimeSec);
         float y = GameConfig.JUDGE_LINE_Y + yProgress * (GameConfig.SPAWN_Y - GameConfig.JUDGE_LINE_Y);
         float x = GameConfig.BarX(Line + 1) + (Length - 1) * GameConfig.LANE_WIDTH * 0.5f;
         transform.position = new Vector3(x, y, 0f);
