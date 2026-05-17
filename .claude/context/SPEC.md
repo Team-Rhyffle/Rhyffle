@@ -50,6 +50,7 @@
 ### v1 → v2 코드 salvage
 - **`.claude/context/V1_SALVAGE_MAP.md`** ← Sprint 1 기준 매핑 (9 그대로 / 7 부분 / 2 폐기 / 4 신규)
 - **`.claude/context/REFACTOR_NOTES.md`** ← v1 코드 품질 이슈 (잠재 버그 6 / 매직 넘버 11 / 구조 11 / 성능 7 / dead code 8)
+- **`.claude/context/V1_SCENE_INSPECTION.md`** ← v1 Game.unity 씬 인스펙터 값 (Unity MCP 추출). Camera/Bar/Canvas/AudioSource/Note prefab 실측 + v2 placeholder 갱신 권고
 - **`.claude/context/V2_ARCHITECTURE.md`** ← v2 도착점 청사진 (14 컴포넌트, 이벤트 흐름, v1→v2 매핑표)
 - **`.claude/context/V2_ARCHITECTURE_SPRINT1.md`** ← **Sprint 1 진입 plan** (council 결정 — 6 컴포넌트 점진 분해, Week 1/2/Sprint 2 entry, placeholder 값)
 

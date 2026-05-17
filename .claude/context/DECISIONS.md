@@ -67,6 +67,28 @@
 
 ---
 
+## 2026-05-17: Sprint 1 spec 잔여 빈칸 일괄 확정 + JSON 검증 우선
+
+- **Context**: 한울이 디코에서 "채보툴 / 플레이화면 1차 구현 기획안 리뷰 두 트랙 공유"를 요청 (5/17 10:32). 사용자(이재근) 본인이 spec 결정 권한을 충분히 가지고 있어 한울 답변 대기 대신 직접 결정으로 spec 잔여 빈칸을 일괄 해소. 동시에 데모 음원/곡 메타 준비보다 JSON 채보 드롭 시각 검증이 선행되어야 한다는 우선순위 합의.
+- **Decision**:
+  - `h` = 1.0 유지 (Unity world unit)
+  - 라인 1개 가로 폭 = 화면 fit 임의 (24 lane이 카메라 가시 영역 가로폭 채움). `GameConfig.LANE_WIDTH`
+  - 배속 r 사용자 옵션 노출 X (Sprint 1)
+  - 플릭 시간창 없음 — 거리 조건만으로 판정
+  - HoldNote SpMiss = **v1과 완벽히 동일한 로직** (마지막 터치 떼는 시점 등급 분류, `JudgmentGrade.SpMiss` enum 유지)
+  - 점수 UI = v1 `GameScoreInfo.cs` 참고 (표시 형식 salvage)
+  - 콤보 UI = 중앙 상단 (placeholder 네모상자 OK)
+  - Pause / Resume UX = v1 `GamePlayer.cs` 참고
+  - 곡 메타 포맷 = 이재근 작성, **JSON 드롭 검증 끝난 후**에 진행
+  - Week 1 우선순위 = 음원/오디오 통합 후순위, JSON → 노트 line/length/timing 시각 검증 우선
+- **Outcome**:
+  - `JUDGMENT_SPEC.md §4` 미확정 6건 ✅ 해소 (Plain Mode 외 클래스/시너지만 잔존)
+  - `V2_ARCHITECTURE_SPRINT1.md §4.1` UI placeholder 결정 신설 + Week 1 우선순위 노트
+  - `CURRENT_STATUS.md` 블로커 = 없음 / 펜딩 = 곡 메타·시온 username·더미 채보·카드 데이터셋만
+  - 한울에게 디코로 갈 사항 = 결정 사항 통보 + 카드 데이터셋 진행 체크 (질의는 0건)
+
+---
+
 ## YYYY-MM-DD: [다음 결정 제목]
 
 - **Context**:

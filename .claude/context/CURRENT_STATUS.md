@@ -28,20 +28,21 @@ v2 코드 = 0줄. `RhyffleV2/Assets/Scripts/` 비어있음.
 10. 통합 테스트 — 4~8h
 
 ## 블로커
-**없음.** 미확정 spec 3건 (h / 거리 기준점 / 곡 메타) 은 placeholder 값으로 우회 확정 (2026-05-16 결정).
+**없음.** Sprint 1 spec 미확정 항목 전원 해소 (2026-05-17 — 이재근 본인 권한 결정 + 한울 위임).
 
 ## 펜딩 (사용자 / 외부)
-- 곡 메타 spec (BPM/Offset/AudioPath 형식) — 이재근 수정 예정. 도착 시 `Conductor` 동적화 + `JUDGMENT_SPEC.md` 갱신
+- 곡 메타 spec (BPM/Offset/AudioPath 형식) — 이재근 작성. **후순위**: JSON 채보 드롭 검증 끝난 뒤
 - 시온 (사운드) Discord username 매핑 — 사운드 작업 시작 시 보완
 - 김민주 (채보) 더미 채보 데이터 — 본인이 직접 작성하거나 김민주 요청. Sprint 1 Week 1 step 9 시점
-- 카드 데이터셋 (≈400장) — 한울 2026-05-17 마감 예정 (Sprint 2 입력 자산)
+- 카드 데이터셋 (≈400장) — 한울 2026-05-17 마감 예정 (Sprint 2 입력 자산). **진행 상황 확인 필요**
 
 ## 최근 변경
+- 2026-05-17: **v1 Game.unity 씬 인스펙션 (Unity MCP)** — V1_SCENE_INSPECTION.md 신설. Camera ortho size 10 / Bar 21개 간격 1.0unit / 판정선 y=-2.5 실측 (placeholder -2.25 정정) / Canvas ScreenSpaceCamera 956×440 / Pause 카운트다운 3-2-1 sprite / 노트 prefab 5종 경로 확정. V2_ARCHITECTURE + V2_ARCHITECTURE_SPRINT1 에 인스펙션 결과 통합 (씬 셋업 step 구체화 + 매핑표 보강)
+- 2026-05-17: Sprint 1 spec 잔여 빈칸 전원 확정 — HoldNote SpMiss v1 로직 그대로 / 라인 가로폭 화면 fit / 플릭 시간창 없음 / r 옵션 X / 점수·Pause UI v1 참고 / 콤보 UI 중앙상단. JUDGMENT_SPEC + V2_ARCHITECTURE_SPRINT1 갱신
+- 2026-05-17: Week 1 우선순위 명시 — 음원/곡 메타 후순위, JSON 채보 드롭 시각 검증 우선
 - 2026-05-16: Council (5 agents, 2 rounds) — V2_ARCHITECTURE_SPRINT1.md 신설 (14→6 컴포넌트 점진 분해)
 - 2026-05-16: placeholder 값 임의 결정 (h=1.0, 거리=노트중심, 판정선 y=-2.25 등)
 - 2026-05-16: spec 문서 풀세트 작성 (CHART_SPEC, JUDGMENT_SPEC, V1_SALVAGE_MAP, REFACTOR_NOTES, V2_ARCHITECTURE)
-- 2026-05-16: Notion / Figma / Discord MCP 설치
-- 2026-05-16: Discord 풀 크롤 (텍스트 채널 2 + 포럼 thread 11), DISCORD_LOG.md 정리
 
 ## 작업 재개 시 첫 행동
 1. **이 파일 (CURRENT_STATUS.md) 먼저 읽기**

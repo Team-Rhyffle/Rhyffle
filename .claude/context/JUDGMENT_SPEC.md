@@ -68,37 +68,29 @@ totalScore    = Σ per-note    (만점 = 1,200,000)
 
 ## 4. 미확정 항목 (implementation 진입 전 결정 필요)
 
-### 🔴 High — Sprint 1 블로커 가능
-1. **노트 세로 길이 `h`의 정확값** — ⚠️ **placeholder 1.0 결정 (2026-05-16, 이재근 임의)**, 추후 갱신
-   - Unity world units 기준 (전체 4종 노트 동일 적용)
-   - v1 참고치: `Set` 시 노트 sprite scale.y = 0.64 unit (정적), Drop 중 = `3.2·cal` (가변)
-   - 갱신 위치: `GameConfig.NOTE_HEIGHT`. 한 곳 수정 + 재테스트
+### ✅ 해소 (2026-05-17, 이재근 결정 — 본인 권한 내)
+1. **노트 세로 길이 `h`** — 1.0 유지 (Unity world unit). 갱신 위치: `GameConfig.NOTE_HEIGHT`
+2. **거리 계산 기준점** — 노트 중심. 판정선 y = -2.5. 갱신 위치: `Note.GetCenter()` / `GameConfig.JUDGE_LINE_Y`
+3. **HoldNote 사이 판정 노트 자동 생성 룰** — 채보툴이 사전 분할. 같은 `count` 그룹의 여러 JSON 엔트리 = 사이 판정 노트들. 게임 클라는 position 정렬 후 순차 처리
+4. **r 적용 범위** — Sprint 1에 옵션 노출 X. `GameConfig.DEFAULT_SPEED = 1.0` 하드코드
+5. **라인별 판정선 가로 길이** — **임의 결정 — 화면 가로에 맞게**. 24 lane 전체가 카메라 가시 영역 가로 폭을 채우도록 셋업 시 산출. v1 참고치(`length·0.16`)와 별개로 v2는 화면 fit 우선. 갱신 위치: `GameConfig.LANE_WIDTH`
+6. **플릭 거리 시간창** — **없음**. 거리 조건만 충족하면 판정. 시간 제한 도입 X
+7. **HoldNote SpMiss** — **v1과 완벽히 동일한 로직**. (v1: 마지막 터치를 떼는 시점에 등급 분류, SpMiss enum 유지). v2 `JudgmentGrade` enum에 `SpMiss` 포함 + v1 `HoldNoteBody` salvage 시 로직 그대로
 
-2. **거리 계산 기준점** — ⚠️ **노트 중심 결정 (2026-05-16, 이재근 임의)**
-   - 노트의 중심점 ↔ 판정선 y 좌표 거리
-   - 판정선 위치: world y = `-2.25` (v1 참고치 채택)
-   - 갱신 위치: `Note.GetCenter()` 메서드 + `GameConfig.JUDGE_LINE_Y`
+### 🟢 Low — Plain Mode 외 (Sprint 1 범위 외)
+- 클래스 점수 / 시너지 점수 공식 placeholder 값들 (Challenge Mode 영역)
 
-3. **HoldNote 사이 판정 노트 자동 생성 룰** ✅ v1 확인 완료
-   - **답**: 채보툴이 사전 분할. 같은 `count` 그룹의 여러 JSON 엔트리 = 사이 판정 노트들
-   - 게임 클라이언트는 받은 그대로 순차 처리 (v1 `HoldNoteBody.curJudge` 인덱스 진행 방식)
-   - 각 엔트리 = 1개 판정 (v1엔 `noteType` 0/1/2 분류, v2엔 제거 — 순서만 position 정렬로 판정)
-
-### 🟡 Medium — 화면 디자인 확정 후 결정
-4. **r 적용 범위** — 시스템 기본 r=1. 유저가 r 변경 가능한지? Sprint 1 에 옵션 노출 X (placeholder r=1.0 사용)
-5. **라인별 판정선 가로 길이** — 24 lane 중 lane 1개 = world unit 얼마? Figma Hi-Fi blocked
-6. **플릭 거리 시간창** — 일정 시간 안에 충족해야 하는지? (예: 노트 도달 후 0.3초 이내)
-
-### 🟢 Low — Plain Mode 외
-7. 클래스 점수 / 시너지 점수 공식 placeholder 값들 (Challenge Mode 영역)
-
-### ⚠️ Sprint 1 placeholder 결정 (2026-05-16, 이재근 임의 — 향후 갱신)
+### ⚠️ Sprint 1 placeholder 결정 (2026-05-16 임의 → 2026-05-17 한울 권한 위임 확정 + v1 인스펙션 실측 반영)
 - `h` = 1.0 (Unity world unit). 갱신 위치: `GameConfig.NOTE_HEIGHT`
 - 거리 계산 기준점 = 노트 중심. 갱신 위치: `Note.GetCenter()`
-- 판정선 y = -2.25 (v1 참고치). 갱신 위치: `GameConfig.JUDGE_LINE_Y`
+- **판정선 y = -2.5** (v1 Bar world y 실측. 기존 -2.25 placeholder 정정). 갱신 위치: `GameConfig.JUDGE_LINE_Y`
 - BPM = 120 (1곡 하드코드), Offset = 0
 - playerSpeed (r) = 1.0
-- 곡 메타데이터 (BPM/오프셋 형식): 이재근 수정 예정
+- **라인 간격 = 1.0 unit** (v1 21 lane Bar 간격 실측, v2 24 lane은 그대로 1.0 또는 화면 fit 0.875 비례 축소 중 선택). 갱신 위치: `GameConfig.LANE_WIDTH`
+- **카메라 = orthographic, size 10, pos (0, 1.5, -10)** (v1 동일)
+- **Canvas = ScreenSpaceCamera, ref res 956×440, ScaleWithScreenSize/Expand** (v1 동일)
+- 곡 메타데이터 (BPM/오프셋 형식): 이재근 수정 예정 (음원/곡 메타는 JSON 검증 끝나고 후순위)
+- 참조: `V1_SCENE_INSPECTION.md` (v1 실측 전체)
 
 ## 5. v1 코드와의 차이 (확인 완료)
 
@@ -123,7 +115,7 @@ totalScore    = Σ per-note    (만점 = 1,200,000)
   - 사이 판정 노트는 v1/v2 모두 채보툴이 사전 분할 (정합 ✓)
   - 폴리라인 처리 로직 (`HoldNoteBody.curJudge` 진행) — v2도 유사하게 사용 가능
 - **JudgementType enum**: v1 `Perfect, Great, Good, Miss, SpMiss, Checked, NotChecked`
-  - `SpMiss` (Special Miss, HoldNote 마지막 터치 떼는 시점) — v2 spec 미언급, 단순 Miss로 통합 권장
+  - `SpMiss` (Special Miss, HoldNote 마지막 터치 떼는 시점) — **v2도 유지 (2026-05-17 이재근 결정). v1 로직 그대로 salvage**
 
 ### 5.3 v1 코드 참고치 (재구현 시 출발점)
 - 노트 sprite scale (Set): `(length·0.16, 0.64, 1)` — 정적 크기
@@ -134,3 +126,4 @@ totalScore    = Σ per-note    (만점 = 1,200,000)
 ## 6. 변경 이력
 
 - 2026-05-16: Notion "게임 시스템 § 3. 판정" 에서 추출, 본 문서 신설. 미확정 7건 트래킹.
+- 2026-05-17: 미확정 6건 전원 해소 (이재근 본인 권한 결정 + 한울 권한 위임). h=1.0 유지, r 옵션 X, 라인 가로폭 화면 fit, 플릭 시간창 없음, HoldNote SpMiss v1 로직 그대로 유지. Plain Mode 외 클래스/시너지만 잔존.

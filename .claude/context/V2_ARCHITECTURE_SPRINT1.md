@@ -86,6 +86,8 @@ Note (4종 통합 클래스, enum 기반)
 
 ### Week 1 (목표: 화면에 노트 떨어지고 판정 붙음)
 
+> **우선순위 (2026-05-17)**: 음원/곡 메타 통합은 **후순위**. JSON 채보 로드 → 노트 4종이 올바른 line/length/timing으로 떨어지는지 시각 검증부터. Conductor는 dspTime 가상 시계로 시작(오디오 X), 곡 메타 spec은 JSON 드롭 검증 끝나고 작성.
+
 | 순서 | 작업 | 추정 |
 |---|---|---|
 | 1 | `GameConfig` 신규 + enum 분리 (`Define.cs` 정리) | 2h |
@@ -96,9 +98,47 @@ Note (4종 통합 클래스, enum 기반)
 | 6 | `HoldNoteBody` — v1 salvage + GC 최적화 (widthCurve 캐싱) | 2h |
 | 7 | `JudgeProcessor` 신규 — 거리 기반 임계 함수, Grade 분류 | 3h |
 | 8 | `GameLoop` — v1 GamePlayer 핵심 골격 + Spawn/Drop 내부 메서드 + 카드 호출 제거 | 4h |
-| 9 | Unity 씬 셋업 (24 Bar 배치 스크립트, 카메라, 판정선) | 4h |
+| 9 | **Unity 씬 셋업** — v1 `Game.unity` 청사진 재현 (아래 §3.1 참조) | 4h |
 | 10 | 첫 채보 더미 데이터 (Tap 위주, 모든 노트 종류 1개씩) — 직접 작성 or 김민주 요청 | 2h |
 | 11 | 통합 테스트 (노트 떨어짐 + Tap 판정) | 4~8h |
+
+#### 3.1 Week 1 step 9 — Unity 씬 셋업 상세 (v1 인스펙션 기반)
+
+> 출처: `V1_SCENE_INSPECTION.md`. v1 Game.unity 인스펙터 값 그대로 v2에 재현. spec 추측 없음.
+
+**씬 루트 (필수 8개)**:
+1. **Main Camera** — Orthographic, size 10, pos (0, 1.5, -10), near/far 0.3/1000, bg RGB(49,77,121), Clear Flags Solid Color, AudioListener 부착
+2. **Canvas** — Render Mode ScreenSpaceCamera, Render Camera = Main Camera, Plane Distance 100. CanvasScaler ScaleWithScreenSize, ref res 956×440, ScreenMatchMode Expand
+3. **EventSystem** — `InputSystemUIInputModule` 컴포넌트 (legacy `StandaloneInputModule` 아님)
+4. **GameSystem** (빈 컨테이너)
+   - 자식 **NoteScreen** (pos 0, -2.5, 0) — `NoteScreen` 컴포넌트 + 24 Bar 자식
+   - 자식 **NoteBoard** (pos 0, 0, 0) — `LineRenderer` 컴포넌트 (hold polyline 공유)
+5. **GameLoop** — v2 신규. `GameLoop` 컴포넌트
+6. **NoteCreator** — `NoteCreator` 컴포넌트, 5개 prefab ref (`Resources/Prefabs/Note/{BasicNote,SlideNote,FlickNote,HoldNote,HoldNoteBody}.prefab`)
+7. **Audio Source** — `AudioSource` 컴포넌트 (vol 0.3, pitch 1, spatialBlend 0, playOnAwake false, loop false) + `Conductor` 컴포넌트. Sprint 1엔 clip 없음
+8. **HUDController** (선택) — v1 GameUIManager + GameScoreInfo 의 UI 책임 흡수
+
+**Bar 배치 (24개)**:
+- 중심 정렬 시 Bar_N world position = (`-12.5 + N`, -2.5, 0). Bar_1 = -11.5, Bar_24 = +11.5. 화면 가로 폭 23 unit
+- 또는 v1 패턴 좌측 정렬 시 Bar_N = (-12 + N). Bar_1 = -11, Bar_24 = +12
+- 각 Bar:
+  - Tag = "Bar", Layer = Default
+  - SpriteRenderer (Sprint 1은 enabled=false. Hi-Fi 도착 시 enabled=true + bar sprite)
+  - 3D **BoxCollider** (BoxCollider2D 아님!): center (0, -0.84, 0), size (0.32, 3.0, 0.2), localScale 3.2 — v1 동일
+  - `Bar` 컴포넌트: barNum (1~24), GameLoop ref
+
+**UI 자식 (Canvas)**:
+- **Score** TMP: anchor (0, 0.5) 좌측중앙, anchoredPos (25, 0), sizeDelta (100, 0)
+- **JudgementText** TMP: anchor stretch (0,0)–(1,1), anchoredPos (0, -50), margin 400px, fontSize 60 bold center, font `LiberationSans SDF`
+- **Combo** TMP: anchor (0.5, 1) **중앙 상단** (v1 우측중앙에서 변경)
+- **PauseCountdown** Image: `Resources/Art/UI/Pause/{1,2,3}.png` 3장 sprite, 화면 중앙 (GameUIManager 코드와 함께 salvage)
+
+**v1엔 있지만 Sprint 1에서 제외**:
+- `CardBoard` (카드 시스템 영역)
+- `StandardCard` (씬 박힌 데모 카드)
+- `TouchVisualizer` (touchCircle prefab — 시각 디버그용. 필요 시 Week 2에 추가)
+- `NoteTester` (코드 트리거 테스트 도구 — Week 1 step 11 통합 테스트에 유사 패턴 사용 가능)
+- `FlickUpZone` / `FlickDownZone` (v1 좌우 플릭 추가 전 잔재. v2는 4방향이라 폐기 또는 zone 4개)
 
 **Week 1 합계 ≈ 29~33h** (Pragmatist 추정 범위)
 
@@ -139,13 +179,27 @@ Note (4종 통합 클래스, enum 기반)
 |---|---|---|
 | 노트 세로 길이 `h` | **1.0** (Unity world unit) | `GameConfig.NOTE_HEIGHT` |
 | 거리 계산 기준점 | 노트 중심 | `Note.GetCenter()` |
-| 판정선 y | -2.25 (v1 값) | `GameConfig.JUDGE_LINE_Y` |
+| **판정선 y** | **-2.5** (v1 인스펙션 실측. 기존 -2.25 정정) | `GameConfig.JUDGE_LINE_Y` |
 | 출발선 y | 7.75 (v1 값) | `GameConfig.SPAWN_Y` |
 | BPM | 120 (하드코드 1곡 한정) | `Conductor.bpm` 필드 |
 | Offset | 0 | `Conductor.offset` 필드 |
 | playerSpeed (r) | 1.0 | `GameConfig.DEFAULT_SPEED` |
+| **라인 간격** | **1.0 unit** (v1 21 lane 실측 그대로) 또는 0.875 (24 lane 화면 fit 축소) | `GameConfig.LANE_WIDTH` |
+| **카메라** | orthographic, size 10, pos (0, 1.5, -10), bg RGB(49,77,121) | Main Camera |
+| **Canvas** | ScreenSpaceCamera, ref res 956×440, Expand, planeDistance 100 | Canvas / CanvasScaler |
 
 향후 갱신 시: 위 const/필드 한 곳만 수정 + 재테스트.
+
+### 4.1 UI placeholder 결정 (2026-05-17)
+
+| 항목 | 결정 | 비고 |
+|---|---|---|
+| 점수 UI | **v1 참고** — Canvas 좌측중앙 anchor (0, 0.5), anchoredPos (25, 0), TMP. `GameScoreInfo.cs` salvage | v1 인스펙션 확인 |
+| 콤보 UI | **중앙 상단** 배치 (v1은 우측중앙이었음 — v2 의식적 변경) | placeholder 네모상자 OK |
+| 판정 UI (JudgementText) | 화면 중앙 stretch, fontSize 60 bold, anchoredPos (0, -50), 400px margin | v1 동일 (`LiberationSans SDF`) |
+| Pause / Resume UX | **v1 참고** — `GameUIManager.countSprites[3]` = `Resources/Art/UI/Pause/{1,2,3}.png` 카운트다운 sprite salvage | 3-2-1 sprite 시퀀스 |
+| HoldNote SpMiss | v1 로직 그대로 (마지막 터치 떼는 시점 SpMiss 등급) | `JudgmentGrade.SpMiss` enum 포함 |
+| 플릭 판정 | 거리 조건만 (시간창 X) | 무한 swipe 허용 |
 
 ---
 
@@ -165,6 +219,9 @@ Note (4종 통합 클래스, enum 기반)
 | `AudioTest.cs` | `Conductor.cs` 에 흡수 (dspTime 사용) |
 | `Contents/GamePlayer.cs` (569줄) | `GameLoop.cs` (250~300줄 목표) |
 | `Managers/Managers.cs` | Sprint 1 한정 ScoreManager + JsonManager 만 활성. Card/Deck/Effect 등 빈 stub |
+| `Resources/Prefabs/Note/{BasicNote,SlideNote,FlickNote,HoldNote,HoldNoteBody}.prefab` | 동일 경로로 복사 (`.meta` 동반). v2 NoteCreator 인스펙터 ref 재연결 | 5종 그대로 salvage |
+| `Resources/Art/UI/Pause/{1,2,3}.png` | 동일 경로로 복사 (`.meta` 동반). Pause 카운트다운 sprite | v1 GameUIManager 패턴 salvage |
+| `Resources/Art/barTest.png` | placeholder 단계엔 불필요 (Bar SpriteRenderer enabled=false). Hi-Fi 도착 시 신규 sprite 교체 | 의도적 미salvage |
 
 ---
 
@@ -202,3 +259,5 @@ Note (4종 통합 클래스, enum 기반)
 ## 8. 변경 이력
 
 - 2026-05-16: Council (5 agents, 2 rounds) 결정으로 신설. 14 → 6 컴포넌트 점진 분해. h placeholder 1.0 임의 결정. Sprint 2 entry 분리 작업 명시.
+- 2026-05-17: Sprint 1 spec 잔여 빈칸 일괄 확정 (HoldNote SpMiss v1 동일 / r 옵션 X / 플릭 시간창 없음 / 콤보 UI 중앙상단 / 점수·Pause UI v1 참고). Week 1 우선순위 = JSON 채보 드롭 검증 우선, 음원/곡 메타 후순위. §4 UI placeholder 결정 신설.
+- 2026-05-17: **v1 Game.unity 인스펙션 결과 통합** — §3.1 Week 1 step 9 (씬 셋업) 구체화 (Camera/Canvas/Bar/UI/Note prefab 5종/Pause sprite 직접 수치 명시). §4 placeholder 표에 카메라/Canvas/라인 간격 실측치 추가. §5 매핑 표에 prefab + sprite salvage 경로 추가. 판정선 y placeholder -2.25 → -2.5 정정.
