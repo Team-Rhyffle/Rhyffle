@@ -2,7 +2,9 @@
     "name": "Rhyffle.Editor",
     "rootNamespace": "",
     "references": [
-        "Rhyffle.Runtime"
+        "Rhyffle.Runtime",
+        "Unity.InputSystem",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [
         "Editor"

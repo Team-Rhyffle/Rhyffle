@@ -6,8 +6,8 @@ public class GameLoop : MonoBehaviour {
     public Conductor       conductor;
     public NoteScreen      noteScreen;
     public JudgeProcessor  judgeProcessor;
-    public UnityEngine.UI.Text scoreText;
-    public UnityEngine.UI.Text comboText;
+    public TMPro.TextMeshProUGUI scoreText;
+    public TMPro.TextMeshProUGUI comboText;
     public TMPro.TextMeshProUGUI judgementText;
 
     [Header("Note Prefabs (NoteCreator 흡수 — council 권장 6 루트 축소안)")]
