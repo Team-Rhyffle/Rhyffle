@@ -43,8 +43,12 @@ public static class SceneBootstrap {
                 Debug.LogWarning($"[SceneBootstrap] Prefab not found: {path}");
                 continue;
             }
-            // 1) Missing scripts 제거 (v1 wrapper script refs)
+            // 1) Missing scripts 제거 (v1 wrapper script refs) — root + 자식 재귀
             int removed = GameObjectUtility.RemoveMonoBehavioursWithMissingScript(go);
+            foreach (var t in go.GetComponentsInChildren<Transform>(true)) {
+                if (t.gameObject == go) continue;
+                removed += GameObjectUtility.RemoveMonoBehavioursWithMissingScript(t.gameObject);
+            }
             // 2) Note 컴포넌트 없으면 attach (HoldNoteBody는 별도 처리)
             if (path.Contains("HoldNoteBody")) {
                 if (go.GetComponent<HoldNoteBody>() == null) go.AddComponent<HoldNoteBody>();
