@@ -1,12 +1,11 @@
 {
-    "name": "Rhyffle.Editor",
+    "name": "Rhyffle.Runtime",
     "rootNamespace": "",
     "references": [
-        "Rhyffle.Runtime"
+        "Unity.InputSystem",
+        "Unity.TextMeshPro"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
