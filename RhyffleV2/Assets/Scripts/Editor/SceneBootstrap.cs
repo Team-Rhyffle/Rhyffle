@@ -244,6 +244,9 @@ public static class SceneBootstrap {
         // Bar들의 gameLoop ref 와이어링
         foreach (var bar in noteScreen.bars) bar.gameLoop = gameLoop;
 
+        // === 7. CardSystem + CardBoard (idempotent helper) ===
+        EnsureCardSystemAndBoard(canvasGO);
+
         // === 씬 저장 ===
         EditorSceneManager.SaveScene(scene, SCENE_PATH);
         AssetDatabase.SaveAssets();
@@ -264,8 +267,44 @@ public static class SceneBootstrap {
     }
 
     // ============================================================
+    // 3. Add CardSystem + CardBoard to Current Scene (idempotent)
+    // ============================================================
+
+    [MenuItem("Rhyffle/Add CardSystem+CardBoard to Current Scene")]
+    static void AddCardSystemAndBoardMenu() {
+        var canvasGO = GameObject.Find("Canvas");
+        if (canvasGO == null) {
+            Debug.LogError("[SceneBootstrap] Canvas not found in current scene.");
+            return;
+        }
+        EnsureCardSystemAndBoard(canvasGO);
+        EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
+        AssetDatabase.SaveAssets();
+    }
+
+    // ============================================================
     // Helpers
     // ============================================================
+
+    static void EnsureCardSystemAndBoard(GameObject canvasGO) {
+        // CardSystem: top-level GameObject
+        var existingSys = GameObject.Find("CardSystem");
+        if (existingSys == null) {
+            var sysGO = new GameObject("CardSystem");
+            sysGO.AddComponent<CardSystem>();
+            Debug.Log("[SceneBootstrap] CardSystem GameObject created.");
+        }
+        // CardBoard: child of Canvas
+        Transform existingBoard = canvasGO.transform.Find("CardBoard");
+        if (existingBoard == null) {
+            var boardGO = new GameObject("CardBoard", typeof(RectTransform));
+            boardGO.transform.SetParent(canvasGO.transform, false);
+            boardGO.layer = LayerMask.NameToLayer("UI");
+            boardGO.AddComponent<CardBoardUI>();
+            Debug.Log("[SceneBootstrap] CardBoard added under Canvas.");
+        }
+    }
 
     static GameObject CreateTMPText(Transform parent, string name, string text, int fontSize) {
         var go = new GameObject(name, typeof(RectTransform));
