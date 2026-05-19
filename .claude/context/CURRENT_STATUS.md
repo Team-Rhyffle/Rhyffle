@@ -7,16 +7,14 @@
 ---
 
 ## 현재 단계
-**Sprint 1.5 완료** — 10/10 task DONE. Phase push 완료.
+**Sprint 1.5.1 진행 중** — T1 완료 (8944a12). T2~T5 대기.
 
 - Sprint 1 (2026-05-18 완료): 14/14 task + Steelman 게이트 3개 PASS.
-- Sprint 1.5 (2026-05-19 완료): 10/10 task DONE. EventBus + 이벤트 struct 4종 + CardData DTO + ScoreModifier + ICardEffect 5-method + CardSystem + CardEffectRegistry + 더미 카드 3종 + bootstrap + PokerHandEvaluator + tests + CardBoardUI + 씬 배치 + GameLoop 통합 + 통합 검증 + Steelman 게이트 2개 PASS. **36/36 EditMode tests PASS**.
+- Sprint 1.5 (2026-05-19 완료): 10/10 task DONE. **36/36 EditMode tests PASS**.
+- Sprint 1.5.1 (2026-05-19 진행): Lane Visualization Refinement + Card-Lane Mapping. T1 완료.
 
 ## 다음 액션
-**Sprint 2 진입 준비** — 진입 조건 확인:
-1. `김한울 카드 데이터셋 도착 확인` (마감 2026-05-17, 지연 중) — 데이터셋 없으면 일반능력 system spec 미확정
-2. 일반능력 system spec 확정 후 `ICardEffect` 실구현 + `CardSystem` 확장
-3. 묘지/덱 spec 확인 (`SPEC.md` 인덱스 경유)
+**Sprint 1.5.1 T2**: `GameConfig.BarX` 공식 업데이트 (n-12.5 → n-13), `GameConfig.LaneX(i)` 신규 헬퍼 추가, SceneBootstrap 하드코드 `n-13` → `GameConfig.BarX(n)` 교체.
 
 ## 블로커
 **Sprint 2 진입 블로커**: 김한울 카드 데이터셋 미도착 (2026-05-17 마감 → 초과). 진행 상황 확인 필요.
@@ -28,11 +26,11 @@
 - 김민주 (채보) 더미 채보 데이터 — 본인이 직접 작성하거나 김민주 요청. Sprint 1 Week 1 step 9 시점
 
 ## 최근 변경
-- 2026-05-19: **Sprint 1.5 Task 10 완료 + Phase push** — 통합 검증 PASS (score 1,320,000 / 1,584,000), 36/36 EditMode tests PASS, Steelman Gate A+B PASS, CardBoard UI 확인. CURRENT_STATUS + DECISIONS 갱신. SteelmanGatesTest.cs 신설.
+- 2026-05-19: **Sprint 1.5.1 T1 완료** (8944a12) — LaneAnchor.cs 신규, Bar.cs 시각 전용화, NoteScreen.cs lanes 추가, SceneBootstrap 25 Bar + 24 LaneAnchor, Game.unity 재생성. 36/36 tests PASS.
+- 2026-05-19: **Sprint 1.5 Task 10 완료 + Phase push** — 통합 검증 PASS (score 1,320,000 / 1,584,000), 36/36 EditMode tests PASS, Steelman Gate A+B PASS.
 - 2026-05-19: **Sprint 1.5 Task 9 완료** (40b04ca) — GameLoop EventBus 통합 (modifier 합산 + 콤보 보호 + 키노트 stub).
-- 2026-05-19: **Sprint 1.5 Task 8 완료** (e0d3091) — CardBoardUI (7 슬롯 procedural, FieldChangedEvent 구독) + SceneBootstrap EnsureCardSystemAndBoard helper + 메뉴 아이템.
+- 2026-05-19: **Sprint 1.5 Task 8 완료** (e0d3091) — CardBoardUI (7 슬롯 procedural, FieldChangedEvent 구독) + SceneBootstrap EnsureCardSystemAndBoard helper.
 - 2026-05-19: **Sprint 1.5 Task 7 완료** (39e811f) — PokerHandEvaluator stub + PokerHand enum 13값 + 4 EditMode tests.
-- 2026-05-19: **Sprint 1.5 Task 6 완료** (48721b4) — 더미 카드 3종 + DummyEffectsBootstrap + 8 EditMode tests.
 
 ## 작업 재개 시 첫 행동
 1. **이 파일 (CURRENT_STATUS.md) 먼저 읽기**
