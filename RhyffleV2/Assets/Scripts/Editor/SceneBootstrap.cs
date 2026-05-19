@@ -184,6 +184,22 @@ public static class SceneBootstrap {
             20
         );
 
+        // Sprint 1.5.3 Lo-Fi placeholder: 셔플 + 덱묘지
+        CreatePlaceholderPanel(
+            canvasGO.transform, "ShufflePlaceholder",
+            new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, 0f),
+            new Vector2(8f, 8f), new Vector2(80f, 79f),
+            "셔플", new Color(1.0f, 0.95f, 0.4f, 0.7f),
+            20
+        );
+        CreatePlaceholderPanel(
+            canvasGO.transform, "DeckGravePlaceholder",
+            new Vector2(1f, 0f), new Vector2(1f, 0f), new Vector2(1f, 0f),
+            new Vector2(-8f, 8f), new Vector2(83f, 79f),
+            "덱묘지", new Color(1.0f, 0.95f, 0.4f, 0.7f),
+            18
+        );
+
         // === 3. EventSystem ===
         var eventSystemGO = new GameObject("EventSystem");
         eventSystemGO.AddComponent<EventSystem>();
@@ -325,7 +341,7 @@ public static class SceneBootstrap {
             EditorBuildSettings.scenes = newScenes;
         }
 
-        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 25 Bar(점 0.5) + 24 LaneAnchor(Visual 자식 띠) + UI 6종 + GameLoop 와이어링 완료. Build settings에 등록됨. (Sprint 1.5.3 T2: PausePlaceholder + SongInfoPlaceholder 추가)");
+        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 25 Bar(점 0.5) + 24 LaneAnchor(Visual 자식 띠) + UI 8종 + GameLoop 와이어링 완료. Build settings에 등록됨. (Sprint 1.5.3 T3: ShufflePlaceholder + DeckGravePlaceholder 추가)");
     }
 
     // ============================================================
