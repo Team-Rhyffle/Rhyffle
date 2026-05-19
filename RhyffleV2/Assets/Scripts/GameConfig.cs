@@ -5,8 +5,6 @@ public static class GameConfig {
     public const float JUDGE_LINE_Y     = -2.5f;   // v1 Bar world y 실측
     public const float SPAWN_Y          = 7.75f;   // v1 출발선 y
     public const float NOTE_HEIGHT      = 1.0f;    // h, Hi-Fi 도착 시 갱신
-    // Bar_N world x 공식: N - 12.5 (중심정렬, N ∈ [1, 24] → x ∈ [-11.5, +11.5])
-
     // === 시간 (채보 step + BPM) ===
     public const int   STEPS_PER_QUARTER = 48;     // 1/4박자 = 48 step (CHART_SPEC.md)
     public const int   SPAWN_LEAD_STEPS  = 96;     // 노트 도착 2박자 전 spawn
@@ -36,13 +34,17 @@ public static class GameConfig {
 
     // === Bar 콜라이더 (v1 실측 — lane 입력 식별 only, 판정 무관) ===
     public const float BAR_COLLIDER_CENTER_Y = -0.84f;
-    public const float BAR_COLLIDER_SIZE_X   = 0.32f;
+    public const float BAR_COLLIDER_SIZE_X   = 0.32f;  // Sprint 1.5.1+ 사용 안 함 — Hi-Fi marker 도입 시 활용 예정
     public const float BAR_COLLIDER_SIZE_Y   = 3.0f;
     public const float BAR_COLLIDER_SIZE_Z   = 0.2f;
     public const float BAR_LOCAL_SCALE       = 3.2f;
 
-    // === Bar 좌표 공식 헬퍼 ===
-    public static float BarX(int barNum) => barNum - 12.5f;
+    // === Bar / Lane 좌표 헬퍼 (Sprint 1.5.1+) ===
+    public const int BAR_COUNT = 25;     // lane 24개의 양 끝 + 사이 marker 25 (중심정렬)
+    // BarX: lane 경계점 (점 marker) world x. 25 marker.
+    // LaneX: lane 영역 (띠) center world x. 24 lane.
+    public static float BarX(int barNum) => barNum - 13f;
+    public static float LaneX(int laneIndex) => laneIndex - 11.5f;
 
     // === Card System (Sprint 1.5+) ===
     public const int CARDS_IN_FIELD          = 7;   // 필드 카드 수 (spec §4 + Lo-Fi UI 7 슬롯 동일)

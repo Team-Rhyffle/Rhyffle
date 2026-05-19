@@ -32,10 +32,25 @@ public class GameConfigTest {
 
     [Test]
     public void BarX_Formula_AtBoundaries() {
-        Assert.AreEqual(-11.5f, GameConfig.BarX(1));
-        Assert.AreEqual(-0.5f,  GameConfig.BarX(12));
-        Assert.AreEqual(0.5f,   GameConfig.BarX(13));
-        Assert.AreEqual(11.5f,  GameConfig.BarX(24));
+        // 25 marker 중심정렬: Bar_1=-12, Bar_13=0, Bar_25=+12
+        Assert.AreEqual(-12f, GameConfig.BarX(1));
+        Assert.AreEqual(0f,   GameConfig.BarX(13));
+        Assert.AreEqual(12f,  GameConfig.BarX(25));
+    }
+
+    [Test]
+    public void LaneX_Formula_AtBoundaries() {
+        // 24 lane center: lane 0=-11.5, lane 12=0.5, lane 23=+11.5
+        Assert.AreEqual(-11.5f, GameConfig.LaneX(0));
+        Assert.AreEqual(0.5f,   GameConfig.LaneX(12));
+        Assert.AreEqual(11.5f,  GameConfig.LaneX(23));
+    }
+
+    [Test]
+    public void BarCount_And_LaneCount_AreCoherent() {
+        Assert.AreEqual(25, GameConfig.BAR_COUNT);
+        Assert.AreEqual(24, GameConfig.LANE_COUNT);
+        Assert.AreEqual(GameConfig.BAR_COUNT, GameConfig.LANE_COUNT + 1);
     }
 
     [Test]

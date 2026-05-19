@@ -44,7 +44,7 @@ public class Note : MonoBehaviour {
         float spawnLeadTimeSec = Conductor.StepToTime(GameConfig.SPAWN_LEAD_STEPS, bpm);
         float yProgress = Mathf.Clamp01(timeUntilHit * speed / spawnLeadTimeSec);
         float y = GameConfig.JUDGE_LINE_Y + yProgress * (GameConfig.SPAWN_Y - GameConfig.JUDGE_LINE_Y);
-        float x = GameConfig.BarX(Line + 1) + (Length - 1) * GameConfig.LANE_WIDTH * 0.5f;
+        float x = GameConfig.LaneX(Line) + (Length - 1) * GameConfig.LANE_WIDTH * 0.5f;
         transform.position = new Vector3(x, y, 0f);
     }
 

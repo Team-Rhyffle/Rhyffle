@@ -186,7 +186,7 @@ public static class SceneBootstrap {
         for (int n = 1; n <= 25; n++) {
             var bar = new GameObject($"Bar_{n}");
             bar.transform.SetParent(noteScreenGO.transform, false);
-            bar.transform.localPosition = new Vector3(n - 13, 0f, 0f); // Sprint 1.5.1 T2 will define this as GameConfig.BarX(n)
+            bar.transform.localPosition = new Vector3(GameConfig.BarX(n), 0f, 0f);
             bar.transform.localScale = new Vector3(GameConfig.BAR_LOCAL_SCALE, GameConfig.BAR_LOCAL_SCALE, 1f);
             bar.tag = "Bar";
             var sr = bar.AddComponent<SpriteRenderer>();
@@ -202,7 +202,7 @@ public static class SceneBootstrap {
         for (int i = 0; i < 24; i++) {
             var laneGO = new GameObject($"LaneAnchor_{i}");
             laneGO.transform.SetParent(noteScreenGO.transform, false);
-            laneGO.transform.localPosition = new Vector3(i - 11.5f, 0f, 0f); // lane center; T2 will replace with GameConfig.LaneX(i)
+            laneGO.transform.localPosition = new Vector3(GameConfig.LaneX(i), 0f, 0f);
             var laneCol = laneGO.AddComponent<BoxCollider>();
             laneCol.center = new Vector3(0f, GameConfig.BAR_COLLIDER_CENTER_Y, 0f);
             laneCol.size = new Vector3(GameConfig.LANE_WIDTH, GameConfig.BAR_COLLIDER_SIZE_Y, GameConfig.BAR_COLLIDER_SIZE_Z);
