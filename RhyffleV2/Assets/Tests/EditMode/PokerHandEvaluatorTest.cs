@@ -2,12 +2,16 @@ using NUnit.Framework;
 using System.Collections.Generic;
 
 public class PokerHandEvaluatorTest {
+    // Helper: build a CardData inline
+    static CardData C(CardSuit s, CardRank r) => new CardData { Suit = s, Rank = r };
+
+    // ── existing tests (updated) ─────────────────────────────────────────────
+
     [Test]
     public void Evaluate_SameRankTwoCards_Returns원페어() {
-        // Two Spade Aces → 원페어
         var field = new List<CardData> {
-            new CardData { Suit = CardSuit.Spade, Rank = CardRank.A },
-            new CardData { Suit = CardSuit.Heart, Rank = CardRank.A },
+            C(CardSuit.Spade, CardRank.A),
+            C(CardSuit.Heart, CardRank.A),
         };
         Assert.AreEqual(PokerHand.원페어, PokerHandEvaluator.Evaluate(field));
     }
@@ -15,22 +19,22 @@ public class PokerHandEvaluatorTest {
     [Test]
     public void Evaluate_AllDistinctRanks_Returns없음() {
         var field = new List<CardData> {
-            new CardData { Suit = CardSuit.Spade, Rank = CardRank.A },
-            new CardData { Suit = CardSuit.Heart, Rank = CardRank.R2 },
-            new CardData { Suit = CardSuit.Diamond, Rank = CardRank.R3 },
+            C(CardSuit.Spade,   CardRank.A),
+            C(CardSuit.Heart,   CardRank.R2),
+            C(CardSuit.Diamond, CardRank.R3),
         };
         Assert.AreEqual(PokerHand.없음, PokerHandEvaluator.Evaluate(field));
     }
 
     [Test]
-    public void Evaluate_ThreeSameRank_StillReturns원페어AsStub() {
-        // Sprint 1.5 stub: 3-of-a-kind returns 원페어 since 트리플 detection unimplemented
+    public void Evaluate_ThreeSameRank_ReturnsTriple() {
+        // Three Kings → 트리플 (stub test renamed: 트리플 detection now implemented)
         var field = new List<CardData> {
-            new CardData { Suit = CardSuit.Spade, Rank = CardRank.K },
-            new CardData { Suit = CardSuit.Heart, Rank = CardRank.K },
-            new CardData { Suit = CardSuit.Diamond, Rank = CardRank.K },
+            C(CardSuit.Spade,   CardRank.K),
+            C(CardSuit.Heart,   CardRank.K),
+            C(CardSuit.Diamond, CardRank.K),
         };
-        Assert.AreEqual(PokerHand.원페어, PokerHandEvaluator.Evaluate(field));
+        Assert.AreEqual(PokerHand.트리플, PokerHandEvaluator.Evaluate(field));
     }
 
     [Test]
@@ -39,8 +43,8 @@ public class PokerHandEvaluatorTest {
         var values = System.Enum.GetValues(typeof(PokerHand));
         Assert.AreEqual(13, values.Length);
         // Spot-check key values
-        Assert.AreEqual(0, (int)PokerHand.없음);
-        Assert.AreEqual(1, (int)PokerHand.원페어);
+        Assert.AreEqual(0,  (int)PokerHand.없음);
+        Assert.AreEqual(1,  (int)PokerHand.원페어);
         Assert.AreEqual(12, (int)PokerHand.스트레이트플러시);
         // Verify all expected names exist
         Assert.IsTrue(System.Enum.IsDefined(typeof(PokerHand), "투페어"));
@@ -53,5 +57,140 @@ public class PokerHandEvaluatorTest {
         Assert.IsTrue(System.Enum.IsDefined(typeof(PokerHand), "더블트리플"));
         Assert.IsTrue(System.Enum.IsDefined(typeof(PokerHand), "포카드"));
         Assert.IsTrue(System.Enum.IsDefined(typeof(PokerHand), "럭키세븐"));
+    }
+
+    // ── new tests: 7 traditional hands ──────────────────────────────────────
+
+    [Test]
+    public void Evaluate_FourSameRank_Returns포카드() {
+        // AAAA + K → 포카드
+        var field = new List<CardData> {
+            C(CardSuit.Spade,   CardRank.A),
+            C(CardSuit.Heart,   CardRank.A),
+            C(CardSuit.Diamond, CardRank.A),
+            C(CardSuit.Club,    CardRank.A),
+            C(CardSuit.Spade,   CardRank.K),
+        };
+        Assert.AreEqual(PokerHand.포카드, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_TripleAndPair_Returns풀하우스() {
+        // AAA + KK → 풀하우스
+        var field = new List<CardData> {
+            C(CardSuit.Spade,   CardRank.A),
+            C(CardSuit.Heart,   CardRank.A),
+            C(CardSuit.Diamond, CardRank.A),
+            C(CardSuit.Spade,   CardRank.K),
+            C(CardSuit.Heart,   CardRank.K),
+        };
+        Assert.AreEqual(PokerHand.풀하우스, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_TripleAlone_Returns트리플() {
+        // AAA + K + Q (no pair) → 트리플
+        var field = new List<CardData> {
+            C(CardSuit.Spade,   CardRank.A),
+            C(CardSuit.Heart,   CardRank.A),
+            C(CardSuit.Diamond, CardRank.A),
+            C(CardSuit.Club,    CardRank.K),
+            C(CardSuit.Spade,   CardRank.Q),
+        };
+        Assert.AreEqual(PokerHand.트리플, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_TwoPairs_Returns투페어() {
+        // AA + KK + Q → 투페어
+        var field = new List<CardData> {
+            C(CardSuit.Spade,   CardRank.A),
+            C(CardSuit.Heart,   CardRank.A),
+            C(CardSuit.Diamond, CardRank.K),
+            C(CardSuit.Club,    CardRank.K),
+            C(CardSuit.Spade,   CardRank.Q),
+        };
+        Assert.AreEqual(PokerHand.투페어, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_FiveSameSuit_Returns플러시() {
+        // 5 Spades, all distinct ranks → 플러시 (not a straight)
+        var field = new List<CardData> {
+            C(CardSuit.Spade, CardRank.A),
+            C(CardSuit.Spade, CardRank.R3),
+            C(CardSuit.Spade, CardRank.R6),
+            C(CardSuit.Spade, CardRank.R9),
+            C(CardSuit.Spade, CardRank.Q),
+        };
+        Assert.AreEqual(PokerHand.플러시, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_FiveConsecutiveRanks_Returns스트레이트() {
+        // 2-3-4-5-6, mixed suits → 스트레이트
+        var field = new List<CardData> {
+            C(CardSuit.Spade,   CardRank.R2),
+            C(CardSuit.Heart,   CardRank.R3),
+            C(CardSuit.Diamond, CardRank.R4),
+            C(CardSuit.Club,    CardRank.R5),
+            C(CardSuit.Spade,   CardRank.R6),
+        };
+        Assert.AreEqual(PokerHand.스트레이트, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_StraightFlush_Returns스트레이트플러시() {
+        // 2♠-3♠-4♠-5♠-6♠ → 스트레이트플러시
+        var field = new List<CardData> {
+            C(CardSuit.Spade, CardRank.R2),
+            C(CardSuit.Spade, CardRank.R3),
+            C(CardSuit.Spade, CardRank.R4),
+            C(CardSuit.Spade, CardRank.R5),
+            C(CardSuit.Spade, CardRank.R6),
+        };
+        Assert.AreEqual(PokerHand.스트레이트플러시, PokerHandEvaluator.Evaluate(field));
+    }
+
+    // ── priority tests ───────────────────────────────────────────────────────
+
+    [Test]
+    public void Evaluate_FullHouseVsTriple_Priority풀하우스Wins() {
+        // AAA + KK qualifies both 풀하우스 and 트리플; 풀하우스 must win
+        var field = new List<CardData> {
+            C(CardSuit.Spade,   CardRank.A),
+            C(CardSuit.Heart,   CardRank.A),
+            C(CardSuit.Diamond, CardRank.A),
+            C(CardSuit.Spade,   CardRank.K),
+            C(CardSuit.Heart,   CardRank.K),
+        };
+        Assert.AreEqual(PokerHand.풀하우스, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_StraightFlushVsFlush_Priority스트레이트플러시Wins() {
+        // 5 consecutive same-suit cards qualifies both 플러시 and 스트레이트플러시;
+        // 스트레이트플러시 must win
+        var field = new List<CardData> {
+            C(CardSuit.Heart, CardRank.R3),
+            C(CardSuit.Heart, CardRank.R4),
+            C(CardSuit.Heart, CardRank.R5),
+            C(CardSuit.Heart, CardRank.R6),
+            C(CardSuit.Heart, CardRank.R7),
+        };
+        Assert.AreEqual(PokerHand.스트레이트플러시, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_StraightFlushVsStraight_Priority스트레이트플러시Wins() {
+        // Same hand as above — also qualifies as 스트레이트; 스트레이트플러시 must win
+        var field = new List<CardData> {
+            C(CardSuit.Diamond, CardRank.R7),
+            C(CardSuit.Diamond, CardRank.R8),
+            C(CardSuit.Diamond, CardRank.R9),
+            C(CardSuit.Diamond, CardRank.R10),
+            C(CardSuit.Diamond, CardRank.J),
+        };
+        Assert.AreEqual(PokerHand.스트레이트플러시, PokerHandEvaluator.Evaluate(field));
     }
 }
