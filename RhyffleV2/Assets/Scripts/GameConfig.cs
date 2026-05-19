@@ -45,8 +45,8 @@ public static class GameConfig {
     public static float BarX(int barNum) => barNum - 12.5f;
 
     // === Card System (Sprint 1.5+) ===
-    public const int CARDS_IN_FIELD        = 7;   // 필드에 올라와 있는 카드 슬롯 수 (Lo-Fi UI 7 슬롯 기준)
-    public const int KEY_NOTE_COMBO_INTERVAL = 32; // 키 노트 트리거 콤보 간격 (spec 미정 — stub, Sprint 2 갱신)
+    public const int CARDS_IN_FIELD          = 7;   // 필드 카드 수 (spec §4 + Lo-Fi UI 7 슬롯 동일)
+    public const int KEY_NOTE_COMBO_INTERVAL = 32;  // 키 노트 트리거 콤보 간격 (임의 값 — 플레이테스트 미검증, 2박 단위 어림셈 수준; spec 미정 — stub, Sprint 2 갱신)
 }
 
 public enum NoteKind { Normal, Hold, Slide, Flick }

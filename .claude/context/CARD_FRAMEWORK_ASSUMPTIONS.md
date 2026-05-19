@@ -21,7 +21,7 @@
 | 항목 | 내용 |
 |------|------|
 | **현재 stub** | "키 노트" spec 미정. 매 32 콤보마다 `KeyNoteProcessedEvent` 발행하는 것으로 대체. 간격 값 = `GameConfig.KEY_NOTE_COMBO_INTERVAL = 32`. |
-| **재방문 파일** | `GameLoop.cs` (ApplyJudgment 내부 — 이벤트 발행 로직), `GameConfig.cs` (`KEY_NOTE_COMBO_INTERVAL` 상수), channel spec extension (이벤트 페이로드) |
+| **재방문 파일** | `GameLoop.cs` (ApplyJudgment 내부 — 이벤트 발행 로직), `GameConfig.cs` (`KEY_NOTE_COMBO_INTERVAL` 상수 값 교체 또는 삭제, 채보 키 노트 조건으로 대체), channel spec extension (이벤트 페이로드) |
 | **트리거** | 채보/플레이 채널 spec 에서 "키 노트" 조건 확정 시 |
 
 ---
@@ -31,7 +31,7 @@
 | 항목 | 내용 |
 |------|------|
 | **현재 stub** | Sprint 1.5 에서 완전 스킵. 더미 카드 3종은 모두 고유 능력(unique ability)만 보유 — 일반능력 없음. |
-| **재방문 파일** | `CardEffectRegistry.cs` — rarity 기반 일반능력 랜덤 발급 제너레이터 추가 예정 |
+| **재방문 파일** | `CardEffectRegistry.cs` (등록 로직 내 일반능력 생성 경로 — rarity 기반 랜덤 발급 제너레이터 추가 예정) |
 | **트리거** | 카드 rarity / 일반능력 목록 spec 확정 시 |
 
 ---
