@@ -120,14 +120,16 @@ public static class SceneBootstrap {
         scaler.referencePixelsPerUnit = 100f;
         canvasGO.AddComponent<GraphicRaycaster>();
 
-        // Canvas 자식 — Score (좌측중앙)
-        var scoreGO = CreateTMPText(canvasGO.transform, "Score", "0", 30);
+        // Canvas 자식 — Score (Lo-Fi 우상단 좌측 — Canvas RefRes 956×440 기준 (-128, -8) from top-right)
+        var scoreGO = CreateTMPText(canvasGO.transform, "Score", "0", 28);
+        var scoreTmp = scoreGO.GetComponent<TextMeshProUGUI>();
+        scoreTmp.alignment = TextAlignmentOptions.Right;
         var scoreRT = scoreGO.GetComponent<RectTransform>();
-        scoreRT.anchorMin = new Vector2(0f, 0.5f);
-        scoreRT.anchorMax = new Vector2(0f, 0.5f);
-        scoreRT.pivot     = new Vector2(0f, 0.5f);
-        scoreRT.anchoredPosition = new Vector2(25f, 0f);
-        scoreRT.sizeDelta = new Vector2(200f, 50f);
+        scoreRT.anchorMin = new Vector2(1f, 1f);
+        scoreRT.anchorMax = new Vector2(1f, 1f);
+        scoreRT.pivot     = new Vector2(1f, 1f);
+        scoreRT.anchoredPosition = new Vector2(-128f, -8f);
+        scoreRT.sizeDelta = new Vector2(123f, 79f);
 
         // Canvas 자식 — JudgementText (중앙 stretch)
         var judgeGO = CreateTMPText(canvasGO.transform, "JudgementText", "", 60);
@@ -142,16 +144,16 @@ public static class SceneBootstrap {
         judgeRT.offsetMin = new Vector2(200f, 150f);
         judgeRT.offsetMax = new Vector2(-200f, -250f);
 
-        // Canvas 자식 — Combo (중앙 상단, council 결정)
-        var comboGO = CreateTMPText(canvasGO.transform, "Combo", "", 50);
+        // Canvas 자식 — Combo (Lo-Fi 우상단 우측 — Score 옆에 나란히, (-4, -8) from top-right)
+        var comboGO = CreateTMPText(canvasGO.transform, "Combo", "", 32);
         var comboTmp = comboGO.GetComponent<TextMeshProUGUI>();
-        comboTmp.alignment = TextAlignmentOptions.Center;
+        comboTmp.alignment = TextAlignmentOptions.Right;
         var comboRT = comboGO.GetComponent<RectTransform>();
-        comboRT.anchorMin = new Vector2(0.5f, 1f);
-        comboRT.anchorMax = new Vector2(0.5f, 1f);
-        comboRT.pivot     = new Vector2(0.5f, 1f);
-        comboRT.anchoredPosition = new Vector2(0f, -50f);
-        comboRT.sizeDelta = new Vector2(200f, 80f);
+        comboRT.anchorMin = new Vector2(1f, 1f);
+        comboRT.anchorMax = new Vector2(1f, 1f);
+        comboRT.pivot     = new Vector2(1f, 1f);
+        comboRT.anchoredPosition = new Vector2(-4f, -8f);
+        comboRT.sizeDelta = new Vector2(123f, 79f);
 
         // Canvas 자식 — PauseCountdown Image (중앙, Sprint 1엔 disable)
         var pauseGO = new GameObject("PauseCountdown", typeof(RectTransform));
@@ -307,7 +309,7 @@ public static class SceneBootstrap {
             EditorBuildSettings.scenes = newScenes;
         }
 
-        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 25 Bar(점 0.5) + 24 LaneAnchor(Visual 자식 띠) + UI 4종 + GameLoop 와이어링 완료. Build settings에 등록됨. (Sprint 1.5.2 T3)");
+        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 25 Bar(점 0.5) + 24 LaneAnchor(Visual 자식 띠) + UI 4종 + GameLoop 와이어링 완료. Build settings에 등록됨. (Sprint 1.5.3 T1: Score/Combo 우상단 재배치)");
     }
 
     // ============================================================
