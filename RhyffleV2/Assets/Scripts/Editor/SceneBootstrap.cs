@@ -168,6 +168,22 @@ public static class SceneBootstrap {
         pauseRT.sizeDelta = new Vector2(200f, 200f);
         pauseGO.SetActive(false);
 
+        // Sprint 1.5.3 Lo-Fi placeholder: 일시정지 + 곡 정보
+        CreatePlaceholderPanel(
+            canvasGO.transform, "PausePlaceholder",
+            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
+            new Vector2(8f, -8f), new Vector2(77f, 79f),
+            "⏸", new Color(1.0f, 0.95f, 0.4f, 0.7f),
+            36
+        );
+        CreatePlaceholderPanel(
+            canvasGO.transform, "SongInfoPlaceholder",
+            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
+            new Vector2(8f, -243f), new Vector2(129f, 119f),
+            "곡 정보", new Color(0.85f, 0.85f, 0.85f, 0.6f),
+            20
+        );
+
         // === 3. EventSystem ===
         var eventSystemGO = new GameObject("EventSystem");
         eventSystemGO.AddComponent<EventSystem>();
@@ -309,7 +325,7 @@ public static class SceneBootstrap {
             EditorBuildSettings.scenes = newScenes;
         }
 
-        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 25 Bar(점 0.5) + 24 LaneAnchor(Visual 자식 띠) + UI 4종 + GameLoop 와이어링 완료. Build settings에 등록됨. (Sprint 1.5.3 T1: Score/Combo 우상단 재배치)");
+        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 25 Bar(점 0.5) + 24 LaneAnchor(Visual 자식 띠) + UI 6종 + GameLoop 와이어링 완료. Build settings에 등록됨. (Sprint 1.5.3 T2: PausePlaceholder + SongInfoPlaceholder 추가)");
     }
 
     // ============================================================
@@ -393,6 +409,48 @@ public static class SceneBootstrap {
         tmp.text = text;
         tmp.fontSize = fontSize;
         tmp.color = Color.white;
+        return go;
+    }
+
+    /// <summary>
+    /// Lo-Fi placeholder: Image (bgColor) + 중앙 라벨 TMP. anchor/pivot/size로 위치 결정.
+    /// Sprint 1.5.3 — 향후 Hi-Fi 외관 교체 예정.
+    /// </summary>
+    static GameObject CreatePlaceholderPanel(
+        Transform parent, string name,
+        Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot,
+        Vector2 anchoredPos, Vector2 size,
+        string label, Color bgColor, int fontSize
+    ) {
+        var go = new GameObject(name, typeof(RectTransform));
+        go.transform.SetParent(parent, false);
+        go.layer = LayerMask.NameToLayer("UI");
+        var rt = (RectTransform)go.transform;
+        rt.anchorMin = anchorMin;
+        rt.anchorMax = anchorMax;
+        rt.pivot     = pivot;
+        rt.anchoredPosition = anchoredPos;
+        rt.sizeDelta = size;
+
+        var img = go.AddComponent<Image>();
+        img.color = bgColor;
+
+        if (!string.IsNullOrEmpty(label)) {
+            var labelGO = new GameObject("Label", typeof(RectTransform));
+            labelGO.transform.SetParent(go.transform, false);
+            labelGO.layer = LayerMask.NameToLayer("UI");
+            var lrt = (RectTransform)labelGO.transform;
+            lrt.anchorMin = Vector2.zero;
+            lrt.anchorMax = Vector2.one;
+            lrt.offsetMin = Vector2.zero;
+            lrt.offsetMax = Vector2.zero;
+            var tmp = labelGO.AddComponent<TextMeshProUGUI>();
+            tmp.text = label;
+            tmp.fontSize = fontSize;
+            tmp.color = Color.black;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.enableWordWrapping = true;
+        }
         return go;
     }
 
