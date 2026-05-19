@@ -1,18 +1,15 @@
 using UnityEngine;
 
 /// <summary>
-/// 단일 lane anchor. SpriteRenderer는 placeholder (enabled=true + 1×1 white).
-/// BoxCollider 역할 = 터치 입력 lane 식별 only. 판정은 JudgeProcessor가
-/// 거리 기반으로 별도 계산 (콜라이더 hit과 무관). 콜라이더 y=9.6 unit은
-/// lane 전체 입력 영역 확보용 — 노트 trajectory cover 목적 아님.
+/// Lane 경계점 visual marker. 25 인스턴스 (barNum 1~25, lane 24개의 양 끝 + 사이).
+/// 입력 책임은 LaneAnchor가 담당 (Sprint 1.5.1).
+/// SpriteRenderer는 placeholder (enabled=true + 1×1 white, transparency로 점 표시).
 /// </summary>
-[RequireComponent(typeof(BoxCollider))]
 public class Bar : MonoBehaviour {
-    public int barNum;        // 1~24
-    public GameLoop gameLoop; // 인스펙터 와이어링
+    public int barNum;        // 1~25
 
     /// <summary>
-    /// barNum → world x. 중심정렬 24 lane: Bar_1=-11.5, Bar_24=+11.5.
+    /// barNum → world x. 중심정렬 25 marker: Bar_1=-12, Bar_13=0, Bar_25=+12.
     /// </summary>
     public float GetWorldX() => GameConfig.BarX(barNum);
 }

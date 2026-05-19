@@ -13,7 +13,8 @@ using TMPro;
 /// 메뉴 순서:
 ///   1. Rhyffle/Add Bar Tag (Tag 'Bar' 추가, SceneSetup.cs)
 ///   2. Rhyffle/Fix Note Prefabs (5 prefab missing script 제거 + Note 컴포넌트 + FlickNote variant 회전)
-///   3. Rhyffle/Bootstrap Game Scene (새 Game.unity 생성, 6 루트 셋업, 24 Bar 자동 생성, 인스펙터 와이어링)
+///   3. Rhyffle/Bootstrap Game Scene (새 Game.unity 생성, 6 루트 셋업, 25 Bar visual marker + 24 LaneAnchor collider 자동 생성, 인스펙터 와이어링)
+/// Sprint 1.5.1: Bar 25 점 marker (입력 책임 없음) + LaneAnchor 24 입력 collider (1.0 width, full lane).
 /// 모든 작업은 council 결정 + v1 인스펙션 실측값을 그대로 따름.
 /// </summary>
 public static class SceneBootstrap {
@@ -173,32 +174,44 @@ public static class SceneBootstrap {
         var gameSystemGO = new GameObject("GameSystem");
         gameSystemGO.transform.position = Vector3.zero;
 
-        // 4-1. NoteScreen (Bar 24개 부모)
+        // 4-1. NoteScreen (Bar 25개 + LaneAnchor 24개 부모)
         var noteScreenGO = new GameObject("NoteScreen");
         noteScreenGO.transform.SetParent(gameSystemGO.transform, false);
         noteScreenGO.transform.localPosition = new Vector3(0f, GameConfig.JUDGE_LINE_Y, 0f);
         var noteScreen = noteScreenGO.AddComponent<NoteScreen>();
-        // Bar 24개 자동 생성 (SceneSetup.Setup24Bars 로직 재사용)
+        // Bar 25개 자동 생성 — visual marker only (no BoxCollider, no gameLoop wiring)
+        // Sprint 1.5.1: 입력 책임은 LaneAnchor 24개로 분리
         var sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
         if (sprite == null) sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
-        for (int n = 1; n <= GameConfig.LANE_COUNT; n++) {
+        for (int n = 1; n <= 25; n++) {
             var bar = new GameObject($"Bar_{n}");
             bar.transform.SetParent(noteScreenGO.transform, false);
-            bar.transform.localPosition = new Vector3(GameConfig.BarX(n), 0f, 0f);
+            bar.transform.localPosition = new Vector3(n - 13, 0f, 0f); // Sprint 1.5.1 T2 will define this as GameConfig.BarX(n)
             bar.transform.localScale = new Vector3(GameConfig.BAR_LOCAL_SCALE, GameConfig.BAR_LOCAL_SCALE, 1f);
             bar.tag = "Bar";
             var sr = bar.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;
             sr.color = new Color(1f, 1f, 1f, 0.3f);
             sr.sortingOrder = 10;
-            var col = bar.AddComponent<BoxCollider>();
-            col.center = new Vector3(0f, GameConfig.BAR_COLLIDER_CENTER_Y, 0f);
-            col.size = new Vector3(GameConfig.BAR_COLLIDER_SIZE_X, GameConfig.BAR_COLLIDER_SIZE_Y, GameConfig.BAR_COLLIDER_SIZE_Z);
             var barComp = bar.AddComponent<Bar>();
             barComp.barNum = n;
         }
         noteScreen.bars.Clear();
         noteScreen.bars.AddRange(noteScreenGO.GetComponentsInChildren<Bar>());
+        // LaneAnchor 24개 자동 생성 — 입력 collider, full lane width 1.0
+        for (int i = 0; i < 24; i++) {
+            var laneGO = new GameObject($"LaneAnchor_{i}");
+            laneGO.transform.SetParent(noteScreenGO.transform, false);
+            laneGO.transform.localPosition = new Vector3(i - 11.5f, 0f, 0f); // lane center; T2 will replace with GameConfig.LaneX(i)
+            var laneCol = laneGO.AddComponent<BoxCollider>();
+            laneCol.center = new Vector3(0f, GameConfig.BAR_COLLIDER_CENTER_Y, 0f);
+            laneCol.size = new Vector3(GameConfig.LANE_WIDTH, GameConfig.BAR_COLLIDER_SIZE_Y, GameConfig.BAR_COLLIDER_SIZE_Z);
+            var laneComp = laneGO.AddComponent<LaneAnchor>();
+            laneComp.laneIndex = i;
+            // gameLoop 와이어링은 GameLoop 생성 후 아래서 수행
+        }
+        noteScreen.lanes.Clear();
+        noteScreen.lanes.AddRange(noteScreenGO.GetComponentsInChildren<LaneAnchor>());
 
         // 4-2. NoteBoard (hold polyline 공유 LineRenderer)
         var noteBoardGO = new GameObject("NoteBoard");
@@ -241,8 +254,8 @@ public static class SceneBootstrap {
         gameLoop.holdNotePrefab       = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/Prefabs/Note/HoldNote.prefab");
         gameLoop.holdNoteBodyPrefab   = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/Prefabs/Note/HoldNoteBody.prefab");
 
-        // Bar들의 gameLoop ref 와이어링
-        foreach (var bar in noteScreen.bars) bar.gameLoop = gameLoop;
+        // LaneAnchor gameLoop ref 와이어링 (Bar는 gameLoop 필드 없음 — Sprint 1.5.1)
+        foreach (var lane in noteScreen.lanes) lane.gameLoop = gameLoop;
 
         // === 7. CardSystem + CardBoard (idempotent helper) ===
         EnsureCardSystemAndBoard(canvasGO);
@@ -263,7 +276,7 @@ public static class SceneBootstrap {
             EditorBuildSettings.scenes = newScenes;
         }
 
-        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 24 Bar + UI 4종 + GameLoop 와이어링 완료. Build settings에 등록됨.");
+        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 25 Bar + 24 LaneAnchor + UI 4종 + GameLoop 와이어링 완료. Build settings에 등록됨. (Sprint 1.5.1)");
     }
 
     // ============================================================
