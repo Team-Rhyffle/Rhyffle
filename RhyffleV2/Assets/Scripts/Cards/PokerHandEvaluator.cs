@@ -70,13 +70,22 @@ public static class PokerHandEvaluator {
             }
         }
 
+        // Sprint 1.5.2 T2 — new Rhyffle hand aggregates
+        // 럭키세븐: all 7 field cards have distinct consecutive ranks (A=1 only)
+        bool hasSevenConsecutive = validCards.Count == 7
+                                   && distinctRanks.Count == 7
+                                   && HasNConsecutive(distinctRanks, 7);
+
+        // 레인보우: all 4 suits present in a 7-card field (meaningful only at full field size)
+        bool hasRainbow = validCards.Count == 7 && suitCounts.Count >= 4;
+
         if (hasStraightFlush)              return PokerHand.스트레이트플러시;
-        // TODO: Sprint 1.5.2 T2 — 럭키세븐
+        if (hasSevenConsecutive)           return PokerHand.럭키세븐;          // Sprint 1.5.2 T2
         if (quads > 0)                     return PokerHand.포카드;
-        // TODO: Sprint 1.5.2 T2 — 더블트리플
-        // TODO: Sprint 1.5.2 T2 — 레인보우
+        if (triples >= 2)                  return PokerHand.더블트리플;        // Sprint 1.5.2 T2
+        if (hasRainbow)                    return PokerHand.레인보우;          // Sprint 1.5.2 T2
         if (triples >= 1 && pairs >= 1)    return PokerHand.풀하우스;
-        // TODO: Sprint 1.5.2 T2 — 쓰리페어
+        if (pairs >= 3)                    return PokerHand.쓰리페어;          // Sprint 1.5.2 T2
         if (hasFlush)                      return PokerHand.플러시;
         if (hasStraight)                   return PokerHand.스트레이트;
         if (triples >= 1)                  return PokerHand.트리플;

@@ -193,4 +193,112 @@ public class PokerHandEvaluatorTest {
         };
         Assert.AreEqual(PokerHand.스트레이트플러시, PokerHandEvaluator.Evaluate(field));
     }
+
+    // ── Sprint 1.5.2 T2: 4 Rhyffle-specific hands ───────────────────────────
+
+    [Test]
+    public void Evaluate_SevenConsecutiveRanks_Returns럭키세븐() {
+        // ranks 1..7 mixed suits → 럭키세븐 (not 스트레이트플러시 since suits differ)
+        var field = new List<CardData> {
+            C(CardSuit.Spade,   CardRank.A),
+            C(CardSuit.Heart,   CardRank.R2),
+            C(CardSuit.Diamond, CardRank.R3),
+            C(CardSuit.Club,    CardRank.R4),
+            C(CardSuit.Spade,   CardRank.R5),
+            C(CardSuit.Heart,   CardRank.R6),
+            C(CardSuit.Diamond, CardRank.R7),
+        };
+        Assert.AreEqual(PokerHand.럭키세븐, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_SevenConsecutiveSameSuit_Returns스트레이트플러시() {
+        // all Spades 1..7 — 5 consec same suit fires first → 스트레이트플러시 (higher priority)
+        var field = new List<CardData> {
+            C(CardSuit.Spade, CardRank.A),
+            C(CardSuit.Spade, CardRank.R2),
+            C(CardSuit.Spade, CardRank.R3),
+            C(CardSuit.Spade, CardRank.R4),
+            C(CardSuit.Spade, CardRank.R5),
+            C(CardSuit.Spade, CardRank.R6),
+            C(CardSuit.Spade, CardRank.R7),
+        };
+        Assert.AreEqual(PokerHand.스트레이트플러시, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_TwoTriples_Returns더블트리플() {
+        // AAA + KKK + Q
+        var field = new List<CardData> {
+            C(CardSuit.Spade,   CardRank.A),   C(CardSuit.Heart,   CardRank.A),   C(CardSuit.Diamond, CardRank.A),
+            C(CardSuit.Club,    CardRank.K),   C(CardSuit.Spade,   CardRank.K),   C(CardSuit.Heart,   CardRank.K),
+            C(CardSuit.Diamond, CardRank.Q),
+        };
+        Assert.AreEqual(PokerHand.더블트리플, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_FourSuitsAllPresent_Returns레인보우() {
+        // 4 suits each at least once, no pair/triple, non-consecutive ranks
+        var field = new List<CardData> {
+            C(CardSuit.Spade,   CardRank.A),
+            C(CardSuit.Heart,   CardRank.R3),
+            C(CardSuit.Diamond, CardRank.R5),
+            C(CardSuit.Club,    CardRank.R7),
+            C(CardSuit.Spade,   CardRank.R9),
+            C(CardSuit.Heart,   CardRank.J),
+            C(CardSuit.Diamond, CardRank.K),
+        };
+        Assert.AreEqual(PokerHand.레인보우, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_ThreePairs_Returns쓰리페어() {
+        // AA + KK + QQ + J (no triple, only 2 suits → no 레인보우)
+        var field = new List<CardData> {
+            C(CardSuit.Spade, CardRank.A),  C(CardSuit.Heart, CardRank.A),
+            C(CardSuit.Spade, CardRank.K),  C(CardSuit.Heart, CardRank.K),
+            C(CardSuit.Spade, CardRank.Q),  C(CardSuit.Heart, CardRank.Q),
+            C(CardSuit.Spade, CardRank.J),
+        };
+        Assert.AreEqual(PokerHand.쓰리페어, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_더블트리플VsPokar_Priority포카드Wins() {
+        // AAAA + KKK — quad takes priority over double-triple (10 > 9)
+        var field = new List<CardData> {
+            C(CardSuit.Spade,   CardRank.A), C(CardSuit.Heart,   CardRank.A),
+            C(CardSuit.Diamond, CardRank.A), C(CardSuit.Club,    CardRank.A),
+            C(CardSuit.Spade,   CardRank.K), C(CardSuit.Heart,   CardRank.K), C(CardSuit.Diamond, CardRank.K),
+        };
+        Assert.AreEqual(PokerHand.포카드, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_레인보우VsFullhouse_Priority레인보우Wins() {
+        // AAA + KK + Q + J with all 4 suits present → 레인보우(8) beats 풀하우스(7)
+        var field = new List<CardData> {
+            C(CardSuit.Spade,   CardRank.A),
+            C(CardSuit.Heart,   CardRank.A),
+            C(CardSuit.Diamond, CardRank.A),
+            C(CardSuit.Club,    CardRank.K),
+            C(CardSuit.Spade,   CardRank.K),
+            C(CardSuit.Heart,   CardRank.Q),
+            C(CardSuit.Diamond, CardRank.J),
+        };
+        Assert.AreEqual(PokerHand.레인보우, PokerHandEvaluator.Evaluate(field));
+    }
+
+    [Test]
+    public void Evaluate_쓰리페어VsFullhouse_Priority풀하우스Wins() {
+        // AAA + KK + QQ — triples=1, pairs=2 → 풀하우스 wins over 쓰리페어
+        // Only 3 suits used (no Club) → 레인보우 FALSE
+        var field = new List<CardData> {
+            C(CardSuit.Spade,   CardRank.A), C(CardSuit.Heart,   CardRank.A), C(CardSuit.Diamond, CardRank.A),
+            C(CardSuit.Spade,   CardRank.K), C(CardSuit.Heart,   CardRank.K),
+            C(CardSuit.Spade,   CardRank.Q), C(CardSuit.Heart,   CardRank.Q),
+        };
+        Assert.AreEqual(PokerHand.풀하우스, PokerHandEvaluator.Evaluate(field));
+    }
 }
