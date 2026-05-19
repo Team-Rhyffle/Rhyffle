@@ -7,7 +7,7 @@
 ---
 
 ## 현재 단계
-**Sprint 1.5.3 완료** — Figma Lo-Fi 플레이 화면 배치 placeholder 적용. **58/58 EditMode tests PASS**.
+**Sprint 1.5.4 완료** — 한글 TMP Font Asset (MalgunGothic Dynamic SDF) + LiberationSans SDF fallback 등록. **58/58 EditMode tests PASS**.
 
 - Sprint 1 (2026-05-18 완료): 14/14 task + Steelman 게이트 3개 PASS.
 - Sprint 1.5 (2026-05-19 완료): 10/10 task DONE. 36/36 EditMode tests PASS.
@@ -34,11 +34,11 @@
 - Figma Hi-Fi 외관 교체 (placeholder → 실제 art)
 
 ## 최근 변경
+- 2026-05-19: **Sprint 1.5.4 완료** + push (b1a8bf6) — MalgunGothic TTF import + Dynamic SDF asset + LiberationSans fallback chain 등록. 58/58 PASS.
 - 2026-05-19: **Sprint 1.5.3 T5 완료** + Phase push — HUD 재배치 + 5 placeholder + 3 영역 visual band. 58/58 PASS.
 - 2026-05-19: **Sprint 1.5.3 T4 완료** — 노트/판정선/카드 영역 visual band (NoteArea/JudgeLine/CardAreaPlaceholder).
 - 2026-05-19: **Sprint 1.5.3 T3 완료** — 셔플 + 덱묘지 placeholder (ShufflePlaceholder, DeckGravePlaceholder).
 - 2026-05-19: **Sprint 1.5.3 T2 완료** — 일시정지 + 곡 정보 placeholder + CreatePlaceholderPanel helper.
-- 2026-05-19: **Sprint 1.5.3 T1 완료** — HUD 재배치 (Score/Combo 우상단, anchoredPosition 확인).
 
 ## 작업 재개 시 첫 행동
 1. **이 파일 (CURRENT_STATUS.md) 먼저 읽기**
