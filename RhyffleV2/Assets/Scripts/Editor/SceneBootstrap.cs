@@ -228,7 +228,7 @@ public static class SceneBootstrap {
             var bar = new GameObject($"Bar_{n}");
             bar.transform.SetParent(noteScreenGO.transform, false);
             bar.transform.localPosition = new Vector3(GameConfig.BarX(n), 0f, 0f);
-            bar.transform.localScale = new Vector3(0.5f, 0.5f, 1f);   // 작은 점 marker (Sprint 1.5.2 T3; BAR_LOCAL_SCALE=3.2 은 미사용)
+            bar.transform.localScale = new Vector3(0.5f, 0.5f, 1f);   // 작은 점 marker (Sprint 1.5.2 T3; BAR_LOCAL_SCALE=3.2 는 SceneSetup legacy menu 전용)
             bar.tag = "Bar";
             var sr = bar.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;

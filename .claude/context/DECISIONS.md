@@ -118,6 +118,62 @@
   5. **score 계산 순서**: `Publish(NoteJudgedEvent)` → 카드들이 내부 상태 업데이트 → `GetScoreMultipliers()` 호출 → product 곱셈 → `RoundToInt`. 이벤트 발행이 modifier 수집보다 반드시 선행해야 함.
 - **Outcome**: 통합 검증 2026-05-19 PASS — ATK-only 1,320,000, ATK+SUP 1,584,000, 36/36 EditMode tests, Gate A(메모리 누수 없음) + Gate B(삽입 순서 보존) 모두 PASS.
 
+---
+
+## 2026-05-19: Sprint 1.5 — Card Effect Framework
+
+- **Context**: Sprint 1.5에서 카드 효과 발동을 score/combo 로직과 분리하는 이벤트 기반 프레임워크 필요.
+- **Decision**: EventBus + ICardEffect interface + CardSystem (Awake에서 registry pull). 카드가 직접 이벤트 구독/해제 — CardSystem이 중개하지 않음. How: `Cards/CardSystem.cs` + `Cards/Effects/*.cs`.
+- **Outcome**: DummyEffect 3종 (ATK, SUP, DEF) + runtime 검증 PASS. 36/36 EditMode tests.
+
+---
+
+## 2026-05-19: Sprint 1.5.1 — Lane Visualization + Card-Lane Mapping
+
+- **Context**: 사용자가 점 vs 띠 시각화 명시 요구 + 카드 lane 매핑 spec 확정 필요.
+- **Decision**: Bar 24→25 점 marker (입력 없음), LaneAnchor 24 입력 collider, CARDS_IN_FIELD 7→8, LANES_PER_CARD=3, lane→card 영역 한정 modifier. `LaneToCardIndex` 헬퍼, `CardSystem.GetScoreMultipliersForSlot`.
+- **Outcome**: Bar/LaneAnchor 역할 분리 완료. 40/40 tests PASS.
+
+---
+
+## 2026-05-19: Sprint 1.5.1 — CardBoard World Space Refactor
+
+- **Context**: ScreenSpace-Camera Canvas 자식으로 카드 보드 배치 시 화면 비율 의존 발생.
+- **Decision**: CardBoard를 WorldSpace Canvas (`CardBoardCanvas`, position y=-5, size 24×4.5) 신설 아래로 이전. 슬롯 width=3 world unit.
+- **Outcome**: 화면 비율 의존 제거, lane area 자동 정렬. 40/40 tests PASS.
+
+---
+
+## 2026-05-19: Sprint 1.5.2 — PokerHandEvaluator 12종
+
+- **Context**: 기존 7 전통 hand만으로 spec 불완전. Rhyffle 고유 4종 추가 필요.
+- **Decision**: 7 전통 + 4 고유 (럭키세븐=7 연속, 더블트리플, 레인보우, 쓰리페어) = 12종. `PokerHandEvaluator.Evaluate` priority chain.
+- **Outcome**: 22 EditMode tests 포함 58/58 PASS.
+
+---
+
+## 2026-05-19: Sprint 1.5.3 — Figma Lo-Fi 배치 Placeholder
+
+- **Context**: Figma Lo-Fi 배치에 맞춰 HUD 재배치 + placeholder 5종 + 영역 시각화 필요.
+- **Decision**: Score/Combo 우상단 재배치, 일시정지/곡정보/셔플/덱묘지 placeholder 4종, 노트/판정선/카드 영역 visual band 3종 (World Space SpriteRenderer — Canvas overlay 좌표 화면 비율 의존 문제 해소). `CreatePlaceholderPanel` + `CreateWorldVisualBand` 헬퍼.
+- **Outcome**: Lo-Fi 시각 align 완료. 58/58 tests PASS.
+
+---
+
+## 2026-05-19: Sprint 1.5.4 — TMP 한글 폰트
+
+- **Context**: 한글 라벨 표시 필요. MalgunGothic은 license 불명확 (MS Windows 번들).
+- **Decision**: NotoSansKR SDF (Apache 2.0, license-clean)로 교체. Dynamic SDF atlas Texture2D + Material을 `AssetDatabase.AddObjectToAsset`으로 sub-asset 저장 (MissingReferenceException 방지). LiberationSans fallback chain 갱신.
+- **Outcome**: 한글 라벨 표시 + license 안전. MalgunGothic 파일 삭제. 58/58 PASS.
+
+---
+
+## 2026-05-19: Sprint 1.5.5 — 일시정지 버튼 Wire
+
+- **Context**: PausePlaceholder가 시각 요소만 있었고 실제 Pause/Resume 기능 없음.
+- **Decision**: `PauseButton` MonoBehaviour (PausePlaceholder Image + Button + click handler). `GameLoop.IsPaused` getter 추가. 클릭 시 라벨 PAUSE↔PLAY 토글.
+- **Outcome**: Pause/Resume 기능 동작 확인. 58/58 tests PASS.
+
 ## YYYY-MM-DD: [다음 결정 제목]
 
 - **Context**:

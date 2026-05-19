@@ -34,10 +34,10 @@ public static class GameConfig {
 
     // === Bar 콜라이더 (v1 실측 — lane 입력 식별 only, 판정 무관) ===
     public const float BAR_COLLIDER_CENTER_Y = -0.84f;
-    public const float BAR_COLLIDER_SIZE_X   = 0.32f;  // Sprint 1.5.1+ 사용 안 함 — Hi-Fi marker 도입 시 활용 예정
+    public const float BAR_COLLIDER_SIZE_X   = 0.32f;  // SceneSetup.cs (Sprint 1 legacy menu) 에서만 사용 — SceneBootstrap은 LANE_WIDTH 직접 사용
     public const float BAR_COLLIDER_SIZE_Y   = 3.0f;
     public const float BAR_COLLIDER_SIZE_Z   = 0.2f;
-    public const float BAR_LOCAL_SCALE       = 3.2f;  // Sprint 1.5.2+ 사용 안 함 — Bar 점 marker는 별도 작은 scale(0.5) 사용
+    public const float BAR_LOCAL_SCALE       = 3.2f;  // SceneSetup.cs (Sprint 1 legacy menu) 에서만 사용 — SceneBootstrap은 0.5f 하드코드 (작은 점 marker)
 
     // === Bar / Lane 좌표 헬퍼 (Sprint 1.5.1+) ===
     public const int BAR_COUNT = 25;     // lane 24개의 양 끝 + 사이 marker 25 (중심정렬)
