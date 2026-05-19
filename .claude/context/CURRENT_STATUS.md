@@ -7,13 +7,13 @@
 ---
 
 ## 현재 단계
-**Sprint 1.5 진행 중** — Task 1 완료 (66c8c4b), Task 3 완료 (1a88476). Task 2 대기.
+**Sprint 1.5 진행 중** — Task 1 완료 (66c8c4b), Task 2 완료 (91eb7f0), Task 3 완료 (1a88476), Task 4 완료 (5504e08).
 
 - Sprint 1 (2026-05-18 완료): 14/14 task + Steelman 게이트 3개 PASS.
-- Sprint 1.5 plan (30d0804): `docs/superpowers/plans/2026-05-18-sprint1.5-card-framework-lofi-ui.md` — 10 task. **Task 1, 3 완료**: EventBus (Task 1) + CardData DTO + 4 enums (Task 3, `Assets/Scripts/Cards/`). Task 2 (JudgmentResult) 남음.
+- Sprint 1.5 plan (30d0804): `docs/superpowers/plans/2026-05-18-sprint1.5-card-framework-lofi-ui.md` — 10 task. **Task 1, 2, 3, 4 완료**: EventBus + 이벤트 struct 4종 + CardData DTO + ScoreModifier. Task 5+ 남음.
 
 ## 다음 액션
-**Sprint 1.5 Task 2** — `JudgmentResult` struct 구현 (`Assets/Scripts/Events/JudgmentResult.cs`). EventBus 연동 준비.
+**Sprint 1.5 Task 5+** — plan 파일 확인 후 다음 미완료 task 진행 (`docs/superpowers/plans/2026-05-18-sprint1.5-card-framework-lofi-ui.md`).
 
 ## 블로커
 없음. 다만 Sprint 2 진입 (실제 카드 시스템) 위해선 **김한울 카드 데이터셋 도착 필요** (마감 2026-05-17 = 어제) — 진행 상황 확인 권장. Sprint 1.5는 데이터셋 무관, 즉시 진행 가능
@@ -25,11 +25,11 @@
 - 카드 데이터셋 (≈400장) — 한울 2026-05-17 마감 예정 (Sprint 2 입력 자산). **진행 상황 확인 필요**
 
 ## 최근 변경
+- 2026-05-19: **Sprint 1.5 Task 2 완료** (91eb7f0) — 이벤트 struct 4종 (NoteJudgedEvent/ComboChangedEvent/FieldChangedEvent/KeyNoteProcessedEvent). `Assets/Scripts/Events/` 추가. 0 compile errors.
 - 2026-05-19: **Sprint 1.5 Task 3 완료** (1a88476) — CardData DTO + CardGroup/Suit/Rank/Rarity 4 enums. `Assets/Scripts/Cards/` 신설. 0 compile errors.
-- 2026-05-18: **Sprint 1.5 plan 작성** (30d0804) — Card Effect Framework + Lo-Fi UI Placement. 10 task, EventBus pub/sub + 더미 카드 3종 발동 검증 + CardBoard 7 슬롯 placeholder. 카드 spec은 Notion 카드시스템 페이지에서 추출 (필드 7장, 좌→우 발동, 카드군 5종, 족보 12종). 5 stub 명시 (묘지/키노트/일반능력/카드UI/카드source).
+- 2026-05-18: **Sprint 1.5 plan 작성** (30d0804) — Card Effect Framework + Lo-Fi UI Placement. 10 task, EventBus pub/sub + 더미 카드 3종 발동 검증 + CardBoard 7 슬롯 placeholder.
 - 2026-05-18: **Sprint 1 phase push 완료** — origin/main b0d7e5c (31 commits 외부 공유). Sprint 1 plain mode 종결.
-- 2026-05-18: **Sprint 1 Plain Mode 14/14 task + 3 Steelman 게이트 PASS** — Unity MCP execute_code reflection-based manual ticking으로 headless 검증. 16노트 Perfect. Flick 4종 + Slide invisible / Flick(D) 9× scale 버그 발견·수정.
-- 2026-05-17: Sprint 1 구현 — .cs 9개 + tests 17개 + asset 22개 + 더미 채보 + Game.unity 6 루트 셋업.
+- 2026-05-18: **Sprint 1 Plain Mode 14/14 task + 3 Steelman 게이트 PASS** — Unity MCP execute_code reflection-based manual ticking으로 headless 검증.
 - 2026-05-17: v1 Game.unity 씬 인스펙션 (Unity MCP) — V1_SCENE_INSPECTION.md 신설. Camera ortho size 10 / Bar 21개 간격 1.0unit / 판정선 y=-2.5 실측.
 
 ## 작업 재개 시 첫 행동
