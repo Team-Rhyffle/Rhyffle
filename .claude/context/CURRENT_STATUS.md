@@ -7,7 +7,7 @@
 ---
 
 ## 현재 단계
-**Sprint 1.5.6 T1 완료** — DeckSystem.cs 신규 + EditMode 4 tests. **62/62 PASS**.
+**Sprint 1.5.6 T2 완료** — SceneBootstrap DeckSystem wiring. **62/62 PASS**.
 
 - Sprint 1 (2026-05-18 완료): 14/14 task + Steelman 게이트 3개 PASS.
 - Sprint 1.5 (2026-05-19 완료): 10/10 task DONE. 36/36 EditMode tests PASS.
@@ -17,9 +17,10 @@
 - Sprint 1.5.4 (2026-05-19 완료): NotoSansKR SDF (Apache 2.0) + atlas sub-asset 저장. 58/58 tests PASS.
 - Sprint 1.5.5 (2026-05-19 완료): PauseButton wire + code polish + DECISIONS.md 정리.
 - Sprint 1.5.6 T1 (2026-05-19): DeckSystem.cs 신규 (단일 묘지, Fisher-Yates, KeyNote trigger). 62/62 PASS.
+- Sprint 1.5.6 T2 (2026-05-19): SceneBootstrap EnsureCardSystemAndBoard에 DeckSystem 생성 + cardSystem wire. 62/62 PASS.
 
 ## 다음 액션
-**Sprint 1.5.6 T2** — SceneBootstrap에 DeckSystem 컴포넌트 wire.
+**Sprint 1.5.6 T3** — 다음 task 확인 필요.
 
 ## 블로커
 **Sprint 2 진입 블로커**: 김한울 카드 데이터셋 미도착 (2026-05-17 마감 → 초과). 진행 상황 확인 필요.
@@ -36,11 +37,11 @@
 - Figma Hi-Fi 외관 교체 (placeholder → 실제 art)
 
 ## 최근 변경
+- 2026-05-19: **Sprint 1.5.6 T2 완료** (c442ce9) — SceneBootstrap EnsureCardSystemAndBoard에 DeckSystem 생성 + cardSystem wire. 62/62 PASS.
 - 2026-05-19: **Sprint 1.5.6 T1 완료** (c1b0a5c) — DeckSystem.cs 신규 (단일 묘지, Fisher-Yates, KeyNote trigger) + 4 tests. 62/62 PASS.
 - 2026-05-19: **Sprint 1.5.5 T3 완료** + Phase push — code polish (GameConfig 상수 2개 보존 + 주석 명확화) + DECISIONS.md Sprint 1.5.x 정리.
 - 2026-05-20: **Sprint 1.5.5 T2 완료** (d130af1) — NotoSansKR SDF (Apache 2.0) 교체, MalgunGothic 삭제 (license-clean). SceneBootstrap 2곳 경로 교체. 58/58 PASS.
 - 2026-05-20: **Sprint 1.5.5 T1 완료** — PauseButton.cs 신규 + GameLoop.IsPaused getter + SceneBootstrap PausePlaceholder wire. 58/58 PASS.
-- 2026-05-19: **Sprint 1.5.4 hotfix** + push (8f4c912) — atlas sub-asset 누락 fix (AddObjectToAsset) + MalgunGothic 직접 할당 + ⏸→PAUSE. 0 MissingRef/경고. 58/58 PASS.
 
 ## 작업 재개 시 첫 행동
 1. **이 파일 (CURRENT_STATUS.md) 먼저 읽기**
