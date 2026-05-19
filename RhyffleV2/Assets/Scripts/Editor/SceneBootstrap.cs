@@ -169,12 +169,13 @@ public static class SceneBootstrap {
         pauseGO.SetActive(false);
 
         // Sprint 1.5.3 Lo-Fi placeholder: 일시정지 + 곡 정보
+        // Sprint 1.5.4 fix: ⏸ (U+23F8) → "PAUSE" (MalgunGothic에 pause 심볼 glyph 없음)
         CreatePlaceholderPanel(
             canvasGO.transform, "PausePlaceholder",
             new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
             new Vector2(8f, -8f), new Vector2(77f, 79f),
-            "⏸", new Color(1.0f, 0.95f, 0.4f, 0.7f),
-            36
+            "PAUSE", new Color(1.0f, 0.95f, 0.4f, 0.7f),
+            24
         );
         CreatePlaceholderPanel(
             canvasGO.transform, "SongInfoPlaceholder",
@@ -451,6 +452,9 @@ public static class SceneBootstrap {
         tmp.text = text;
         tmp.fontSize = fontSize;
         tmp.color = Color.white;
+        // Sprint 1.5.4: 한글 라벨 지원을 위해 MalgunGothic SDF 직접 할당 (fallback chain 의존 안 함)
+        var koreanFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Fonts/MalgunGothic SDF.asset");
+        if (koreanFont != null) tmp.font = koreanFont;
         return go;
     }
 
@@ -492,6 +496,9 @@ public static class SceneBootstrap {
             tmp.color = Color.black;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.enableWordWrapping = true;
+            // Sprint 1.5.4: 한글 라벨 지원
+            var koreanFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Fonts/MalgunGothic SDF.asset");
+            if (koreanFont != null) tmp.font = koreanFont;
         }
         return go;
     }
