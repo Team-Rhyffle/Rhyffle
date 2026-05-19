@@ -260,6 +260,20 @@ public static class SceneBootstrap {
         // === 7. CardSystem + CardBoard (idempotent helper) ===
         EnsureCardSystemAndBoard(canvasGO);
 
+        // Sprint 1.5.1: wire CardBoardUI into GameLoop (hover signal target)
+        var cardBoardGO = GameObject.Find("CardBoard");
+        if (cardBoardGO != null) {
+            var cardBoardUI = cardBoardGO.GetComponent<CardBoardUI>();
+            if (cardBoardUI != null && gameLoop != null) gameLoop.cardBoardUI = cardBoardUI;
+        }
+
+        // Also wire CardSystem
+        var cardSystemGO = GameObject.Find("CardSystem");
+        if (cardSystemGO != null) {
+            var cs = cardSystemGO.GetComponent<CardSystem>();
+            if (cs != null && gameLoop != null) gameLoop.cardSystem = cs;
+        }
+
         // === 씬 저장 ===
         EditorSceneManager.SaveScene(scene, SCENE_PATH);
         AssetDatabase.SaveAssets();

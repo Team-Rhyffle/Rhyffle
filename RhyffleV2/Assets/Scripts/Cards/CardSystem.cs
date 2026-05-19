@@ -37,6 +37,20 @@ public class CardSystem : MonoBehaviour {
         return result;
     }
 
+    // Sprint 1.5.1: Returns modifiers from the effect at the given slot index only.
+    // GameLoop uses this with `note.Line / LANES_PER_CARD` to apply modifiers per area.
+    // Returns empty list if cardIndex out of range (e.g., no effect registered at that slot).
+    public List<ScoreModifier> GetScoreMultipliersForSlot(int cardIndex) {
+        if (cardIndex < 0 || cardIndex >= _activeEffects.Count) {
+            return new List<ScoreModifier>();
+        }
+        var result = new List<ScoreModifier>();
+        foreach (var m in _activeEffects[cardIndex].GetCurrentModifiers()) {
+            result.Add(m);
+        }
+        return result;
+    }
+
     // GameLoop calls this on Miss before zeroing combo. Returns true if some
     // active effect protected the combo (effect spends its own charge internally).
     public bool TryConsumeComboProtection() {

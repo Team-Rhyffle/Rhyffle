@@ -22,6 +22,7 @@ public class GameLoop : MonoBehaviour {
 
     [Header("Card System (Sprint 1.5+) — optional, scene-found fallback in Start")]
     public CardSystem cardSystem;
+    public CardBoardUI cardBoardUI;   // Sprint 1.5.1: hover signal target
 
     [Header("Chart")]
     public string chartName = "dummy_test";
@@ -55,10 +56,9 @@ public class GameLoop : MonoBehaviour {
         if (totalNoteCount > 0) {
             baseScore = Mathf.RoundToInt(1_000_000f / totalNoteCount);
         }
-        // Fallback: locate CardSystem in scene if not inspector-wired.
-        if (cardSystem == null) {
-            cardSystem = FindObjectOfType<CardSystem>();
-        }
+        // Fallback: locate CardSystem/CardBoardUI in scene if not inspector-wired.
+        if (cardSystem == null)   cardSystem   = FindObjectOfType<CardSystem>();
+        if (cardBoardUI == null)  cardBoardUI  = FindObjectOfType<CardBoardUI>();
         // Publish initial FieldChangedEvent so card subscribers see the starting field (may be empty in 1.5).
         if (cardSystem != null) {
             EventBus.Publish(new FieldChangedEvent { Field = cardSystem.GetField() });
@@ -178,12 +178,13 @@ public class GameLoop : MonoBehaviour {
     }
 
     private void HandlePress(Vector2 screenPos) {
-        // 스크린 → 월드 raycast → Bar hit → lane num 추출
+        // 스크린 → 월드 raycast → LaneAnchor hit → lane index 추출
         Ray ray = Camera.main.ScreenPointToRay(screenPos);
         if (Physics.Raycast(ray, out RaycastHit hit, 100f)) {
-            var bar = hit.collider.GetComponent<Bar>();
-            if (bar != null) {
-                int lane = bar.barNum - 1;  // 0-indexed
+            var laneAnchor = hit.collider.GetComponent<LaneAnchor>();
+            if (laneAnchor != null) {
+                int lane = laneAnchor.laneIndex;
+                if (cardBoardUI != null) cardBoardUI.OnLaneHover(lane);
                 JudgeLanePress(lane);
             }
         }
@@ -220,13 +221,16 @@ public class GameLoop : MonoBehaviour {
         // Aggregate score multipliers from active card effects (left→right product).
         float productMul = 1f;
         if (cardSystem != null) {
-            var mods = cardSystem.GetScoreMultipliers();
+            // Sprint 1.5.1: card modifier 영역 한정 — note.Line의 lane이 속한 카드 슬롯의 effect만 적용
+            int cardIdx = GameConfig.LaneToCardIndex(note.Line);
+            var mods = cardSystem.GetScoreMultipliersForSlot(cardIdx);
             foreach (var m in mods) productMul *= m.Multiplier;
         }
         int finalDelta = Mathf.RoundToInt(baseDelta * productMul);
         score += finalDelta;
 
         // Combo update with protection on Miss
+        // Sprint 1.5.1 design: combo 보호는 전체 영역 적용 (어느 카드의 def도 트리거 가능). 영역 한정은 spec 미정 — Sprint 2.
         if (grade == JudgmentGrade.Miss) {
             bool protected_ = cardSystem != null && cardSystem.TryConsumeComboProtection();
             if (!protected_) combo = 0;
