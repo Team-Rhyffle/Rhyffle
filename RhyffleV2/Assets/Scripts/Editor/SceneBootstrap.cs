@@ -15,6 +15,7 @@ using TMPro;
 ///   2. Rhyffle/Fix Note Prefabs (5 prefab missing script 제거 + Note 컴포넌트 + FlickNote variant 회전)
 ///   3. Rhyffle/Bootstrap Game Scene (새 Game.unity 생성, 6 루트 셋업, 25 Bar visual marker + 24 LaneAnchor collider 자동 생성, 인스펙터 와이어링)
 /// Sprint 1.5.1: Bar 25 점 marker (입력 책임 없음) + LaneAnchor 24 입력 collider (1.0 width, full lane).
+/// Sprint 1.5.2 T3: Bar 작은 점(0.5 scale, 푸른빛) + LaneAnchor 자식 Visual 띠 sprite.
 /// 모든 작업은 council 결정 + v1 인스펙션 실측값을 그대로 따름.
 /// </summary>
 public static class SceneBootstrap {
@@ -187,11 +188,11 @@ public static class SceneBootstrap {
             var bar = new GameObject($"Bar_{n}");
             bar.transform.SetParent(noteScreenGO.transform, false);
             bar.transform.localPosition = new Vector3(GameConfig.BarX(n), 0f, 0f);
-            bar.transform.localScale = new Vector3(GameConfig.BAR_LOCAL_SCALE, GameConfig.BAR_LOCAL_SCALE, 1f);
+            bar.transform.localScale = new Vector3(0.5f, 0.5f, 1f);   // 작은 점 marker (Sprint 1.5.2 T3; BAR_LOCAL_SCALE=3.2 은 미사용)
             bar.tag = "Bar";
             var sr = bar.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;
-            sr.color = new Color(1f, 1f, 1f, 0.3f);
+            sr.color = new Color(0.85f, 0.9f, 1.0f, 0.85f);   // 약한 푸른빛 흰색, 더 불투명
             sr.sortingOrder = 10;
             var barComp = bar.AddComponent<Bar>();
             barComp.barNum = n;
@@ -199,16 +200,29 @@ public static class SceneBootstrap {
         noteScreen.bars.Clear();
         noteScreen.bars.AddRange(noteScreenGO.GetComponentsInChildren<Bar>());
         // LaneAnchor 24개 자동 생성 — 입력 collider, full lane width 1.0
+        // Sprint 1.5.2 T3: 자식 "Visual" GO에 띠 sprite 분리 (collider scale 영향 없음)
         for (int i = 0; i < 24; i++) {
             var laneGO = new GameObject($"LaneAnchor_{i}");
             laneGO.transform.SetParent(noteScreenGO.transform, false);
             laneGO.transform.localPosition = new Vector3(GameConfig.LaneX(i), 0f, 0f);
+            // LaneAnchor root: collider만 — localScale 변경 없음 (collider world size 보존)
             var laneCol = laneGO.AddComponent<BoxCollider>();
             laneCol.center = new Vector3(0f, GameConfig.BAR_COLLIDER_CENTER_Y, 0f);
             laneCol.size = new Vector3(GameConfig.LANE_WIDTH, GameConfig.BAR_COLLIDER_SIZE_Y, GameConfig.BAR_COLLIDER_SIZE_Z);
             var laneComp = laneGO.AddComponent<LaneAnchor>();
             laneComp.laneIndex = i;
             // gameLoop 와이어링은 GameLoop 생성 후 아래서 수행
+
+            // 자식 Visual — sprite (input collider와 독립 scale)
+            var visualGO = new GameObject("Visual");
+            visualGO.transform.SetParent(laneGO.transform, false);
+            visualGO.transform.localPosition = new Vector3(0f, GameConfig.BAR_COLLIDER_CENTER_Y, 0f);  // collider 중심 y와 동일
+            visualGO.transform.localScale = new Vector3(GameConfig.LANE_WIDTH, GameConfig.BAR_COLLIDER_SIZE_Y, 1f);
+            var laneSR = visualGO.AddComponent<SpriteRenderer>();
+            laneSR.sprite = sprite;
+            laneSR.color = new Color(0.5f, 0.55f, 0.65f, 0.08f);   // 회색-푸른빛, 매우 투명 (노트 가독성 우선)
+            laneSR.sortingOrder = 5;   // Bar(10)보다 낮음 — background
+            laneComp.visual = laneSR;   // T4 hover 토글용 사전 와이어링
         }
         noteScreen.lanes.Clear();
         noteScreen.lanes.AddRange(noteScreenGO.GetComponentsInChildren<LaneAnchor>());
@@ -290,7 +304,7 @@ public static class SceneBootstrap {
             EditorBuildSettings.scenes = newScenes;
         }
 
-        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 25 Bar + 24 LaneAnchor + UI 4종 + GameLoop 와이어링 완료. Build settings에 등록됨. (Sprint 1.5.1)");
+        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 25 Bar(점 0.5) + 24 LaneAnchor(Visual 자식 띠) + UI 4종 + GameLoop 와이어링 완료. Build settings에 등록됨. (Sprint 1.5.2 T3)");
     }
 
     // ============================================================

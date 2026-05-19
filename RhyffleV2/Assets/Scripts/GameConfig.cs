@@ -37,7 +37,7 @@ public static class GameConfig {
     public const float BAR_COLLIDER_SIZE_X   = 0.32f;  // Sprint 1.5.1+ 사용 안 함 — Hi-Fi marker 도입 시 활용 예정
     public const float BAR_COLLIDER_SIZE_Y   = 3.0f;
     public const float BAR_COLLIDER_SIZE_Z   = 0.2f;
-    public const float BAR_LOCAL_SCALE       = 3.2f;
+    public const float BAR_LOCAL_SCALE       = 3.2f;  // Sprint 1.5.2+ 사용 안 함 — Bar 점 marker는 별도 작은 scale(0.5) 사용
 
     // === Bar / Lane 좌표 헬퍼 (Sprint 1.5.1+) ===
     public const int BAR_COUNT = 25;     // lane 24개의 양 끝 + 사이 marker 25 (중심정렬)
