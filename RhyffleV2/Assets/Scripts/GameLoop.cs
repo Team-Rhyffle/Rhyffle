@@ -44,6 +44,7 @@ public class GameLoop : MonoBehaviour {
     private float startCountdown;
     private bool songStarted;
     private int _keyNoteTriggerCount;
+    private LaneAnchor _hoveredLane;   // 현재 hover 중인 lane 추적 (전환 감지용)
 
     void Start() {
         // 채보 로드
@@ -87,6 +88,7 @@ public class GameLoop : MonoBehaviour {
         if (autoPerfectDebug) AutoPerfectJudge();
         else ProcessInput();
         CheckMissedNotes();
+        UpdateHoverRaycast();   // 순수 visual — autoPerfectDebug 무관하게 항상 실행
     }
 
     // === Debug: 모든 노트가 판정선 도달 시점에 자동 Perfect 처리 ===
@@ -188,6 +190,38 @@ public class GameLoop : MonoBehaviour {
                 JudgeLanePress(lane);
             }
         }
+    }
+
+    // === Mouse hover highlight (Sprint 1.5.2 T4) ===
+    // 매 프레임 마우스 위치 raycast → LaneAnchor 감지 → 전환 시에만 색 갱신.
+    // laneIndex -1 을 OnLaneHover에 넘길 때 CardBoardUI 쪽 guard가 처리하므로 안전.
+    private void UpdateHoverRaycast() {
+        var mouse = UnityEngine.InputSystem.Mouse.current;
+        if (mouse == null) {
+            // 마우스 디바이스 없음 — hover 상태 초기화
+            if (_hoveredLane != null) {
+                _hoveredLane.SetHover(false);
+                _hoveredLane = null;
+                if (cardBoardUI != null) cardBoardUI.OnLaneHover(-1);   // -1 = clear (no-op in CardBoardUI guard)
+            }
+            return;
+        }
+        Vector2 screenPos = mouse.position.ReadValue();
+        LaneAnchor newHover = null;
+        if (Camera.main != null) {
+            Ray ray = Camera.main.ScreenPointToRay(screenPos);
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f)) {
+                newHover = hit.collider.GetComponent<LaneAnchor>();
+            }
+        }
+        if (newHover == _hoveredLane) return;   // 변경 없음 — early out
+        // Transition: 이전 lane 복귀 → 새 lane highlight
+        if (_hoveredLane != null) _hoveredLane.SetHover(false);
+        if (newHover != null) {
+            newHover.SetHover(true);
+            if (cardBoardUI != null) cardBoardUI.OnLaneHover(newHover.laneIndex);
+        }
+        _hoveredLane = newHover;
     }
 
     private void JudgeLanePress(int lane) {

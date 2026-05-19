@@ -48,9 +48,11 @@ public class CardBoardUI : MonoBehaviour {
         }
     }
 
-    // Called by GameLoop.HandlePress when user touches a lane.
+    // Called by GameLoop.HandlePress (click) and GameLoop.UpdateHoverRaycast (mouse-over).
+    // laneIndex < 0 means "clear hover" — guard first to avoid C# -1/3==0 division quirk.
     // Highlights the corresponding card slot for HOVER_FRAMES frames.
     public void OnLaneHover(int laneIndex) {
+        if (laneIndex < 0 || laneIndex >= GameConfig.LANE_COUNT) return;
         int cardIdx = GameConfig.LaneToCardIndex(laneIndex);
         if (cardIdx < 0 || cardIdx >= _slotImages.Count) return;
         _slotImages[cardIdx].color = HOVER_COLOR;

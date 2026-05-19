@@ -221,6 +221,8 @@ public static class SceneBootstrap {
             var laneSR = visualGO.AddComponent<SpriteRenderer>();
             laneSR.sprite = sprite;
             laneSR.color = new Color(0.5f, 0.55f, 0.65f, 0.08f);   // 회색-푸른빛, 매우 투명 (노트 가독성 우선)
+            // NOTE: 이 수치는 LaneAnchor.cs NORMAL_COLOR 와 동기화 필요 (T4 hover 복귀색).
+            // 두 파일에 중복 정의 — spec 결정 전까지 수동 동기화.
             laneSR.sortingOrder = 5;   // Bar(10)보다 낮음 — background
             laneComp.visual = laneSR;   // T4 hover 토글용 사전 와이어링
         }
