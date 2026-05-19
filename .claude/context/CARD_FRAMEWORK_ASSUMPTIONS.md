@@ -40,9 +40,10 @@
 
 | 항목 | 내용 |
 |------|------|
-| **현재 stub** | Lo-Fi Figma 미참조. 화면 하단에 7 슬롯 수평 나열, 각 슬롯 ~80×120 px placeholder 박스. 위치/간격은 임의. |
-| **재방문 파일** | `CardBoardUI.cs` (슬롯 배치 로직), `Game.unity` Canvas 하위 CardBoard GameObject |
-| **트리거** | Figma Lo-Fi 레이아웃 확정 후 (Hi-Fi 합류 전 단계 갱신 OK) |
+| **결정 (2026-05-19 사용자 검수)** | 카드 1개 = lane 3개 폭. 8 카드 슬롯 (CARDS_IN_FIELD=8, LANES_PER_CARD=3). 슬롯 width = Canvas RefWidth / 8 ≈ 119.5 px. 좌→우 horizontal 배열, 화면 하단 anchor. |
+| **Hi-Fi 적용 방침** | Hi-Fi Figma 적용 시 슬롯 외관(이미지/폰트/색)만 교체. 슬롯 수/폭/위치 layout은 spec 확정. |
+| **재방문 파일** | `CardBoardUI.cs` (Hi-Fi 외관 적용), `Game.unity` (Canvas 자식 외관 변경) |
+| **트리거** | Hi-Fi Figma 외관 확정 후 |
 
 ---
 
@@ -56,4 +57,18 @@
 
 ---
 
-*최종 갱신: 2026-05-19 (Sprint 1.5 Task 0)*
+## 6. lane → card 영역 매핑
+
+| 항목 | 내용 |
+|------|------|
+| **현재 stub/하드코드** | `GameConfig.LaneToCardIndex(lane) = lane / 3` (lane 0~2 → card 0, lane 3~5 → card 1, ..., lane 21~23 → card 7). 카드 modifier 적용 시 영역 한정. 매핑은 단순 정수 나눗셈으로 결정 (left→right 슬롯 배치 가정). |
+| **재방문 파일** | `GameConfig.cs` (LANES_PER_CARD 변경 시), `CardSystem.cs` (`GetScoreMultipliersForSlot` 추가는 T5), `GameLoop.cs` (ApplyJudgment 영역 필터 — T5) |
+| **트리거** | 카드 배치 방식 spec 변경 시 (예: 카드 2개 폭 사용, 비대칭 매핑 등) |
+
+---
+
+*최종 갱신: 2026-05-19 (Sprint 1.5.1 T3)*
+
+### 변경 이력
+- `2026-05-19`: Sprint 1.5 Task 0 — 최초 작성 (항목 1~5 stub).
+- `2026-05-19`: Sprint 1.5.1 T3 — 카드 UI 위치 stub → 결정 전환 (항목 4), lane→card 매핑 항목 신규 (항목 6).

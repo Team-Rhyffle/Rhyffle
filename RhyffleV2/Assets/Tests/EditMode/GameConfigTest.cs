@@ -61,4 +61,24 @@ public class GameConfigTest {
         Assert.AreEqual(2, (int)FlickDirection.Down);
         Assert.AreEqual(3, (int)FlickDirection.Left);
     }
+
+    [Test]
+    public void CARDS_IN_FIELD_TimesLANES_PER_CARD_EqualsLaneCount() {
+        // 24 lane / 8 card / 3 lane-per-card invariant
+        Assert.AreEqual(8, GameConfig.CARDS_IN_FIELD);
+        Assert.AreEqual(3, GameConfig.LANES_PER_CARD);
+        Assert.AreEqual(GameConfig.LANE_COUNT, GameConfig.CARDS_IN_FIELD * GameConfig.LANES_PER_CARD);
+    }
+
+    [Test]
+    public void LaneToCardIndex_MapsCorrectly() {
+        // lane 0~2 → card 0, lane 3~5 → card 1, ..., lane 21~23 → card 7
+        Assert.AreEqual(0, GameConfig.LaneToCardIndex(0));
+        Assert.AreEqual(0, GameConfig.LaneToCardIndex(1));
+        Assert.AreEqual(0, GameConfig.LaneToCardIndex(2));
+        Assert.AreEqual(1, GameConfig.LaneToCardIndex(3));
+        Assert.AreEqual(2, GameConfig.LaneToCardIndex(6));
+        Assert.AreEqual(7, GameConfig.LaneToCardIndex(21));
+        Assert.AreEqual(7, GameConfig.LaneToCardIndex(23));
+    }
 }

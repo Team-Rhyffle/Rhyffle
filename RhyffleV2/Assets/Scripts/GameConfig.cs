@@ -45,9 +45,12 @@ public static class GameConfig {
     // LaneX: lane 영역 (띠) center world x. 24 lane.
     public static float BarX(int barNum) => barNum - 13f;
     public static float LaneX(int laneIndex) => laneIndex - 11.5f;
+    // invariant: LANE_COUNT % LANES_PER_CARD == 0
+    public static int   LaneToCardIndex(int laneIndex) => laneIndex / LANES_PER_CARD;
 
     // === Card System (Sprint 1.5+) ===
-    public const int CARDS_IN_FIELD          = 7;   // 필드 카드 수 (spec §4 + Lo-Fi UI 7 슬롯 동일)
+    public const int CARDS_IN_FIELD          = 8;   // 필드 카드 수 (24 lane / 3 lane per card = 8; spec §4 + Sprint 1.5.1 사용자 검수 결정)
+    public const int LANES_PER_CARD          = 3;   // 카드 1개당 lane 수 (24 / 8 = 3)
     public const int KEY_NOTE_COMBO_INTERVAL = 32;  // 키 노트 트리거 콤보 간격 (임의 값 — 플레이테스트 미검증, 2박 단위 어림셈 수준; spec 미정 — stub, Sprint 2 갱신)
 }
 
