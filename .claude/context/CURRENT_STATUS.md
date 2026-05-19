@@ -7,7 +7,7 @@
 ---
 
 ## 현재 단계
-**Sprint 1.5.5 T1 완료** — PauseButton 컴포넌트 + GameLoop.IsPaused getter + SceneBootstrap wire. PausePlaceholder에 Button+PauseButton 부착, 라벨 PAUSE↔PLAY 토글. **58/58 EditMode tests PASS**.
+**Sprint 1.5.5 T2 완료** — NotoSansKR SDF (Apache 2.0) 생성 + MalgunGothic 삭제 (license-clean). LiberationSans fallback chain 갱신 + SceneBootstrap 경로 교체. **58/58 EditMode tests PASS**.
 
 - Sprint 1 (2026-05-18 완료): 14/14 task + Steelman 게이트 3개 PASS.
 - Sprint 1.5 (2026-05-19 완료): 10/10 task DONE. 36/36 EditMode tests PASS.
@@ -17,7 +17,7 @@
 - Sprint 1.5.5 T1 (2026-05-20 완료): PauseButton 기능 wire.
 
 ## 다음 액션
-**Sprint 1.5.5 T2** 진행 또는 **Sprint 2 대기** — 김한울 카드 데이터셋 + Figma Hi-Fi 도착 필요.
+**Sprint 1.5.5 T3** 진행 또는 **Sprint 2 대기** — 김한울 카드 데이터셋 + Figma Hi-Fi 도착 필요. (T3 내용 미정 시 Sprint 2 입력 대기)
 
 ## 블로커
 **Sprint 2 진입 블로커**: 김한울 카드 데이터셋 미도착 (2026-05-17 마감 → 초과). 진행 상황 확인 필요.
@@ -34,11 +34,11 @@
 - Figma Hi-Fi 외관 교체 (placeholder → 실제 art)
 
 ## 최근 변경
+- 2026-05-20: **Sprint 1.5.5 T2 완료** (d130af1) — NotoSansKR SDF (Apache 2.0) 교체, MalgunGothic 삭제 (license-clean). SceneBootstrap 2곳 경로 교체. 58/58 PASS.
 - 2026-05-20: **Sprint 1.5.5 T1 완료** — PauseButton.cs 신규 + GameLoop.IsPaused getter + SceneBootstrap PausePlaceholder wire. 58/58 PASS.
 - 2026-05-19: **Sprint 1.5.4 hotfix** + push (8f4c912) — atlas sub-asset 누락 fix (AddObjectToAsset) + MalgunGothic 직접 할당 + ⏸→PAUSE. 0 MissingRef/경고. 58/58 PASS.
 - 2026-05-19: **Sprint 1.5.4 완료** + push (b1a8bf6) — MalgunGothic TTF import + Dynamic SDF asset + LiberationSans fallback chain 등록. 58/58 PASS.
 - 2026-05-19: **Sprint 1.5.3 T5 완료** + Phase push — HUD 재배치 + 5 placeholder + 3 영역 visual band. 58/58 PASS.
-- 2026-05-19: **Sprint 1.5.3 T4 fix** + push (a6ec540) — Canvas overlay visual band → World Space SpriteRenderer. NoteAreaBand/JudgeLineBand/CardAreaBand (NoteScreen 자식). 58/58 PASS.
 
 ## 작업 재개 시 첫 행동
 1. **이 파일 (CURRENT_STATUS.md) 먼저 읽기**
