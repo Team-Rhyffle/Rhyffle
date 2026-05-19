@@ -3,18 +3,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// Sprint 1.5.1 — 8 slots, total width = Canvas RefWidth (956 px).
-// Each slot width = CANVAS_REF_WIDTH / CARDS_IN_FIELD = 956/8 = 119.5 px,
-// matching 3-lane visual width (LANES_PER_CARD = 3).
+// Sprint 1.5.1 — 8 slots sized to match the 3-lane world area (x=-12 to +12).
+// BuildSlots() converts lane-area world edges to canvas local px via Camera+RectTransformUtility,
+// then sets slotWidth = laneAreaCanvasPx / CARDS_IN_FIELD (≈ 645/8 ≈ 80.6 px at 16:9).
+// This replaces the previous static CANVAS_REF_WIDTH/CARDS_IN_FIELD = 119.5 px calculation
+// which was 4.4× wider than the actual lane column width.  (Sprint 1.5.1 follow-up patch)
 // OnLaneHover() provides N-frame highlight tied to LaneToCardIndex.
-// Canvas must use ScaleWithScreenSize anchored to RefWidth (956×440); the px value
-// scales with screen at runtime, keeping slot-to-lane alignment intact.
+// NOTE: sizing is computed once in Awake; screen-resize at runtime won't auto-update (placeholder ok).
 // Children are created procedurally in Awake — no prefab dependencies, no Figma reference yet.
 public class CardBoardUI : MonoBehaviour {
-    // Slot dimensions: 1/N of Canvas reference width (N = CARDS_IN_FIELD = 8).
-    // Currently 956/8 = 119.5 px per slot, matching 3-lane visual width.
+    // Slot dimensions: 1/N of lane-area canvas width (dynamically computed in BuildSlots).
+    // At 16:9 / 956×440 reference: lane area ≈ 645 px, slotWidth ≈ 645/8 ≈ 80.6 px.
     const float SLOT_HEIGHT     = 120f;
-    const float SLOT_SPACING    = 0f;          // 0 — slots flush so 8×width = full canvas
+    const float SLOT_SPACING    = 0f;          // 0 — slots flush; spacing is subsumed into slotWidth
     const float BOTTOM_PADDING  = 12f;
     const int   HOVER_FRAMES    = 12;          // ~0.2s @ 60fps
     static readonly Color EMPTY_COLOR  = new Color(0.4f, 0.4f, 0.4f, 0.6f);
@@ -60,17 +61,41 @@ public class CardBoardUI : MonoBehaviour {
     }
 
     void BuildSlots() {
-        // Ensure self has a RectTransform
+        // --- Step 1: resolve canvas and camera ---
+        var canvas = GetComponentInParent<Canvas>();
+        var cam    = canvas != null ? canvas.worldCamera : null;
+        if (cam == null) cam = Camera.main;
+
+        // --- Step 2: lane-area world-edge points ---
+        // Lane area is symmetric: x = -laneAreaHalfWidth … +laneAreaHalfWidth
+        float laneAreaHalfWidth = (GameConfig.LANE_COUNT * GameConfig.LANE_WIDTH) * 0.5f;  // 24*1.0*0.5 = 12
+        Vector3 worldLeft  = new Vector3(-laneAreaHalfWidth, 0f, 0f);   // (-12, 0, 0)
+        Vector3 worldRight = new Vector3(+laneAreaHalfWidth, 0f, 0f);   // (+12, 0, 0)
+
+        // --- Step 3: world → screen → canvas local px ---
+        RectTransform canvasRT = canvas != null ? (canvas.transform as RectTransform) : null;
+        Vector2 screenLeft  = cam != null ? (Vector2)cam.WorldToScreenPoint(worldLeft)  : Vector2.zero;
+        Vector2 screenRight = cam != null ? (Vector2)cam.WorldToScreenPoint(worldRight) : Vector2.zero;
+        Vector2 canvasLeft  = Vector2.zero;
+        Vector2 canvasRight = Vector2.zero;
+        if (canvasRT != null) {
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRT, screenLeft,  cam, out canvasLeft);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRT, screenRight, cam, out canvasRight);
+        }
+        float totalWidth = Mathf.Abs(canvasRight.x - canvasLeft.x);   // lane area width in canvas px
+        // Fallback if camera/canvas not yet ready (keeps previous broken size rather than zero)
+        if (totalWidth < 1f) totalWidth = GameConfig.CANVAS_REF_WIDTH;
+        float boardCenterX = (canvasLeft.x + canvasRight.x) * 0.5f;   // should be ≈0 for centred lane area
+
+        // --- Step 4: position and size the board ---
         var rt = (RectTransform)transform;
-        // Stretch horizontally along bottom of parent canvas
         rt.anchorMin = new Vector2(0.5f, 0f);
         rt.anchorMax = new Vector2(0.5f, 0f);
         rt.pivot     = new Vector2(0.5f, 0f);
-        // Slot width computed from Canvas reference resolution so all 8 slots fill the full canvas width.
-        float slotWidth  = GameConfig.CANVAS_REF_WIDTH / (float)GameConfig.CARDS_IN_FIELD;
-        float totalWidth = GameConfig.CARDS_IN_FIELD * slotWidth + (GameConfig.CARDS_IN_FIELD - 1) * SLOT_SPACING;  // = 956 with spacing 0
         rt.sizeDelta         = new Vector2(totalWidth, SLOT_HEIGHT);
-        rt.anchoredPosition  = new Vector2(0f, BOTTOM_PADDING);
+        rt.anchoredPosition  = new Vector2(boardCenterX, BOTTOM_PADDING);
+
+        float slotWidth = totalWidth / (float)GameConfig.CARDS_IN_FIELD;
 
         for (int i = 0; i < GameConfig.CARDS_IN_FIELD; i++) {
             var slot = new GameObject($"Slot_{i}", typeof(RectTransform));
@@ -81,7 +106,7 @@ public class CardBoardUI : MonoBehaviour {
             srt.anchorMax = new Vector2(0f, 0.5f);
             srt.pivot     = new Vector2(0f, 0.5f);
             srt.sizeDelta        = new Vector2(slotWidth, SLOT_HEIGHT);
-            srt.anchoredPosition = new Vector2(i * (slotWidth + SLOT_SPACING), 0f);
+            srt.anchoredPosition = new Vector2(i * slotWidth, 0f);  // SLOT_SPACING stays 0
 
             var img = slot.AddComponent<Image>();
             img.color = EMPTY_COLOR;
