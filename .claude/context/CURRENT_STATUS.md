@@ -7,17 +7,13 @@
 ---
 
 ## 현재 단계
-**Sprint 1 Plain Mode 완료 + push 완료** (origin/main b0d7e5c, 31 commits). **Sprint 1.5 plan 작성 완료, 실행 대기.**
+**Sprint 1.5 진행 중** — Task 1 완료 (66c8c4b). Task 2 대기.
 
-- Sprint 1 (2026-05-18 완료): 14/14 task + Steelman 게이트 3개 PASS. 16노트 Perfect, score 1.2M, sprite/judgment 정렬 검증. autoPerfectDebug=true 기본값
-- Sprint 1.5 plan (30d0804): `docs/superpowers/plans/2026-05-18-sprint1.5-card-framework-lofi-ui.md` — 10 task (EventBus + JudgmentResult struct + CardData DTO + CardSystem + 더미 카드 3종 + CardBoard placeholder + GameLoop 통합 + 검증). 사용자 결정: 1(b) 더미 카드 발동까지 + HUD 유지 + placeholder
+- Sprint 1 (2026-05-18 완료): 14/14 task + Steelman 게이트 3개 PASS.
+- Sprint 1.5 plan (30d0804): `docs/superpowers/plans/2026-05-18-sprint1.5-card-framework-lofi-ui.md` — 10 task. **Task 1/10 완료**: EventBus generic pub/sub (`Assets/Scripts/Events/EventBus.cs`, 4 EditMode tests). Unity MCP 세션 unavailable로 test runner 미확인 (파일·.meta 생성 확인, compile 오류 미확인).
 
 ## 다음 액션
-**Sprint 1.5 실행 시작** — 진입 방식 선택 필요:
-1. (a) `superpowers:subagent-driven-development` — 이전 Sprint 1 패턴 (task별 implementer + 2 reviewer 직렬화)
-2. (b) Claude가 직접 task별 실행 (subagent 없이, atomic commit per task)
-
-선택 안 되면 (a) 권장 (Sprint 1과 동일하게 품질 보장). 시작 Task 0 = `GameConfig.CARDS_IN_FIELD=7` 상수 + `.claude/context/CARD_FRAMEWORK_ASSUMPTIONS.md` 신설 (5 stub 명시: 묘지·키노트·일반능력·카드UI위치·카드source)
+**Sprint 1.5 Task 2** — `JudgmentResult` struct 구현 (`Assets/Scripts/Events/JudgmentResult.cs`). EventBus 연동 준비.
 
 ## 블로커
 없음. 다만 Sprint 2 진입 (실제 카드 시스템) 위해선 **김한울 카드 데이터셋 도착 필요** (마감 2026-05-17 = 어제) — 진행 상황 확인 권장. Sprint 1.5는 데이터셋 무관, 즉시 진행 가능
