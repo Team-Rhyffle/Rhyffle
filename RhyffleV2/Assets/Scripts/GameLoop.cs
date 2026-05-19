@@ -20,6 +20,9 @@ public class GameLoop : MonoBehaviour {
     public GameObject holdNotePrefab;
     public GameObject holdNoteBodyPrefab;
 
+    [Header("Card System (Sprint 1.5+) — optional, scene-found fallback in Start")]
+    public CardSystem cardSystem;
+
     [Header("Chart")]
     public string chartName = "dummy_test";
 
@@ -39,6 +42,7 @@ public class GameLoop : MonoBehaviour {
     private bool isPaused;
     private float startCountdown;
     private bool songStarted;
+    private int _keyNoteTriggerCount;
 
     void Start() {
         // 채보 로드
@@ -51,6 +55,15 @@ public class GameLoop : MonoBehaviour {
         if (totalNoteCount > 0) {
             baseScore = Mathf.RoundToInt(1_000_000f / totalNoteCount);
         }
+        // Fallback: locate CardSystem in scene if not inspector-wired.
+        if (cardSystem == null) {
+            cardSystem = FindObjectOfType<CardSystem>();
+        }
+        // Publish initial FieldChangedEvent so card subscribers see the starting field (may be empty in 1.5).
+        if (cardSystem != null) {
+            EventBus.Publish(new FieldChangedEvent { Field = cardSystem.GetField() });
+        }
+
         // 시작 — startDelay 후 conductor.StartSong()
         startCountdown = startDelay;
         songStarted = false;
@@ -184,16 +197,56 @@ public class GameLoop : MonoBehaviour {
         ApplyJudgment(note, grade);
     }
 
-    // === Score + Combo (Sprint 1 내부 메서드 — Week 2 ScoreSystem/ComboCounter 분리) ===
+    // === Score + Combo (Sprint 1.5 EventBus 통합 — modifier 합산 + 콤보 보호 + 키노트 stub) ===
     private void ApplyJudgment(Note note, JudgmentGrade grade) {
         note.IsJudged = true;
-        int delta = Mathf.RoundToInt(baseScore * JudgeProcessor.GetScoreMultiplier(grade));
-        score += delta;
-        // TODO: SpMiss combo behavior unspecified in JUDGMENT_SPEC.md — confirm before Sprint 2 ComboCounter split
-        if (grade == JudgmentGrade.Miss) combo = 0;
-        else combo++;
+        int prevCombo = combo;
+
+        // Base score from JudgeProcessor (no cards yet)
+        int baseDelta = Mathf.RoundToInt(baseScore * JudgeProcessor.GetScoreMultiplier(grade));
+
+        // Publish NoteJudgedEvent — gives cards a chance to update internal state.
+        // Modifiers list is provided but unused by the published event itself in current design
+        // (cards expose modifiers via CardSystem.GetScoreMultipliers, not via the event payload).
+        EventBus.Publish(new NoteJudgedEvent {
+            Grade     = grade,
+            Kind      = note.Kind,
+            Line      = note.Line,
+            Combo     = combo,                // pre-update value; ComboChangedEvent below carries the transition
+            BaseScore = baseDelta,
+            Modifiers = new System.Collections.Generic.List<ScoreModifier>(),
+        });
+
+        // Aggregate score multipliers from active card effects (left→right product).
+        float productMul = 1f;
+        if (cardSystem != null) {
+            var mods = cardSystem.GetScoreMultipliers();
+            foreach (var m in mods) productMul *= m.Multiplier;
+        }
+        int finalDelta = Mathf.RoundToInt(baseDelta * productMul);
+        score += finalDelta;
+
+        // Combo update with protection on Miss
+        if (grade == JudgmentGrade.Miss) {
+            bool protected_ = cardSystem != null && cardSystem.TryConsumeComboProtection();
+            if (!protected_) combo = 0;
+            // else: combo unchanged
+        } else {
+            combo++;
+        }
+        EventBus.Publish(new ComboChangedEvent { Combo = combo, Previous = prevCombo });
+
+        // Key note stub: every KEY_NOTE_COMBO_INTERVAL combo step (only when combo just crossed a boundary)
+        if (combo > 0 && combo % GameConfig.KEY_NOTE_COMBO_INTERVAL == 0 && combo != prevCombo) {
+            _keyNoteTriggerCount++;
+            EventBus.Publish(new KeyNoteProcessedEvent {
+                Combo = combo,
+                TriggerCount = _keyNoteTriggerCount,
+            });
+        }
+
         UpdateHUD(grade);
-        Debug.Log($"[Judge] {grade} note(kind={note.Kind}, line={note.Line}) | score={score} combo={combo}");
+        Debug.Log($"[Judge] {grade} note(kind={note.Kind}, line={note.Line}) base={baseDelta} ×{productMul:0.00} = {finalDelta} | score={score} combo={combo}");
     }
 
     private void UpdateHUD(JudgmentGrade grade) {
