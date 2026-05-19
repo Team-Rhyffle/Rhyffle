@@ -252,6 +252,7 @@ public static class SceneBootstrap {
         var gameLoopGO = new GameObject("GameLoop");
         var judgeProcessor = gameLoopGO.AddComponent<JudgeProcessor>();
         var gameLoop = gameLoopGO.AddComponent<GameLoop>();
+        gameLoop.autoPerfectDebug = false;   // Sprint 1.5.2 — 실 입력 검증 default
         gameLoop.conductor = conductor;
         gameLoop.noteScreen = noteScreen;
         gameLoop.judgeProcessor = judgeProcessor;

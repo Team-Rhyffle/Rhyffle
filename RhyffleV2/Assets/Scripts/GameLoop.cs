@@ -29,7 +29,7 @@ public class GameLoop : MonoBehaviour {
 
     [Header("Debug")]
     [Tooltip("ON 시 모든 노트를 판정선 도달 순간 자동 Perfect 처리 — 콤보/점수 검증용")]
-    public bool autoPerfectDebug = true;
+    public bool autoPerfectDebug = false;   // changed: Sprint 1.5.2 — 실 입력 검증 default
     [Tooltip("Play 진입 후 곡 시작까지 대기 시간 (초). 첫 프레임 hiccup 흡수.")]
     public float startDelay = 2.0f;
 
