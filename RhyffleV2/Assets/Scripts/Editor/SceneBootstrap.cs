@@ -201,32 +201,6 @@ public static class SceneBootstrap {
             18
         );
 
-        // Sprint 1.5.3 T4 Lo-Fi placeholder: 노트영역 / 판정선 / 카드영역 visual band (lane/CardBoard와 별개 — 단순 visual 박스)
-        // 좌표: Lo-Fi portrait → landscape 변환 결과 (CW 90° rotation). Canvas top-left anchor 기준.
-        // Anchor (0,1), pivot (0,1), anchoredPosition.y는 음수 (위에서 아래로 거리).
-        // 총 높이: 345 + 30 + 65 = 440 = 화면 전체 height. x 범위: 119~837 (720 width).
-        CreatePlaceholderPanel(
-            canvasGO.transform, "NoteAreaPlaceholder",
-            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(119f, 0f), new Vector2(718f, 345f),
-            "", new Color(1.0f, 0.95f, 0.4f, 0.05f),   // 매우 옅은 노란 — 영역 경계만
-            0
-        );
-        CreatePlaceholderPanel(
-            canvasGO.transform, "JudgeLinePlaceholder",
-            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(119f, -345f), new Vector2(718f, 30f),
-            "", new Color(1.0f, 0.85f, 0.2f, 0.4f),    // 더 진한 노란 — 판정선 강조
-            0
-        );
-        CreatePlaceholderPanel(
-            canvasGO.transform, "CardAreaPlaceholder",
-            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(119f, -375f), new Vector2(718f, 65f),
-            "", new Color(1.0f, 0.95f, 0.4f, 0.15f),    // 옅은 노란
-            0
-        );
-
         // === 3. EventSystem ===
         var eventSystemGO = new GameObject("EventSystem");
         eventSystemGO.AddComponent<EventSystem>();
@@ -289,6 +263,30 @@ public static class SceneBootstrap {
         }
         noteScreen.lanes.Clear();
         noteScreen.lanes.AddRange(noteScreenGO.GetComponentsInChildren<LaneAnchor>());
+
+        // Sprint 1.5.3 T4 fix: World Space visual band (lane/card area와 자동 정렬)
+        // Canvas overlay 좌표가 화면 비율 의존 → World Space SpriteRenderer로 이전
+        // NoteScreen localPosition.y = JUDGE_LINE_Y (-2.5) → 자식 localPosition은 world y에서 JUDGE_LINE_Y를 뺀 값
+        CreateWorldVisualBand(noteScreenGO.transform, "NoteAreaBand",
+            center: new Vector3(0f, (GameConfig.SPAWN_Y + GameConfig.JUDGE_LINE_Y) * 0.5f - GameConfig.JUDGE_LINE_Y, 0f),
+            size: new Vector2(GameConfig.LANE_COUNT * GameConfig.LANE_WIDTH, GameConfig.SPAWN_Y - GameConfig.JUDGE_LINE_Y),
+            color: new Color(1.0f, 0.95f, 0.4f, 0.05f),
+            sortingOrder: 1,
+            sprite: sprite);
+        // JudgeLineBand: world y = JUDGE_LINE_Y → local y = 0 (NoteScreen root와 동일)
+        CreateWorldVisualBand(noteScreenGO.transform, "JudgeLineBand",
+            center: new Vector3(0f, 0f, 0f),
+            size: new Vector2(GameConfig.LANE_COUNT * GameConfig.LANE_WIDTH, 0.3f),
+            color: new Color(1.0f, 0.85f, 0.2f, 0.6f),
+            sortingOrder: 6,
+            sprite: sprite);
+        // CardAreaBand: world y = -5 → local y = -5 - JUDGE_LINE_Y = -5 - (-2.5) = -2.5
+        CreateWorldVisualBand(noteScreenGO.transform, "CardAreaBand",
+            center: new Vector3(0f, -5f - GameConfig.JUDGE_LINE_Y, 0f),
+            size: new Vector2(GameConfig.LANE_COUNT * GameConfig.LANE_WIDTH, 4.5f),
+            color: new Color(1.0f, 0.95f, 0.4f, 0.10f),
+            sortingOrder: 0,
+            sprite: sprite);
 
         // 4-2. NoteBoard (hold polyline 공유 LineRenderer)
         var noteBoardGO = new GameObject("NoteBoard");
@@ -368,7 +366,7 @@ public static class SceneBootstrap {
             EditorBuildSettings.scenes = newScenes;
         }
 
-        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 25 Bar(점 0.5) + 24 LaneAnchor(Visual 자식 띠) + UI 11종(PauseInfo 2 + Shuffle/DeckGrave 2 + 노트/판정선/카드 3) + GameLoop 와이어링 완료. Build settings에 등록됨. (Sprint 1.5.3 T4: 노트/판정선/카드 visual band 추가)");
+        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 25 Bar(점 0.5) + 24 LaneAnchor(Visual 자식 띠) + 3 World Space band (NoteArea/JudgeLine/CardArea, NoteScreen 자식) + UI 8종(PauseInfo 2 + Shuffle/DeckGrave 2 Canvas overlay) + GameLoop 와이어링 완료. Build settings에 등록됨. (Sprint 1.5.3 T4 fix: Canvas overlay → World Space band)");
     }
 
     // ============================================================
@@ -500,6 +498,21 @@ public static class SceneBootstrap {
             var koreanFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Fonts/MalgunGothic SDF.asset");
             if (koreanFont != null) tmp.font = koreanFont;
         }
+        return go;
+    }
+
+    /// <summary>
+    /// World Space visual band — lane/card area boundary 표시. 1×1 sprite + localScale로 size 조절.
+    /// </summary>
+    static GameObject CreateWorldVisualBand(Transform parent, string name, Vector3 center, Vector2 size, Color color, int sortingOrder, Sprite sprite) {
+        var go = new GameObject(name);
+        go.transform.SetParent(parent, false);
+        go.transform.localPosition = center;
+        go.transform.localScale = new Vector3(size.x, size.y, 1f);
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = sprite;
+        sr.color = color;
+        sr.sortingOrder = sortingOrder;
         return go;
     }
 
