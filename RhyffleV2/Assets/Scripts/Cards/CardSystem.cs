@@ -46,8 +46,7 @@ public class CardSystem : MonoBehaviour {
         return false;
     }
 
-    // For Task 6 / 8 to populate the field with CardData (one CardData per active effect, by order).
-    // Validates count matches _activeEffects.Count.
+    // For Task 6/8 to populate the field with CardData (convention: one CardData per active effect, by order — NOT validated here, caller's responsibility).
     public void SetField(List<CardData> cards) {
         _field.Clear();
         if (cards != null) _field.AddRange(cards);
