@@ -1,6 +1,55 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-// Stub for Task 4 type wiring. Full impl arrives in Task 5
-// (필드 관리 + activeEffects + GetScoreMultipliers + TryConsumeComboProtection).
 public class CardSystem : MonoBehaviour {
+    private readonly List<CardData>    _field         = new List<CardData>();     // max 7
+    private readonly List<ICardEffect> _activeEffects = new List<ICardEffect>(); // parallel, left→right activation order
+
+    void Awake() {
+        // Pull all currently-registered effect factories from CardEffectRegistry,
+        // up to CARDS_IN_FIELD slots. Field is left empty (no CardData) until
+        // Task 6 supplies real cards. activeEffects is what actually receives events.
+        foreach (var kv in CardEffectRegistry.GetAllFactories()) {
+            if (_activeEffects.Count >= GameConfig.CARDS_IN_FIELD) break;
+            var effect = kv.Value();
+            if (effect == null) continue;
+            _activeEffects.Add(effect);
+            effect.OnAttach(this);
+        }
+    }
+
+    void OnDestroy() {
+        foreach (var effect in _activeEffects) effect.OnDetach(this);
+        _activeEffects.Clear();
+        _field.Clear();
+    }
+
+    // Read-only snapshot copy for FieldChangedEvent publishers / inspectors.
+    public List<CardData> GetField() => new List<CardData>(_field);
+
+    // Aggregate modifiers from all active effects, left→right.
+    // GameLoop calls this when applying a NoteJudgedEvent's final score.
+    public List<ScoreModifier> GetScoreMultipliers() {
+        var result = new List<ScoreModifier>();
+        foreach (var effect in _activeEffects) {
+            foreach (var m in effect.GetCurrentModifiers()) result.Add(m);
+        }
+        return result;
+    }
+
+    // GameLoop calls this on Miss before zeroing combo. Returns true if some
+    // active effect protected the combo (effect spends its own charge internally).
+    public bool TryConsumeComboProtection() {
+        foreach (var effect in _activeEffects) {
+            if (effect.TryConsumeComboProtection()) return true;
+        }
+        return false;
+    }
+
+    // For Task 6 / 8 to populate the field with CardData (one CardData per active effect, by order).
+    // Validates count matches _activeEffects.Count.
+    public void SetField(List<CardData> cards) {
+        _field.Clear();
+        if (cards != null) _field.AddRange(cards);
+    }
 }
