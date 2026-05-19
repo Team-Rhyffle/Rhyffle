@@ -458,8 +458,8 @@ public static class SceneBootstrap {
         tmp.text = text;
         tmp.fontSize = fontSize;
         tmp.color = Color.white;
-        // Sprint 1.5.4: 한글 라벨 지원을 위해 MalgunGothic SDF 직접 할당 (fallback chain 의존 안 함)
-        var koreanFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Fonts/MalgunGothic SDF.asset");
+        // Sprint 1.5.5 T2: NotoSansKR SDF (Apache 2.0) — MalgunGothic 제거 (license-clean)
+        var koreanFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Fonts/NotoSansKR SDF.asset");
         if (koreanFont != null) tmp.font = koreanFont;
         return go;
     }
@@ -502,8 +502,8 @@ public static class SceneBootstrap {
             tmp.color = Color.black;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.enableWordWrapping = true;
-            // Sprint 1.5.4: 한글 라벨 지원
-            var koreanFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Fonts/MalgunGothic SDF.asset");
+            // Sprint 1.5.5 T2: NotoSansKR SDF (Apache 2.0) — MalgunGothic 제거 (license-clean)
+            var koreanFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Fonts/NotoSansKR SDF.asset");
             if (koreanFont != null) tmp.font = koreanFont;
         }
         return go;
