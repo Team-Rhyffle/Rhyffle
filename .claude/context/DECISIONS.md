@@ -107,6 +107,17 @@
 
 ---
 
+## 2026-05-19: Sprint 1.5 — Card Effect Framework 설계 결정 기록
+
+- **Context**: Sprint 1.5에서 카드 효과 프레임워크 (ICardEffect, CardSystem, CardEffectRegistry, 더미 3종) 신설. 여러 설계 지점에서 결정이 필요했음.
+- **Decision**:
+  1. **ICardEffect 5-method contract**: `OnAttach` / `OnDetach` / `GetCurrentModifiers` / `TryConsumeComboProtection` + `Id` 프로퍼티. "카드가 직접 이벤트 구독"하는 패턴 — CardSystem이 이벤트를 중개하지 않음. 효과마다 독립적 구독/해제로 생명주기 관리.
+  2. **RuntimeInitializeOnLoadMethod 등록**: DummyEffectsBootstrap이 `[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]`로 PlayMode 진입 시 자동 등록. EditMode 테스트에서는 미실행 → `CardEffectRegistry.Register()`를 테스트 코드에서 명시 호출.
+  3. **Dictionary 삽입 순서 가정**: `CardEffectRegistry` 내부 `Dictionary<string, Func<ICardEffect>>`는 .NET Mono (Unity) 환경에서 삽입 순서 보존이 경험적으로 확인됨 (Sprint 1.5 3 entries). Sprint 2에서 카드 수 증가 시 리사이즈로 순서 깨질 리스크 있음 → **Sprint 2에서 `List<(string, Func<ICardEffect>)>`로 교체 고려**.
+  4. **콤보 보호 패턴**: DummyDef_HeartQ는 Miss 이벤트 수신 시 `_pendingProtect=true` 세팅 → GameLoop가 `TryConsumeComboProtection()` 호출 시 소비. 이벤트 발행과 소비를 분리하는 2-step 패턴.
+  5. **score 계산 순서**: `Publish(NoteJudgedEvent)` → 카드들이 내부 상태 업데이트 → `GetScoreMultipliers()` 호출 → product 곱셈 → `RoundToInt`. 이벤트 발행이 modifier 수집보다 반드시 선행해야 함.
+- **Outcome**: 통합 검증 2026-05-19 PASS — ATK-only 1,320,000, ATK+SUP 1,584,000, 36/36 EditMode tests, Gate A(메모리 누수 없음) + Gate B(삽입 순서 보존) 모두 PASS.
+
 ## YYYY-MM-DD: [다음 결정 제목]
 
 - **Context**:
