@@ -200,6 +200,32 @@ public static class SceneBootstrap {
             18
         );
 
+        // Sprint 1.5.3 T4 Lo-Fi placeholder: 노트영역 / 판정선 / 카드영역 visual band (lane/CardBoard와 별개 — 단순 visual 박스)
+        // 좌표: Lo-Fi portrait → landscape 변환 결과 (CW 90° rotation). Canvas top-left anchor 기준.
+        // Anchor (0,1), pivot (0,1), anchoredPosition.y는 음수 (위에서 아래로 거리).
+        // 총 높이: 345 + 30 + 65 = 440 = 화면 전체 height. x 범위: 119~837 (720 width).
+        CreatePlaceholderPanel(
+            canvasGO.transform, "NoteAreaPlaceholder",
+            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
+            new Vector2(119f, 0f), new Vector2(718f, 345f),
+            "", new Color(1.0f, 0.95f, 0.4f, 0.05f),   // 매우 옅은 노란 — 영역 경계만
+            0
+        );
+        CreatePlaceholderPanel(
+            canvasGO.transform, "JudgeLinePlaceholder",
+            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
+            new Vector2(119f, -345f), new Vector2(718f, 30f),
+            "", new Color(1.0f, 0.85f, 0.2f, 0.4f),    // 더 진한 노란 — 판정선 강조
+            0
+        );
+        CreatePlaceholderPanel(
+            canvasGO.transform, "CardAreaPlaceholder",
+            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
+            new Vector2(119f, -375f), new Vector2(718f, 65f),
+            "", new Color(1.0f, 0.95f, 0.4f, 0.15f),    // 옅은 노란
+            0
+        );
+
         // === 3. EventSystem ===
         var eventSystemGO = new GameObject("EventSystem");
         eventSystemGO.AddComponent<EventSystem>();
@@ -341,7 +367,7 @@ public static class SceneBootstrap {
             EditorBuildSettings.scenes = newScenes;
         }
 
-        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 25 Bar(점 0.5) + 24 LaneAnchor(Visual 자식 띠) + UI 8종 + GameLoop 와이어링 완료. Build settings에 등록됨. (Sprint 1.5.3 T3: ShufflePlaceholder + DeckGravePlaceholder 추가)");
+        Debug.Log($"[SceneBootstrap] Game.unity 씬 셋업 완료 — 6 루트 + 25 Bar(점 0.5) + 24 LaneAnchor(Visual 자식 띠) + UI 11종(PauseInfo 2 + Shuffle/DeckGrave 2 + 노트/판정선/카드 3) + GameLoop 와이어링 완료. Build settings에 등록됨. (Sprint 1.5.3 T4: 노트/판정선/카드 visual band 추가)");
     }
 
     // ============================================================
