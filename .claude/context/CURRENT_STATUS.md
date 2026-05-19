@@ -7,10 +7,10 @@
 ---
 
 ## 현재 단계
-**Sprint 1.5 진행 중** — Task 1 완료 (66c8c4b). Task 2 대기.
+**Sprint 1.5 진행 중** — Task 1 완료 (66c8c4b), Task 3 완료 (1a88476). Task 2 대기.
 
 - Sprint 1 (2026-05-18 완료): 14/14 task + Steelman 게이트 3개 PASS.
-- Sprint 1.5 plan (30d0804): `docs/superpowers/plans/2026-05-18-sprint1.5-card-framework-lofi-ui.md` — 10 task. **Task 1/10 완료**: EventBus generic pub/sub (`Assets/Scripts/Events/EventBus.cs`, 4 EditMode tests). Unity MCP 세션 unavailable로 test runner 미확인 (파일·.meta 생성 확인, compile 오류 미확인).
+- Sprint 1.5 plan (30d0804): `docs/superpowers/plans/2026-05-18-sprint1.5-card-framework-lofi-ui.md` — 10 task. **Task 1, 3 완료**: EventBus (Task 1) + CardData DTO + 4 enums (Task 3, `Assets/Scripts/Cards/`). Task 2 (JudgmentResult) 남음.
 
 ## 다음 액션
 **Sprint 1.5 Task 2** — `JudgmentResult` struct 구현 (`Assets/Scripts/Events/JudgmentResult.cs`). EventBus 연동 준비.
@@ -25,6 +25,7 @@
 - 카드 데이터셋 (≈400장) — 한울 2026-05-17 마감 예정 (Sprint 2 입력 자산). **진행 상황 확인 필요**
 
 ## 최근 변경
+- 2026-05-19: **Sprint 1.5 Task 3 완료** (1a88476) — CardData DTO + CardGroup/Suit/Rank/Rarity 4 enums. `Assets/Scripts/Cards/` 신설. 0 compile errors.
 - 2026-05-18: **Sprint 1.5 plan 작성** (30d0804) — Card Effect Framework + Lo-Fi UI Placement. 10 task, EventBus pub/sub + 더미 카드 3종 발동 검증 + CardBoard 7 슬롯 placeholder. 카드 spec은 Notion 카드시스템 페이지에서 추출 (필드 7장, 좌→우 발동, 카드군 5종, 족보 12종). 5 stub 명시 (묘지/키노트/일반능력/카드UI/카드source).
 - 2026-05-18: **Sprint 1 phase push 완료** — origin/main b0d7e5c (31 commits 외부 공유). Sprint 1 plain mode 종결.
 - 2026-05-18: **Sprint 1 Plain Mode 14/14 task + 3 Steelman 게이트 PASS** — Unity MCP execute_code reflection-based manual ticking으로 headless 검증. 16노트 Perfect. Flick 4종 + Slide invisible / Flick(D) 9× scale 버그 발견·수정.
