@@ -7,7 +7,7 @@
 ---
 
 ## 현재 단계
-**Sprint 1.5.4 완료** — 한글 TMP Font Asset (MalgunGothic Dynamic SDF) + LiberationSans SDF fallback 등록. **58/58 EditMode tests PASS**.
+**Sprint 1.5.4 hotfix 완료** — MalgunGothic SDF atlas sub-asset 저장 + 직접 폰트 할당 + ⏸→PAUSE 교체. **58/58 EditMode tests PASS**. push 완료 (8f4c912).
 
 - Sprint 1 (2026-05-18 완료): 14/14 task + Steelman 게이트 3개 PASS.
 - Sprint 1.5 (2026-05-19 완료): 10/10 task DONE. 36/36 EditMode tests PASS.
@@ -34,6 +34,7 @@
 - Figma Hi-Fi 외관 교체 (placeholder → 실제 art)
 
 ## 최근 변경
+- 2026-05-19: **Sprint 1.5.4 hotfix** + push (8f4c912) — atlas sub-asset 누락 fix (AddObjectToAsset) + MalgunGothic 직접 할당 + ⏸→PAUSE. 0 MissingRef/경고. 58/58 PASS.
 - 2026-05-19: **Sprint 1.5.4 완료** + push (b1a8bf6) — MalgunGothic TTF import + Dynamic SDF asset + LiberationSans fallback chain 등록. 58/58 PASS.
 - 2026-05-19: **Sprint 1.5.3 T5 완료** + Phase push — HUD 재배치 + 5 placeholder + 3 영역 visual band. 58/58 PASS.
 - 2026-05-19: **Sprint 1.5.3 T4 완료** — 노트/판정선/카드 영역 visual band (NoteArea/JudgeLine/CardAreaPlaceholder).
