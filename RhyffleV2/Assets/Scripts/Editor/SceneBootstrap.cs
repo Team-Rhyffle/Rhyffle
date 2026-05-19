@@ -170,13 +170,18 @@ public static class SceneBootstrap {
 
         // Sprint 1.5.3 Lo-Fi placeholder: 일시정지 + 곡 정보
         // Sprint 1.5.4 fix: ⏸ (U+23F8) → "PAUSE" (MalgunGothic에 pause 심볼 glyph 없음)
-        CreatePlaceholderPanel(
+        // Sprint 1.5.5 T1: Button + PauseButton 컴포넌트 wire (gameLoop ref는 아래에서 설정)
+        var pausePlaceholderGO = CreatePlaceholderPanel(
             canvasGO.transform, "PausePlaceholder",
             new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
             new Vector2(8f, -8f), new Vector2(77f, 79f),
             "PAUSE", new Color(1.0f, 0.95f, 0.4f, 0.7f),
             24
         );
+        pausePlaceholderGO.AddComponent<Button>();
+        var pauseBtn = pausePlaceholderGO.AddComponent<PauseButton>();
+        // gameLoop ref assigned below after gameLoop is created; label wired now
+        pauseBtn.label = pausePlaceholderGO.GetComponentInChildren<TextMeshProUGUI>();
         CreatePlaceholderPanel(
             canvasGO.transform, "SongInfoPlaceholder",
             new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f),
@@ -319,6 +324,9 @@ public static class SceneBootstrap {
         gameLoop.comboText = comboGO.GetComponent<TextMeshProUGUI>();
         gameLoop.judgementText = judgeTmp;
         gameLoop.chartName = "dummy_test";
+
+        // Sprint 1.5.5 T1: PauseButton.gameLoop 와이어링 (pauseBtn은 위에서 먼저 생성됨)
+        if (pauseBtn != null) pauseBtn.gameLoop = gameLoop;
 
         // Note prefab 5종 + FlickNote 4방향 wiring
         gameLoop.basicNotePrefab      = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/Prefabs/Note/BasicNote.prefab");

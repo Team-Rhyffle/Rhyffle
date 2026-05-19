@@ -7,16 +7,17 @@
 ---
 
 ## 현재 단계
-**Sprint 1.5.3 T4 fix 완료** — Canvas overlay visual band → World Space SpriteRenderer 이전. NoteScreen 자식 3 band (NoteAreaBand/JudgeLineBand/CardAreaBand). **58/58 EditMode tests PASS**. push 완료 (a6ec540).
+**Sprint 1.5.5 T1 완료** — PauseButton 컴포넌트 + GameLoop.IsPaused getter + SceneBootstrap wire. PausePlaceholder에 Button+PauseButton 부착, 라벨 PAUSE↔PLAY 토글. **58/58 EditMode tests PASS**.
 
 - Sprint 1 (2026-05-18 완료): 14/14 task + Steelman 게이트 3개 PASS.
 - Sprint 1.5 (2026-05-19 완료): 10/10 task DONE. 36/36 EditMode tests PASS.
 - Sprint 1.5.1 (2026-05-19 완료): 5/5 task DONE (Lane Visualization + Card-Lane Mapping). 40/40 tests PASS.
 - Sprint 1.5.2 (2026-05-19 완료): 5/5 task DONE. 58/58 tests PASS.
 - Sprint 1.5.3 (2026-05-19 완료): 5/5 task DONE. HUD 재배치 + 5 placeholder + 3 영역 visual band. 58/58 tests PASS.
+- Sprint 1.5.5 T1 (2026-05-20 완료): PauseButton 기능 wire.
 
 ## 다음 액션
-**Sprint 2 대기** — 김한울 카드 데이터셋 + Figma Hi-Fi 도착 필요.
+**Sprint 1.5.5 T2** 진행 또는 **Sprint 2 대기** — 김한울 카드 데이터셋 + Figma Hi-Fi 도착 필요.
 
 ## 블로커
 **Sprint 2 진입 블로커**: 김한울 카드 데이터셋 미도착 (2026-05-17 마감 → 초과). 진행 상황 확인 필요.
@@ -27,19 +28,17 @@
 - 묘지/덱/키노트/일반능력 spec — Sprint 2 입력 대기
 - 곡 메타 spec (BPM/Offset/AudioPath 형식) — 이재근 작성. **후순위**: JSON 채보 드롭 검증 끝난 뒤
 - 시온 (사운드) Discord username 매핑 — 사운드 작업 시작 시 보완
-- 일시정지 버튼 기능 wire (현재 GameLoop.Pause/Resume 존재, 버튼 UI placeholder만)
 - 곡 정보 데이터 wire (chartName + audio 메타 spec — 펜딩)
 - 셔플 기능 (Sprint 2 카드 spec 도착 시)
 - 덱묘지 데이터 표시 (Sprint 2)
 - Figma Hi-Fi 외관 교체 (placeholder → 실제 art)
 
 ## 최근 변경
-- 2026-05-19: **Sprint 1.5.3 T4 fix** + push (a6ec540) — Canvas overlay visual band → World Space SpriteRenderer. NoteAreaBand/JudgeLineBand/CardAreaBand (NoteScreen 자식). 58/58 PASS.
+- 2026-05-20: **Sprint 1.5.5 T1 완료** — PauseButton.cs 신규 + GameLoop.IsPaused getter + SceneBootstrap PausePlaceholder wire. 58/58 PASS.
 - 2026-05-19: **Sprint 1.5.4 hotfix** + push (8f4c912) — atlas sub-asset 누락 fix (AddObjectToAsset) + MalgunGothic 직접 할당 + ⏸→PAUSE. 0 MissingRef/경고. 58/58 PASS.
 - 2026-05-19: **Sprint 1.5.4 완료** + push (b1a8bf6) — MalgunGothic TTF import + Dynamic SDF asset + LiberationSans fallback chain 등록. 58/58 PASS.
 - 2026-05-19: **Sprint 1.5.3 T5 완료** + Phase push — HUD 재배치 + 5 placeholder + 3 영역 visual band. 58/58 PASS.
-- 2026-05-19: **Sprint 1.5.3 T4 완료** — 노트/판정선/카드 영역 visual band (NoteArea/JudgeLine/CardAreaPlaceholder).
-- 2026-05-19: **Sprint 1.5.3 T2 완료** — 일시정지 + 곡 정보 placeholder + CreatePlaceholderPanel helper.
+- 2026-05-19: **Sprint 1.5.3 T4 fix** + push (a6ec540) — Canvas overlay visual band → World Space SpriteRenderer. NoteAreaBand/JudgeLineBand/CardAreaBand (NoteScreen 자식). 58/58 PASS.
 
 ## 작업 재개 시 첫 행동
 1. **이 파일 (CURRENT_STATUS.md) 먼저 읽기**

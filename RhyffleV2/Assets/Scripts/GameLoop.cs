@@ -41,6 +41,7 @@ public class GameLoop : MonoBehaviour {
     private int combo;
     private int baseScore;
     private bool isPaused;
+    public bool IsPaused => isPaused;   // Sprint 1.5.5 T1: PauseButton 접근용 getter
     private float startCountdown;
     private bool songStarted;
     private int _keyNoteTriggerCount;
