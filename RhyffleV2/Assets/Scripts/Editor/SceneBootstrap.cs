@@ -315,21 +315,54 @@ public static class SceneBootstrap {
     // ============================================================
 
     static void EnsureCardSystemAndBoard(GameObject canvasGO) {
-        // CardSystem: top-level GameObject
+        // 1. CardSystem at root (unchanged)
         var existingSys = GameObject.Find("CardSystem");
         if (existingSys == null) {
             var sysGO = new GameObject("CardSystem");
             sysGO.AddComponent<CardSystem>();
             Debug.Log("[SceneBootstrap] CardSystem GameObject created.");
         }
-        // CardBoard: child of Canvas
-        Transform existingBoard = canvasGO.transform.Find("CardBoard");
-        if (existingBoard == null) {
-            var boardGO = new GameObject("CardBoard", typeof(RectTransform));
-            boardGO.transform.SetParent(canvasGO.transform, false);
-            boardGO.layer = LayerMask.NameToLayer("UI");
-            boardGO.AddComponent<CardBoardUI>();
-            Debug.Log("[SceneBootstrap] CardBoard added under Canvas.");
+
+        // 2. Remove legacy CardBoard if it lives under main Canvas (pre-refactor location)
+        if (canvasGO != null) {
+            var legacyBoard = canvasGO.transform.Find("CardBoard");
+            if (legacyBoard != null) {
+                Object.DestroyImmediate(legacyBoard.gameObject);
+                Debug.Log("[SceneBootstrap] Legacy CardBoard (Canvas child) removed.");
+            }
+        }
+
+        // 3. CardBoardCanvas (World Space) at root — covers lane area, just below judge line
+        var existingCanvas2 = GameObject.Find("CardBoardCanvas");
+        if (existingCanvas2 == null) {
+            var canvas2GO = new GameObject("CardBoardCanvas", typeof(RectTransform));
+            canvas2GO.layer = LayerMask.NameToLayer("UI");
+            var c2rt = (RectTransform)canvas2GO.transform;
+            // Position: center x=0 (lane area is symmetric -12..+12), y below judge line (-2.5)
+            // Card top edge should clear judge line — center y = -5 (top -2.75, bottom -7.25 for height 4.5)
+            canvas2GO.transform.position = new Vector3(0f, -5f, 0f);
+            c2rt.sizeDelta = new Vector2(GameConfig.LANE_COUNT * GameConfig.LANE_WIDTH, 4.5f);  // 24 x 4.5
+            c2rt.pivot = new Vector2(0.5f, 0.5f);
+
+            var canvas2 = canvas2GO.AddComponent<Canvas>();
+            canvas2.renderMode = RenderMode.WorldSpace;
+            canvas2.sortingOrder = 1;
+            canvas2GO.AddComponent<CanvasScaler>();   // default world space settings
+            canvas2GO.AddComponent<GraphicRaycaster>();
+            Debug.Log("[SceneBootstrap] CardBoardCanvas (WorldSpace) created.");
+        }
+
+        // 4. CardBoard under CardBoardCanvas
+        var cardBoardCanvasGO = GameObject.Find("CardBoardCanvas");
+        if (cardBoardCanvasGO != null) {
+            var existingBoard = cardBoardCanvasGO.transform.Find("CardBoard");
+            if (existingBoard == null) {
+                var boardGO = new GameObject("CardBoard", typeof(RectTransform));
+                boardGO.transform.SetParent(cardBoardCanvasGO.transform, false);
+                boardGO.layer = LayerMask.NameToLayer("UI");
+                boardGO.AddComponent<CardBoardUI>();
+                Debug.Log("[SceneBootstrap] CardBoard added under CardBoardCanvas.");
+            }
         }
     }
 
