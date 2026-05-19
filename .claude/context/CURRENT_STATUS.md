@@ -7,14 +7,16 @@
 ---
 
 ## 현재 단계
-**Sprint 1.5.1 완료** — 5/5 task DONE. **40/40 EditMode tests PASS**.
+**Sprint 1.5.2 T2 완료** — PokerHandEvaluator 4 신규 hand 구현. **58/58 EditMode tests PASS**.
 
 - Sprint 1 (2026-05-18 완료): 14/14 task + Steelman 게이트 3개 PASS.
 - Sprint 1.5 (2026-05-19 완료): 10/10 task DONE. 36/36 EditMode tests PASS.
-- Sprint 1.5.1 (2026-05-19 완료): 5/5 task DONE (Lane Visualization + Card-Lane Mapping). **40/40 EditMode tests PASS**.
+- Sprint 1.5.1 (2026-05-19 완료): 5/5 task DONE (Lane Visualization + Card-Lane Mapping). 40/40 tests PASS.
+- Sprint 1.5.2 T1 완료: 7 traditional hands + TODO placeholders. 50/50 tests PASS.
+- Sprint 1.5.2 T2 완료: 럭키세븐/더블트리플/레인보우/쓰리페어 + 8 tests. **58/58 PASS**.
 
 ## 다음 액션
-**Sprint 2 대기**: 카드 데이터셋 (김한울) 도착 후 진입. 블로커 확인 필요.
+**Sprint 1.5.2 T3 이후 또는 Sprint 2 대기**: 카드 데이터셋 (김한울) 도착 후 Sprint 2 진입. Sprint 1.5.2에 추가 Task 있는지 확인.
 
 ## 블로커
 **Sprint 2 진입 블로커**: 김한울 카드 데이터셋 미도착 (2026-05-17 마감 → 초과). 진행 상황 확인 필요.
@@ -26,11 +28,11 @@
 - 김민주 (채보) 더미 채보 데이터 — 본인이 직접 작성하거나 김민주 요청. Sprint 1 Week 1 step 9 시점
 
 ## 최근 변경
+- 2026-05-19: **Sprint 1.5.2 T2 완료** (12920f1) — 럭키세븐/더블트리플/레인보우/쓰리페어 detection + 8 tests (22 PokerHand, 58 total). 레인보우 7-card guard 추가 (5장 field 오탐 방지).
+- 2026-05-19: **Sprint 1.5.2 T1 완료** — 7 traditional hands (원페어~스트레이트플러시) + TODO placeholders. 50/50 tests PASS.
 - 2026-05-19: **Sprint 1.5.1 T5 완료 + Phase push** — HandlePress LaneAnchor 복원, hover signal, GetScoreMultipliersForSlot, ApplyJudgment 영역 한정 modifier, SceneBootstrap wiring. 40/40 tests PASS.
 - 2026-05-19: **Sprint 1.5.1 T4 완료** — CardBoardUI.OnLaneHover + lane→card 슬롯 highlight. 40/40 tests PASS.
 - 2026-05-19: **Sprint 1.5.1 T3 완료** — LaneAnchor collider 검증 + GameConfig 상수 검증.
-- 2026-05-19: **Sprint 1.5.1 T2 완료** — GameConfig.BarX/LaneX 공식 + SceneBootstrap 정리.
-- 2026-05-19: **Sprint 1.5.1 T1 완료** (8944a12) — LaneAnchor.cs 신규, Bar.cs 시각 전용화, NoteScreen.cs lanes 추가, SceneBootstrap 25 Bar + 24 LaneAnchor, Game.unity 재생성.
 
 ## 작업 재개 시 첫 행동
 1. **이 파일 (CURRENT_STATUS.md) 먼저 읽기**
