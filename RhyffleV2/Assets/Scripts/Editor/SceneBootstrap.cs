@@ -401,10 +401,22 @@ public static class SceneBootstrap {
     static void EnsureCardSystemAndBoard(GameObject canvasGO) {
         // 1. CardSystem at root (unchanged)
         var existingSys = GameObject.Find("CardSystem");
+        CardSystem cardSystemComp = null;
         if (existingSys == null) {
             var sysGO = new GameObject("CardSystem");
-            sysGO.AddComponent<CardSystem>();
+            cardSystemComp = sysGO.AddComponent<CardSystem>();
             Debug.Log("[SceneBootstrap] CardSystem GameObject created.");
+        } else {
+            cardSystemComp = existingSys.GetComponent<CardSystem>();
+        }
+
+        // Sprint 1.5.6: DeckSystem (단일 Graveyard, 키노트 trigger). CardSystem 직후 신설.
+        var existingDeck = GameObject.Find("DeckSystem");
+        if (existingDeck == null) {
+            var deckGO = new GameObject("DeckSystem");
+            var deckSys = deckGO.AddComponent<DeckSystem>();
+            deckSys.cardSystem = cardSystemComp;
+            Debug.Log("[SceneBootstrap] DeckSystem GameObject created and wired to CardSystem.");
         }
 
         // 2. Remove legacy CardBoard if it lives under main Canvas (pre-refactor location)
