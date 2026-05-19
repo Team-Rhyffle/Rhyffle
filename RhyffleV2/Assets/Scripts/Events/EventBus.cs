@@ -26,6 +26,7 @@ public static class EventBus {
     }
 
     /// <summary>Remove <paramref name="handler"/> from the subscriber list for type <typeparamref name="T"/>.</summary>
+    /// <remarks>No-op if <paramref name="handler"/> was not previously subscribed.</remarks>
     /// <exception cref="ArgumentNullException">Thrown if handler is null.</exception>
     public static void Unsubscribe<T>(Action<T> handler) {
         if (handler == null) throw new ArgumentNullException(nameof(handler));
@@ -33,6 +34,7 @@ public static class EventBus {
         var key = typeof(T);
         if (_handlers.TryGetValue(key, out var list)) {
             list.Remove(handler);
+            if (list.Count == 0) _handlers.Remove(key);
         }
     }
 
