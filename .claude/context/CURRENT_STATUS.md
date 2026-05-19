@@ -7,13 +7,13 @@
 ---
 
 ## 현재 단계
-**Sprint 1.5 진행 중** — Task 1 완료 (66c8c4b), Task 2 완료 (91eb7f0), Task 3 완료 (1a88476), Task 4 완료 (5504e08), Task 5 완료 (b5ef125).
+**Sprint 1.5 진행 중** — Task 1 완료 (66c8c4b), Task 2 완료 (91eb7f0), Task 3 완료 (1a88476), Task 4 완료 (5504e08), Task 5 완료 (b5ef125), Task 6 완료 (48721b4).
 
 - Sprint 1 (2026-05-18 완료): 14/14 task + Steelman 게이트 3개 PASS.
-- Sprint 1.5 plan (30d0804): `docs/superpowers/plans/2026-05-18-sprint1.5-card-framework-lofi-ui.md` — 10 task. **Task 1–5 완료**: EventBus + 이벤트 struct 4종 + CardData DTO + ScoreModifier + ICardEffect + CardSystem + CardEffectRegistry. Task 6+ 남음.
+- Sprint 1.5 plan (30d0804): `docs/superpowers/plans/2026-05-18-sprint1.5-card-framework-lofi-ui.md` — 10 task. **Task 1–6 완료**: EventBus + 이벤트 struct 4종 + CardData DTO + ScoreModifier + ICardEffect + CardSystem + CardEffectRegistry + 더미 카드 3종 + bootstrap + 8 tests. Task 7+ 남음.
 
 ## 다음 액션
-**Sprint 1.5 Task 6** — 더미 카드 3종 (DummyAtk_SpadeK, DummyDef_HeartA, DummyCombo_ClubJ) + CardEffectBootstrap 등록 + NUnit 테스트. plan 파일 확인: `docs/superpowers/plans/2026-05-18-sprint1.5-card-framework-lofi-ui.md`.
+**Sprint 1.5 Task 7+** — plan 파일 확인: `docs/superpowers/plans/2026-05-18-sprint1.5-card-framework-lofi-ui.md`.
 
 ## 블로커
 없음. 다만 Sprint 2 진입 (실제 카드 시스템) 위해선 **김한울 카드 데이터셋 도착 필요** (마감 2026-05-17 = 어제) — 진행 상황 확인 권장. Sprint 1.5는 데이터셋 무관, 즉시 진행 가능
@@ -25,6 +25,7 @@
 - 카드 데이터셋 (≈400장) — 한울 2026-05-17 마감 예정 (Sprint 2 입력 자산). **진행 상황 확인 필요**
 
 ## 최근 변경
+- 2026-05-19: **Sprint 1.5 Task 6 완료** (48721b4) — 더미 카드 3종 (DummyAtk_SpadeK/DummyDef_HeartQ/DummySup_DiamondJ) + DummyEffectsBootstrap + 8 EditMode tests. 8/8 PASS.
 - 2026-05-19: **Sprint 1.5 Task 5 완료** (b5ef125) — CardSystem 본체 + CardEffectRegistry + ICardEffect 5-member 확장. 0 compile errors.
 - 2026-05-19: **Sprint 1.5 Task 4 완료** (5504e08) — ICardEffect 3-member stub + CardSystem MonoBehaviour stub. 0 compile errors.
 - 2026-05-19: **Sprint 1.5 Task 2 완료** (91eb7f0) — 이벤트 struct 4종 (NoteJudgedEvent/ComboChangedEvent/FieldChangedEvent/KeyNoteProcessedEvent). `Assets/Scripts/Events/` 추가. 0 compile errors.
