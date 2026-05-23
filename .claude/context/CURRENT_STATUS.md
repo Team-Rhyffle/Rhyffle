@@ -50,6 +50,8 @@
 - 셔플 기능 (Sprint 2 카드 spec 도착 시)
 - 덱묘지 데이터 표시 (Sprint 2)
 - Figma Hi-Fi 외관 교체 (placeholder → 실제 art) — 디자이너 부재 동안 보류
+- **레인보우/럭키세븐 정의 spec drift**: 코드(Sprint 1.5.2 결정) ↔ spec 페이지 swap 상태. 코드 정본이지만 한울 페이지 갱신 펜딩
+- **족보 우선순위 코드↔spec 일부 불일치**: 7장 same suit consecutive 시 코드는 스플 / spec은 럭키세븐. 결정 필요
 
 ## Sprint 2 입력 자산 — 신규 확정 사항 (5/21 디코)
 - **아덴(ARDEN) 유닛 1차 데이터셋 제외** — 후속 추가 여지
