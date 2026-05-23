@@ -6,6 +6,30 @@
 # Setup screenshots (temporary, not for repo)
 mcp.png
 
+# Notion export zips (uncompressed markdown is what we track)
+.claude/context/notion_snapshots/**/*.zip
+# Large media inside notion snapshots (images, audio, video) — markdown / json / csv 만 추적
+.claude/context/notion_snapshots/**/*.png
+.claude/context/notion_snapshots/**/*.jpg
+.claude/context/notion_snapshots/**/*.jpeg
+.claude/context/notion_snapshots/**/*.gif
+.claude/context/notion_snapshots/**/*.mp4
+.claude/context/notion_snapshots/**/*.mov
+.claude/context/notion_snapshots/**/*.avif
+.claude/context/notion_snapshots/**/*.webp
+.claude/context/notion_snapshots/**/*.svg
+.claude/context/notion_snapshots/**/*.mp3
+.claude/context/notion_snapshots/**/*.wav
+.claude/context/notion_snapshots/**/*.flac
+.claude/context/notion_snapshots/**/*.aif
+.claude/context/notion_snapshots/**/*.aiff
+.claude/context/notion_snapshots/**/*.ogg
+.claude/context/notion_snapshots/**/*.m4a
+.claude/context/notion_snapshots/**/*.pptx
+.claude/context/notion_snapshots/**/*.docx
+.claude/context/notion_snapshots/**/*.xlsx
+.claude/context/notion_snapshots/**/*.pdf
+
 # OS / IDE noise
 .DS_Store
 Thumbs.db

@@ -5,6 +5,68 @@
 
 ---
 
+## 2026-05-23: Notion mirror 폐기 + 로컬 markdown snapshot 정본화 + MCP HTTP/OAuth 전환
+
+- **Context**:
+  - 공식 Notion 워크스페이스가 한울 개인 소유 → 사용자가 멤버여도 personal connection 부여 권한 없음
+  - 시도 1: 사용자 개인 Notion에 공식 컨텐츠 복붙 → **paste 시 자동으로 휴지통 직행** (특히 데이터베이스). Database paste는 Notion 자체 제약으로 stub만 archived 처리됨
+  - 시도 2: `Ctrl+Shift+V` (plain text paste) → trash는 회피했지만 페이지 mention이 **링크 블록**으로만 변환되어 본문 복제 안 됨 → MCP fetch 시 공식 워크스페이스 ID(`1e436a63...`) 404
+  - 휴지통 비워도 paste-trash 재발 (mention/link reference가 stub 데이터소스 자동 생성 후 archived 트리거 가설)
+- **Decision**:
+  - **mirror 방식 폐기**. 사용자가 Notion에서 **Export Markdown & CSV → `.claude/context/notion_snapshots/`** 에 풀어서 두는 방식으로 전환. markdown이 spec 정본
+  - 공식 페이지 변경 시 사용자가 export 갈아끼움. Claude는 로컬 파일 직접 read
+  - Notion MCP 자체는 유지하되 **HTTP/OAuth 방식 (`https://mcp.notion.com/mcp`)** 로 전환 (기존 internal integration 토큰 방식 → OAuth). 사용자 개인 워크스페이스 접근 용도로만 사용
+  - `.gitignore`: `notion_snapshots/**/*.zip` + 이미지/영상 확장자들 제외 (markdown만 git 추적)
+- **Outcome**:
+  - `.mcp.json` 의 notion 항목 제거, `~/.claude.json` project config에 HTTP transport 등록
+  - 첫 export로 Rhyffle HQ 전체 (기획 / 회의록 / Roadmap / API 명세 / UI UX / 채보 디자인 툴 / 족보 시스템 밸런싱 / Albums / Game Sound / Members / Recruit / Font / Unity / 협업 방식 / QA / Brainstorming) 확보. 약 30개 markdown 파일
+  - SPEC.md 인덱스 전면 갱신 (Notion URL → 로컬 경로)
+
+---
+
+## 2026-05-23: v2 정본 spec — 1차(포커)와 2차(COSMO) 보완 관계 파악
+
+- **Context**:
+  - Notion 로컬 export에서 `게임 시스템` 페이지 2개 + `카드 시스템` 페이지 2개 발견
+  - ID prefix로 시점 식별: `26736a63...` = 2025-09-07 (v2 1차), `35d36a63...` = 2026-05-11 (v2 2차)
+  - 두 페이지가 **단순 중복이 아닌 보완 관계**:
+    - v2 1차 (포커 기반): 7 라인 / 56장 덱 / 4문양 13랭크 / 족보 12종 / 카드군 12종 / 양면 카드 + 능력 (고유+일반) / 반물질
+    - v2 2차 (COSMO 통합): 8 라인 / 40장 덱 / COSMO Objekt 데이터 모델 / JSON 스키마 / 클래스+시너지 점수 / 강화 (화음/공명 각 10단계)
+  - v2 2차로 명확히 대체된 영역: 라인 수, 덱 크기, 카드 데이터 모델, 점수 계산 식
+  - v2 2차에 없는 영역 (1차 spec이 살아있는 것으로 추정): 족보 12종, 카드군 12종, 양면 카드, 능력, 반물질 재화
+  - 동시에 `족보 시스템 밸런싱` 페이지 활발히 작업 중 (5월 23일까지 갱신) → 족보는 데모/프로덕션 둘 다에서 정본일 가능성 높음
+- **Decision**:
+  - **두 페이지 모두 정본으로 등록** — SPEC.md 의 spec 표에 보완 관계 명시
+  - 영역별로 v2 1차 / v2 2차 어느 게 살아있는지 표 형태로 정리 (라인/덱/카드/점수/강화/족보/카드군/양면/반물질)
+  - **불확실 항목**: 족보/카드군/양면/능력/반물질이 데모에 포함되는지 — 한울 확인 필요. **Sprint 2 spec 도착 시점에 확인**
+  - 가설: 데모(2차) = COSMO 시너지만, 풀 프로덕션(1차+2차) = 포커 매커닉 + 카드군까지
+- **Outcome**:
+  - SPEC.md "버전 경계" 섹션 재작성 (표 형태로 영역별 정본 명시 + 불확실 항목 별도 마킹)
+  - GLOSSARY.md 신설/대폭 확장 (포커 매커닉 + COSMO Objekt 필드 + 강화 + 족보 12종 배수 + 채보 단위 + 그룹 멤버 등)
+
+---
+
+## 2026-05-23: 5/21 디코 카드 DB 작업에서 발생한 spec 변경 미반영 사항
+
+- **Context**:
+  - 5/21 디코 thread `1506653488636235807` 에서 한울+동욱(`giantdaegari`) DB 입력 작업 진행
+  - 다수 spec 결정이 디코에서만 합의되고 노션 페이지에는 미반영
+- **Decision**: 다음 항목들을 spec 갱신 펜딩으로 트래킹
+  - **Class 명칭 Premier → Special** (tripleS/ARTMS class enum 변경). 카드 시스템 페이지에는 옛 표기 (`First → Double → Special → Premier`) 그대로
+  - **아덴(ARDEN) 유닛 1차 데이터셋 제외** (Sprint 2 범위 결정)
+  - **카드 이미지 파일명 규약 확정**: `<그룹>_<시즌>_<멤버>_<시리얼>` (예: `ARTMS_Divine01_Heejin_120Z.jpg`)
+  - **이미지 경로 = 클라가 prefix** (DB는 파일명만 보유)
+  - **그룹별 포맷 분기 룰**: tripleS/ARTMS 동일 enum, idntt 별도 enum
+  - **멤버 규모**: 현재 44명, 9명 추가 예정 = 53명
+  - **DB 오타 = 한울 일괄 검수** → 클라 검증 strict 가능
+  - **giantdaegari ↔ 이동욱 매핑 확정** (GitHub repo `gari0525/Rhyffle-jokbo` 100만회 시뮬레이션 코드가 결정적 증거)
+- **Outcome**:
+  - TEAM.md 갱신 (이동욱 = `gari0525` 확정)
+  - DISCORD_LOG.md 5/21 항목에 spec 갱신 펜딩 명시
+  - 한울에게 확인 필요: Class enum 노션 페이지 반영 / 데모 spec 범위 (포커 매커닉 포함 여부)
+
+---
+
 ## 2026-05-16: v2 리빌드 + Windows Claude 환경 분리
 
 - **Context**: rhyffle를 v2로 갈아엎기로 함. Unity Editor는 Windows 호스트 네이티브에서 돌려야 하므로(WSL/리듬게임 타이밍 부적합), 게임 작업을 Windows PowerShell의 별도 Claude Code 인스턴스로 분리. 기존 WSL Claude는 그대로 유지.

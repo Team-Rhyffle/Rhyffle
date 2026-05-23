@@ -342,8 +342,8 @@
 > https://www.notion.so/35d36a63929a805cab02eae26e1e707b
 
 **맥락**: **이동욱 합류 후 첫 공동 기획 문서**. 5/19부터 작성 중. 역할분배 목적 사전 공유
-**spec 영향**: ⚠️ 페이지 접근 불가 (Notion MCP integration 미공유 → 404). 페이지 ID `35d36a63929a805c...` 는 기존 게임 시스템 기획안 ID `35d36a63929a8036...` 와 앞 12자리 동일 → 동일 워크스페이스의 자매 페이지. **content 확인 필요 = 사용자에게 integration 공유 요청 또는 직접 요약**
-**상태**: pending — Notion 권한 + content 확인 후 spec 영향 평가
+**spec 영향**: ✅ **5/23 Notion Export 로 content 확보**. 페이지 ID = **`카드 시스템` v2 2차** (COSMO 데이터 모델 + JSON 스키마 + 화음/공명 강화). 로컬 경로: `.claude/context/notion_snapshots/개인 페이지 & 공유된 페이지/Rhyffle HQ/기획/카드 시스템 35d36a63929a805cab02eae26e1e707b.md`
+**상태**: ✅ 분석 완료 (SPEC.md / GLOSSARY.md / DECISIONS.md 반영)
 
 ---
 
@@ -367,6 +367,8 @@
 6. **DB 오타는 한울이 일괄 검수/수정** → 클라단 검증 로직은 strict하게 가도 됨 (DB가 클린해질 예정)
 
 **상태**: pending (Sprint 2 진입 직전 입력 자산. DB 완성 시점에 JSON 변환 + 로더 작업 착수)
+**노션 페이지 반영 펜딩** (한울 액션 필요):
+- Class 명칭 (`First → Double → Special → Premier`) → 새 spec (`Premier → Special`) 로 갱신 필요. 현재 `카드 시스템 35d36a63...` 페이지에는 옛 표기 유지
 
 ---
 
