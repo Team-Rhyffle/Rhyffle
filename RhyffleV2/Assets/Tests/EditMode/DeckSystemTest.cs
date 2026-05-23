@@ -48,6 +48,27 @@ public class DeckSystemTest {
     }
 
     [Test]
+    public void SetSource_BeforeInit_InjectsCustomDeck() {
+        // 새 DeckSystem (SetUp의 InitDeck 무시하고 fresh로)
+        var go2 = new GameObject("CustomSource");
+        var deck2 = go2.AddComponent<DeckSystem>();
+        deck2.SetSource(new FixedThreeCardSource());
+        deck2.InitDeck();
+        Assert.AreEqual(3, deck2.DeckCount);
+        Object.DestroyImmediate(go2);
+    }
+
+    private class FixedThreeCardSource : IDeckSource {
+        public List<CardData> LoadDeck() {
+            return new List<CardData> {
+                new CardData { Id = "Fixed_00", Suit = CardSuit.Spade, Rank = CardRank.A },
+                new CardData { Id = "Fixed_01", Suit = CardSuit.Heart, Rank = CardRank.K },
+                new CardData { Id = "Fixed_02", Suit = CardSuit.Club,  Rank = CardRank.Q },
+            };
+        }
+    }
+
+    [Test]
     public void OnKeyNote_ReplacesFieldAndSendsOldToGraveyard() {
         // CardSystem mock attach
         var csGO = new GameObject("CardSystemMock");

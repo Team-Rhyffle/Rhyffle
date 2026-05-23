@@ -7,13 +7,15 @@ using UnityEngine;
 /// - 셔플 시 묘지 합쳐 재셔플 (TCG 표준)
 /// - Draw trigger: KeyNoteProcessedEvent (Sprint 1.5 stub: 32 콤보 — 채보 spec 도착 시 교체)
 ///
-/// 데이터셋 미도착으로 SeedDummyDeck()로 24장 random 더미 생성.
-/// Sprint 2에서 JSON loader로 교체.
+/// Sprint 2 prep (2026-05-23): IDeckSource 추상화 추가. 기본은 DummyDeckSource.
+/// 데이터셋 도착 시 JsonDeckSource 구현 후 SetSource(...) 로 교체.
 /// </summary>
 public class DeckSystem : MonoBehaviour {
     public const int DUMMY_DECK_SIZE = 24;
 
     public CardSystem cardSystem;
+
+    private IDeckSource _source = new DummyDeckSource();
 
     private readonly List<CardData>  _deck      = new List<CardData>();   // 원본 (Awake 후 immutable)
     private readonly List<CardData>  _drawPile  = new List<CardData>();   // 셔플된 미사용
@@ -29,12 +31,21 @@ public class DeckSystem : MonoBehaviour {
     }
 
     /// <summary>
+    /// IDeckSource 교체. InitDeck() 호출 전에만 효과 있음. null 무시.
+    /// 테스트 / Sprint 2 JsonDeckSource 주입용.
+    /// </summary>
+    public void SetSource(IDeckSource source) {
+        if (source != null) _source = source;
+    }
+
+    /// <summary>
     /// EditMode 테스트용 초기화 진입점.
     /// EditMode NUnit에서는 Awake가 자동 호출되지 않으므로 SetUp에서 명시적으로 호출.
     /// 런타임에서는 Awake()가 호출함 — 중복 호출 무방 (idempotent).
     /// </summary>
     public void InitDeck() {
-        SeedDummyDeck();
+        _deck.Clear();
+        _deck.AddRange(_source.LoadDeck());
         ResetDrawPileFromDeck();
     }
 
@@ -101,21 +112,6 @@ public class DeckSystem : MonoBehaviour {
         for (int i = _drawPile.Count - 1; i > 0; i--) {
             int j = Random.Range(0, i + 1);
             var tmp = _drawPile[i]; _drawPile[i] = _drawPile[j]; _drawPile[j] = tmp;
-        }
-    }
-
-    /// <summary>Sprint 1.5.6 더미 — 24장 random suit/rank. Sprint 2에서 JSON loader로 교체.</summary>
-    private void SeedDummyDeck() {
-        _deck.Clear();
-        var suits = (CardSuit[])System.Enum.GetValues(typeof(CardSuit));
-        var ranks = (CardRank[])System.Enum.GetValues(typeof(CardRank));
-        for (int i = 0; i < DUMMY_DECK_SIZE; i++) {
-            _deck.Add(new CardData {
-                Id    = $"Dummy_{i:D2}",
-                Suit  = suits[Random.Range(0, suits.Length)],
-                Rank  = ranks[Random.Range(0, ranks.Length)],
-                Group = CardGroup.공격형,    // 기본값 (placeholder)
-            });
         }
     }
 
