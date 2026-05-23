@@ -23,11 +23,9 @@
 ## 다음 액션
 
 ### 즉시 가능 (외부 입력 없이)
-1. **DISCORD_LOG.md 미반영 spec 확정 사항 한울에게 확인 요청** (특히 Class Premier→Special 페이지 갱신 / 데모 spec 범위 — 포커 매커닉 + 카드군 포함 여부)
-2. **Sprint 2 prep work 시작 가능** (spec 도착 전이라도 가능한 작업):
-   - 카드 데이터 모델 C# 정의 (`CardMetadata.cs`) — JSON 스키마 그대로 매핑 (`artist/member/season/collectionNo/class/imageFile`)
-   - JSON deck loader 인터페이스 설계 (`SeedDummyDeck` 교체 자리)
-   - 화음/공명 강화 시스템 구조 검토 (Sprint 2 범위 여부 한울 확인 후)
+- **JsonDeckSource 구현** — 단, JSON 라이브러리 결정 필요 (Unity JsonUtility 는 Dictionary 미지원). Newtonsoft 추가 vs 데이터 형식 list 변환 결정 필요 → 카드 DB 도착 후 진행 권장
+- **PokerHandEvaluator 우선순위 spec align** — 7장 same suit consecutive (코드 스플 / spec 럭키세븐). 결정 시 코드 수정 + 테스트 갱신
+- 5/22~5/23 다른 디코 채널 활동 확인
 
 ### 외부 입력 대기
 - 카드 데이터셋 ETA — 한울 (5/21 입력 진행 시작, 5/22~5/23 활동 확인 안 됨)
@@ -69,11 +67,11 @@
 | 족보 12종 / 카드군 12종 / 양면 카드 / 고유능력+일반능력 / 반물질 재화 | **v2 1차 추정** (26736a63) — 데모 포함 여부 한울 확인 필요 |
 
 ## 최근 변경
-- 2026-05-23: **Sprint 2 prep T1 완료** (commit `0036659`) — CardMetadata 모델 + IDeckSource 추상화 + DummyDeckSource 추출. DeckSystem refactor (source 주입). **65/65 PASS** (62 → 65)
-- 2026-05-23: **Notion 정본 markdown import + spec 분석 commit 2개** (`a3405f0` + `2f0c4af`) — mirror 폐기, v2 1차/2차 보완 관계 분석, GLOSSARY/SPEC/DECISIONS 갱신
-- 2026-05-23: **Notion MCP HTTP/OAuth 전환** (npx 토큰 방식 → `https://mcp.notion.com/mcp`)
-- 2026-05-23: **giantdaegari = 이동욱 매핑 확정** (GitHub `gari0525/Rhyffle-jokbo` 시뮬레이션 코드 증거)
-- 2026-05-21: 디코 spec 변경 다수 캐치업 — 아덴 스킵 / Premier→Special / 파일명 규약 / 그룹별 포맷 분기 / 멤버 53명 예정
+- 2026-05-23: **Sprint 2 prep T3 완료** — CardMetadataRegistry (Dictionary lookup, GetByInstance) + 발견된 레인보우/럭키세븐 spec drift GLOSSARY align + 우선순위 코드↔spec 불일치 펜딩 트래킹. **83/83 PASS** (77 → 83)
+- 2026-05-23: **Sprint 2 prep T2 완료** — CardInstance (개별 카드 DB JSON 매핑) + CardEnhancement (화음/공명 validator + applier, 10단계 cap, 12 tests). **77/77 PASS** (65 → 77)
+- 2026-05-23: **Sprint 2 prep T1 완료** — CardMetadata 모델 + IDeckSource 추상화 + DummyDeckSource 추출 + DeckSystem refactor. **65/65 PASS** (62 → 65)
+- 2026-05-23: **Notion 정본 markdown import + spec 분석** — mirror 폐기, v2 1차/2차 보완 관계 분석. SPEC.md / GLOSSARY.md / DECISIONS.md / TEAM.md 전면 갱신
+- 2026-05-23: **Notion MCP HTTP/OAuth 전환** + **giantdaegari = 이동욱 매핑 확정**
 
 ## 작업 재개 시 첫 행동
 1. **이 파일 (CURRENT_STATUS.md) 먼저 읽기**
