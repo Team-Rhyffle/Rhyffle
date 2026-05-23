@@ -1,0 +1,10 @@
+{
+    "user_id" : 1001,
+    "stardust" : 100,
+    "starpiece" : 50,
+    "materialFree" : 0,
+    "materialApple" : 0,
+    "materialGoogle" : 0,
+    "materialWeb" : 0,
+    "antimatter" : 50
+}

@@ -1,0 +1,12 @@
+{
+    "abilities" : [
+        {
+            "ability_id" : 0,
+            "abilitiy_name" : "headstart"
+        },
+        {
+            "ability_id" : 1,
+            "abilitiy_name" : "colormatch"
+        }
+    ]
+}

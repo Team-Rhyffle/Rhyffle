@@ -1,0 +1,29 @@
+{
+    "card_base_page" : 0,
+    "card_index":[
+        {
+            "card_baseid" : 57,
+            "card_suit" : 0,
+            "card_rank" : 3,
+            "card_rarity" : 2,
+            "card_name" : "Card Name",
+            "unique_ability_id" : 5,
+            "collections" : "Magic",
+            "card_name_back" : "Card Name Back",
+            "unique_ability_id_back" : 6,
+            "collections_back" : "Magic" 
+        },
+        {
+            "card_baseid" : 58,
+            "card_suit" : 1,
+            "card_rank" : 4,
+            "card_rarity" : 3,
+            "card_name" : "Super Card",
+            "unique_ability_id" : 7,
+            "collections" : "Magic",
+            "card_name_back" : "Super Card Back",
+            "unique_ability_id_back" : 7,
+            "collections_back" : "Magic"
+        }
+    ]
+}

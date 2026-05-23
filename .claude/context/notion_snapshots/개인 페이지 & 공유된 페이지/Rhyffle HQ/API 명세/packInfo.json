@@ -1,0 +1,12 @@
+{
+    "packs" :[
+        {
+            "pack_id" : 1,
+            "pack_name" : "First Pack"
+        },
+        {
+            "pack_id" : 2,
+            "pack_name" : "Second Pack"
+        }
+    ]
+}

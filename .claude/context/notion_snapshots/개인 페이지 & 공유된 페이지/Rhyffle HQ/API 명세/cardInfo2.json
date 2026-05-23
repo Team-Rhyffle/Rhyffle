@@ -1,0 +1,37 @@
+{
+    "user_id" : 1001,
+    "user_card_page" : 0,
+    "cards_in_page" : 2,
+    "cards": [
+        {
+            "card_id" : 10203,
+            "card_baseid" : 57,
+            "pack_id" : 1,
+            "card_particle_id" : 0,
+            "is_double_sided" : true,
+            "double_side_activated" : true,
+            "ability_id" : 3,
+            "ability_level" : 2,
+            "unique_ability_level" : 3,
+            "ability_id_back" : 3,
+            "ability_level_back" : 3,
+            "unique_ability_level_back" : 2,
+            "bookmarked" : false
+        },
+        {
+            "card_id" : 10204,
+            "card_baseid" : 57,
+            "pack_id" : 1,
+            "card_particle_id" : 0,
+            "is_double_sided" : true,
+            "double_side_activated" : true,
+            "ability_id" : 1,
+            "ability_level" : 3,
+            "unique_ability_level" : 2,
+            "ability_id_back" : 2,
+            "ability_level_back" : 2,
+            "unique_ability_level_back" : 2,
+            "bookmarked" : false
+        }
+    ]
+}
