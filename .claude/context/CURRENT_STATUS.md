@@ -67,12 +67,11 @@
 | 족보 12종 / 카드군 12종 / 양면 카드 / 고유능력+일반능력 / 반물질 재화 | **v2 1차 추정** (26736a63) — 데모 포함 여부 한울 확인 필요 |
 
 ## 최근 변경
-- 2026-05-23: **Notion mirror 폐기 → Markdown Export 정본 전환**. `.claude/context/notion_snapshots/` 에 전체 페이지 트리 markdown 확보. SPEC.md / GLOSSARY.md / DECISIONS.md / CURRENT_STATUS.md / TEAM.md 전면 갱신
+- 2026-05-23: **Sprint 2 prep T1 완료** (commit `0036659`) — CardMetadata 모델 + IDeckSource 추상화 + DummyDeckSource 추출. DeckSystem refactor (source 주입). **65/65 PASS** (62 → 65)
+- 2026-05-23: **Notion 정본 markdown import + spec 분석 commit 2개** (`a3405f0` + `2f0c4af`) — mirror 폐기, v2 1차/2차 보완 관계 분석, GLOSSARY/SPEC/DECISIONS 갱신
 - 2026-05-23: **Notion MCP HTTP/OAuth 전환** (npx 토큰 방식 → `https://mcp.notion.com/mcp`)
 - 2026-05-23: **giantdaegari = 이동욱 매핑 확정** (GitHub `gari0525/Rhyffle-jokbo` 시뮬레이션 코드 증거)
-- 2026-05-23: **v2 spec 두 버전 발견 + 보완 관계 분석** (포커 1차 / COSMO 2차)
 - 2026-05-21: 디코 spec 변경 다수 캐치업 — 아덴 스킵 / Premier→Special / 파일명 규약 / 그룹별 포맷 분기 / 멤버 53명 예정
-- 2026-05-19: **Sprint 1.5.6 완료** + Phase push — DeckSystem 통합 검증. 62/62 PASS
 
 ## 작업 재개 시 첫 행동
 1. **이 파일 (CURRENT_STATUS.md) 먼저 읽기**
