@@ -5,6 +5,43 @@
 
 ---
 
+## 2026-05-24: 데모 = v2 2차 (COSMO) only — v2 1차 매커닉 전면 폐기
+
+- **Context**:
+  - 5/23 spec 분석 시 v2 1차 매커닉(족보 12종 / 카드군 12종 / 양면+반물질 / 고유·일반능력 / 포커 4문양 13랭크)이 데모에 포함되는지 불확실 → 가설: 데모(2차)=시너지만, 풀 프로덕션(1차+2차)=포커 매커닉
+  - 5/24 Rhyffle Dev Bot 채널(`1508031595565678622`) 통해 한울에게 직접 질의
+  - 한울 답변: **"기존 리플에 있던 족보 시스템 하나도 안 들어감. 포커카드 개념 아니라 Objekt에 있는 값들 그대로 가져다 쓸 생각. 그래서 위에 두개는 다 없다가 맞고, Sprint 2 구현 디테일 적힌 부분을 내가 작업 / 덱 편집이랑 카드 강화 UI/UX 작업을 동욱이가 하기로 했어"**
+- **Decision**:
+  - **데모 정본 = v2 2차 (COSMO) 전적** — 8 라인 / 40장 덱 / Objekt 데이터 모델 / 클래스 점수 + 시너지 점수 / 화음·공명 강화
+  - **v2 1차 매커닉 전면 폐기** (데모 범위에서):
+    - 족보 12종 (포커 매커닉, 5장 핸드 기준 배수 시스템)
+    - 카드군 12종 (장미전쟁/공격/지원/수비/버서커/카오스)
+    - 양면 카드 + 반물질 재화
+    - 고유능력 + 일반능력 (랜덤 부여)
+    - 포커 4문양(스페이드/다이아/하트/클럽) 13랭크 카드 데이터 자체
+  - **연쇄 무효 항목** (Sprint 2 진입 전 펜딩이었으나 폐기):
+    - 레인보우 / 럭키세븐 정의 swap (코드↔spec)
+    - 족보 우선순위 충돌 (7장 same suit consecutive)
+    - A-high straight (10-J-Q-K-A) 인정 여부
+    - 등급 단계 4단계 vs 5단계 (포커 매커닉 rarity 기준 — Objekt class 체계로 대체)
+  - **잔존 펜딩**:
+    - Class 명칭 Premier → Special 노션 페이지 반영 (한울 액션)
+  - **작업 분배**:
+    - **한울**: Sprint 2 spec 본체 (카드 데이터셋 ≈400장 JSON / 클래스 점수 / 시너지 점수 / 화음·공명 단계별 보너스 수치 / 셔플 키 활성화 콤보 게이지 임계값 / 키 노트 8장 교체 타이밍·UX)
+    - **이동욱 (`giantdaegari`)**: 덱 편집 UI/UX + 카드 강화 UI/UX
+  - **코드 처리**:
+    - `PokerHandEvaluator` + 12종 PokerHand enum + 22 EditMode 테스트 → **즉시 삭제** (옵션 A 채택, 5/24). git history 로 보존 — 향후 부활 시 복원 가능. 외부 참조 0건 확인 후 삭제 진행
+    - `CardEnhancement` (Sprint 2 prep T2, 화음/공명 validator+applier 10단계 cap) → 정본 매커닉으로 확정. 단계별 보너스 수치만 한울 입력 대기
+    - `CardMetadata` / `CardInstance` / `CardMetadataRegistry` (Sprint 2 prep T1+T3) → COSMO Objekt 모델 정합 → 정본
+- **Outcome**:
+  - SPEC.md 버전 경계 표 — v2 1차 항목 "데모 미포함 확정" 마킹
+  - GLOSSARY.md — v2 1차 매커닉 섹션 (족보 / 카드 매커닉 / 키워드 v2 1차) "데모 미포함, 향후 프로덕션 부활 가능성으로 보존" 표기
+  - CURRENT_STATUS.md — Sprint 2 블로커/펜딩 대폭 축소. 외부 입력 대기 = 카드 데이터셋 ETA + 클래스/시너지/화음공명 수치 + 셔플/키노트 UX. 코드 결정 = PokerHandEvaluator 처리 방향
+  - DISCORD_LOG.md 5/24 entry 추가
+  - Sprint 2 본 진입 = 카드 데이터셋 도착 + 위 수치/UX spec 도착 시점
+
+---
+
 ## 2026-05-23: Notion mirror 폐기 + 로컬 markdown snapshot 정본화 + MCP HTTP/OAuth 전환
 
 - **Context**:

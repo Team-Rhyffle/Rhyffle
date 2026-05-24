@@ -8,7 +8,8 @@
 
 ## 현재 단계
 **Sprint 1.5.6 완료** — DeckSystem + Graveyard. **62/62 EditMode tests PASS** (5/19).  
-**Sprint 2 진입 대기** — 카드 데이터셋 입력 활발히 진행 중 (5/21~). ETA 미확정.
+**Sprint 2 prep T1+T2+T3 완료** — 83/83 PASS.  
+**Sprint 2 진입 대기** — 카드 데이터셋 입력 진행 + Sprint 2 수치/UX spec 한울 작업 대기. **데모 범위 = v2 2차 (COSMO) only 확정 (5/24 한울)**.
 
 ### 완료된 Sprint 요약
 - Sprint 1 (2026-05-18 완료): 14/14 task + Steelman 게이트 3개 PASS
@@ -24,32 +25,39 @@
 
 ### 즉시 가능 (외부 입력 없이)
 - **JsonDeckSource 구현** — 단, JSON 라이브러리 결정 필요 (Unity JsonUtility 는 Dictionary 미지원). Newtonsoft 추가 vs 데이터 형식 list 변환 결정 필요 → 카드 DB 도착 후 진행 권장
-- **PokerHandEvaluator 우선순위 spec align** — 7장 same suit consecutive (코드 스플 / spec 럭키세븐). 결정 시 코드 수정 + 테스트 갱신
 - 5/22~5/23 다른 디코 채널 활동 확인
 
-### 외부 입력 대기
-- 카드 데이터셋 ETA — 한울 (5/21 입력 진행 시작, 5/22~5/23 활동 확인 안 됨)
-- 등급 단계 (4단계 vs 5단계) 정본 확정 — 한울
-- A-high straight (10-J-Q-K-A) spec — 한울
-- 묘지/덱/키노트/일반능력 spec 추가 디테일 — Sprint 2 spec 도착 시
-- Premier → Special 노션 페이지 반영 여부 — 한울
+### 외부 입력 대기 (모두 한울 — Sprint 2 spec 본체)
+- 카드 데이터셋 (≈400장 JSON) ETA — 한울 + 동욱
+- 클래스 점수 수치 (Class별 +N)
+- 시너지 점수 수치 (시너지_1 합연산 / 시너지_2 곱연산)
+- 화음 / 공명 단계별 보너스 수치 (10단계)
+- 셔플 키 활성화 콤보 게이지 임계값
+- 키 노트 8장 교체 타이밍 / UX
+- 덱 편집 UI/UX (동욱 작업)
+- 카드 강화 UI/UX (동욱 작업)
+- Class 명칭 Premier → Special 노션 페이지 반영 (한울)
 
 ## 블로커
-- **Sprint 2 본격 진입 블로커**: 카드 데이터셋 입력 진행 중 (5/17 마감 → 4일 초과, 5/21 활발히 작업 진행). 5/22~5/23 진행 확인 안 됨 → ETA 확인 필요
-- **spec 불확실성**: v2 2차에 누락된 영역(족보/카드군/양면/능력/반물질)이 데모에 포함되는지 미확정 → 한울 확인 필요 (Sprint 2 spec 도착 시 함께 처리 가능)
+- **Sprint 2 본격 진입 블로커**: 카드 데이터셋 + 위 수치/UX spec 도착 대기. 5/24 한울 spec 작업 진행 선언 (ETA 미확정)
+- ~~**spec 불확실성**: v2 1차 매커닉 데모 포함 여부~~ → **해소 (5/24)**: 데모 = v2 2차 only 확정
 
 ## 펜딩 (사용자 / 외부)
-- 카드 데이터셋 (≈400장) — 5/21 입력 진행 중. **ETA 확인 필요**
-- A-high straight (10-J-Q-K-A) spec — Sprint 2 시 확정
-- 묘지/덱/키노트/일반능력 spec 추가 디테일 — Sprint 2 입력 대기
+- 카드 데이터셋 (≈400장) — 한울+동욱 입력 진행 중
+- 클래스/시너지/화음·공명 수치 + 셔플/키노트 UX — 한울 spec 작업 중
+- 덱 편집 / 카드 강화 UI/UX — 동욱 작업
+- Class 명칭 Premier → Special 노션 반영 — 한울
 - 곡 메타 spec (BPM/Offset/AudioPath 형식) — 이재근 작성. **후순위**
 - 시온 (사운드) Discord username 매핑 — 사운드 작업 시작 시 보완
 - 곡 정보 데이터 wire (chartName + audio 메타 spec — 펜딩)
-- 셔플 기능 (Sprint 2 카드 spec 도착 시)
-- 덱묘지 데이터 표시 (Sprint 2)
 - Figma Hi-Fi 외관 교체 (placeholder → 실제 art) — 디자이너 부재 동안 보류
-- **레인보우/럭키세븐 정의 spec drift**: 코드(Sprint 1.5.2 결정) ↔ spec 페이지 swap 상태. 코드 정본이지만 한울 페이지 갱신 펜딩
-- **족보 우선순위 코드↔spec 일부 불일치**: 7장 same suit consecutive 시 코드는 스플 / spec은 럭키세븐. 결정 필요
+
+### 폐기됨 (5/24 한울 확정으로 무효)
+- ~~A-high straight (10-J-Q-K-A) spec~~ — 포커 매커닉 자체 미사용
+- ~~등급 단계 4/5단계 정본~~ — 포커 rarity 미사용, Objekt class 체계로 대체
+- ~~레인보우/럭키세븐 정의 spec drift~~ — 족보 시스템 미포함
+- ~~족보 우선순위 충돌~~ — 족보 시스템 미포함
+- ~~묘지/덱/키노트/일반능력 spec~~ 중 "일반능력" 부분 (랜덤 부여 능력) — v2 1차 매커닉이라 폐기. 묘지/덱/키노트는 펜딩 유지
 
 ## Sprint 2 입력 자산 — 신규 확정 사항 (5/21 디코)
 - **아덴(ARDEN) 유닛 1차 데이터셋 제외** — 후속 추가 여지
@@ -60,18 +68,19 @@
 - **멤버 규모**: 현재 44명 + 9명 추가 예정 = 53명
 - **DB 오타는 한울 일괄 검수** → 클라 검증 strict 가능
 
-## 카드 spec 정본 — 1차/2차 보완 (5/23 분석)
+## 카드 spec 정본 — 데모 = v2 2차 only 확정 (5/24)
 | 영역 | 정본 |
 |---|---|
 | 라인 수 / 덱 크기 / 카드 데이터 모델 / 점수 식 / 강화 (화음/공명) | **v2 2차** (35d36a63) |
-| 족보 12종 / 카드군 12종 / 양면 카드 / 고유능력+일반능력 / 반물질 재화 | **v2 1차 추정** (26736a63) — 데모 포함 여부 한울 확인 필요 |
+| 족보 12종 / 카드군 12종 / 양면 카드 / 고유능력+일반능력 / 반물질 재화 / 포커 4문양 13랭크 | **데모 미포함** (5/24 한울 확정). 향후 프로덕션 부활 가능성으로 코드/문서 보존 |
 
 ## 최근 변경
+- 2026-05-24: **PokerHandEvaluator + 12종 PokerHand enum + 22 tests 삭제** (옵션 A 채택) — 데모 미포함 결정 적용. 외부 참조 0건 확인. Unity 테스트 카운트 83 → ≈65 예상 (Unity 실행 시 확정)
+- 2026-05-24: **데모 범위 = v2 2차 only 확정** (한울 답변) — 족보/카드군/양면+반물질/포커 매커닉 데모 전면 폐기. 작업 분배: 한울=Sprint 2 spec 본체 / 동욱=덱 편집·카드 강화 UI/UX. 펜딩 항목 다수 무효화
 - 2026-05-23: **Sprint 2 prep T3 완료** — CardMetadataRegistry (Dictionary lookup, GetByInstance) + 발견된 레인보우/럭키세븐 spec drift GLOSSARY align + 우선순위 코드↔spec 불일치 펜딩 트래킹. **83/83 PASS** (77 → 83)
 - 2026-05-23: **Sprint 2 prep T2 완료** — CardInstance (개별 카드 DB JSON 매핑) + CardEnhancement (화음/공명 validator + applier, 10단계 cap, 12 tests). **77/77 PASS** (65 → 77)
 - 2026-05-23: **Sprint 2 prep T1 완료** — CardMetadata 모델 + IDeckSource 추상화 + DummyDeckSource 추출 + DeckSystem refactor. **65/65 PASS** (62 → 65)
 - 2026-05-23: **Notion 정본 markdown import + spec 분석** — mirror 폐기, v2 1차/2차 보완 관계 분석. SPEC.md / GLOSSARY.md / DECISIONS.md / TEAM.md 전면 갱신
-- 2026-05-23: **Notion MCP HTTP/OAuth 전환** + **giantdaegari = 이동욱 매핑 확정**
 
 ## 작업 재개 시 첫 행동
 1. **이 파일 (CURRENT_STATUS.md) 먼저 읽기**
